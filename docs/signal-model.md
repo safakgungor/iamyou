@@ -118,6 +118,15 @@ For S07 (AUC 0.96), the predicted stress probability rises during each task. It 
 
 **Baseline length.** The gain holds for 60–180 s baselines. Agreement with self-reported stress weakens as the baseline gets shorter.
 
+## Other designs we tried
+
+A separate nested search (outer leave-one-person-out, inner 5-fold grouped by person, 432 configurations, selection criterion fixed in advance) tried heart-rate variability from beat intervals, EDA split into tonic level and skin-conductance responses, heart rate scaled by the baseline's spread, 60-second windows and a small hyperparameter grid.
+
+- Read literally, the 60-second design with every new feature won (+0.072 AUC, p = 0.0016). Most of that gain came from scoring it on different, easier windows: both window sizes stay inside one labeled phase, so the longer window is never penalised for reacting late.
+- Scored at the same decision moments (every 5 s, judging the last W seconds, as the app would run), it drops to +0.030 (p = 0.16), and 60-second windows with the shipped features score lower than 30-second ones (−0.019).
+- The most promising next step is the 30-second design with the new HRV and EDA features: +0.028 to +0.032 AUC, better for 24–26 of 33 people, p = 0.08–0.12. Consistent, not significant, and its estimates track self-reported stress less well (ρ 0.40 vs 0.45). We kept the shipped design.
+- The model reacts slowly to a change: at the same decision moments its stress-vs-rest AUC is 0.57 in the first minute of a phase and 0.85 after it. This is one more reason iamyou asks only about sustained rises.
+
 ## Limitations
 
 - **Small sample:** 33 young adults, one dataset, one lab. The CIs are wide; the lower bound of the AUC gain is +0.005.
