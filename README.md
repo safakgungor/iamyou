@@ -7,31 +7,35 @@ Built for Hackachusetts 2026 · Healthcare & Biotech.
 - **Live:** [iamyou.si](https://www.iamyou.si) · the app is at [iamyou.si/app](https://www.iamyou.si/app). Tap **Try as Maya**; no account needed.
 - **Film:** on the landing page, chapter 05.
 
-## Try it in two minutes
+## Try it in five minutes
 
-1. Open [iamyou.si/app](https://www.iamyou.si/app) on a phone and tap **Try as Maya**.
-2. **Check-in.** The twin answers today's question first, as Maya, and hides its guess. Answer by voice or text, see how close it came, and correct it in one sentence.
+1. Open [iamyou.si/app](https://www.iamyou.si/app) on a phone and tap **Try as Maya**. You land on **Today**; the tab bar holds **Today**, **Mind**, **Health** and **Care**.
+2. **Check-in.** The twin answers today's question first, as Maya, and hides its guess. Answer by voice or text, see how close it came, and correct it in one sentence. The twin speaks in the film's voice.
 3. **Second self.** Open the inbox and let the twin draft a reply to Dr. Lee's office in Maya's voice. Nothing leaves without approve and send.
+4. **Mind.** The mind tree ([`/mind`](https://www.iamyou.si/mind)) maps everything the twin has learned from Maya into five branches and grows a leaf with every correction. Tap a leaf to see the entries it came from, or ask it about yourself by voice or text.
+5. **Health.** Maya's timeline from 18 to 40, week by week against her own baseline. Choose who hears about a change, the right-not-to-know control; the county card adds CDC context. The wrist signal ([`/real-signal`](https://www.iamyou.si/real-signal)) runs our model on real PhysioNet recordings.
+6. **Care.** Studies recruiting in Massachusetts for the family condition, and family mode: the people Maya chose ask how she would answer and get her own words back.
+7. **Consent & settings**, from Today: family history, the health layer, and who hears about a change.
 
 Maya is a synthetic persona. The wearable examples are real, de-identified research recordings from PhysioNet, labelled as such.
 
 ## Built with Kiro
 
-Kiro wrote the plan and most of the code. Every spec lives in [`.kiro/specs/`](.kiro/specs), written requirements-first in EARS, then designed, broken into tasks and executed with **Run all Tasks**.
+Kiro wrote the plan and most of the code. All four specs live in [`.kiro/specs/`](.kiro/specs), written requirements-first in EARS, then designed and broken into tasks. Kiro implemented three of them with **Run all Tasks**; Claude Code implemented the fourth from Kiro's spec.
 
-| Spec | What Kiro produced |
-| --- | --- |
-| `twin-loop` | Requirements, design, 20 tasks: scaffold, pure logic, Supabase schema with RLS, the server-only Claude layer, six routes, tests |
-| `assistant-tasks` | Requirements, design, 13 tasks: draft state machine, synthetic inbox, drafts table, safety check, three routes, tests |
-| `health-baseline` | Requirements, design, 18 tasks: speech features, frozen personal baseline, change signal, right-not-to-know gate, Maya's 22-year history |
-| `care-outputs` | Requirements, design, 14 tasks: clinician summary, trial finder, family mode |
+| Spec | Tasks | What it covers | Implemented by |
+| --- | --- | --- | --- |
+| `twin-loop` | 20 | Scaffold, pure logic, Supabase schema with RLS, the server-only Claude layer, six routes, tests | Kiro, Run all Tasks |
+| `assistant-tasks` | 13 | Draft state machine, synthetic inbox, drafts table, safety check, three routes, tests | Kiro, Run all Tasks |
+| `health-baseline` | 18 | Speech features, frozen personal baseline, change signal, right-not-to-know gate, Maya's 22-year history | Kiro, Run all Tasks |
+| `care-outputs` | 14 | Clinician summary, trial finder, family mode | Claude Code, from Kiro's spec |
 
 - **Steering** ([`.kiro/steering/`](.kiro/steering)) carries product, tech, structure and safety rules into every Kiro session.
 - **Hooks** ([`.kiro/hooks/`](.kiro/hooks)): unit tests on save, property tests after each task, a guard that blocks writes to private data and `.env` files, and a session log in [`KIRO_LOG.md`](KIRO_LOG.md).
-- **Property-based tests.** Every rule that can be stated as a property has one: the twin's guess never leaks before the answer, crisis handling wins over everything else, a draft reaches `sent` only through `approved`, deleting the vault removes every row of that user.
-- **In the history.** Commits made from Kiro's output end with `Generated-by: Kiro IDE` (`git log --grep "Generated-by: Kiro"`). They hold about three quarters of the code and spec lines.
+- **Property-based tests.** Every rule that can be stated as a property has one: the twin's guess never leaks before the answer, crisis handling wins over everything else, a draft reaches `sent` only through `approved`, deleting the vault removes every row of that user, the mind tree cites only the user's own entries. 48 property tests run next to 371 unit tests.
+- **In the history.** Commits made from Kiro's output end with `Generated-by: Kiro IDE` (`git log --grep "Generated-by: Kiro"`). Those 15 commits hold about 60% of the code, test and spec lines.
 
-Claude Code built the screens and the landing page, reviewed each Kiro run, and made the fixes, each named in its commit as "Adjusted outside Kiro (Claude Code)". [`AGENTS.md`](AGENTS.md) holds the rules both agents follow.
+Claude Code built the landing page and the screens around Kiro's logic: the phone shell and tabs, the timeline screen, the wrist signal, the mind tree, consent & settings, and the twin's voice. It also reviewed each Kiro run and made the fixes, each named in its commit as "Adjusted outside Kiro (Claude Code)". [`AGENTS.md`](AGENTS.md) holds the rules both agents follow.
 
 ## iamyou Signal
 
@@ -43,13 +47,13 @@ The twin never diagnoses; the strongest wording anywhere is "You might want to t
 
 ## Stack
 
-Next.js 16 (App Router, TypeScript) as a PWA on Vercel · Supabase Postgres with row-level security and anonymous demo sign-in · Claude (`claude-opus-5-5`) from server routes only · Vitest and fast-check · three.js and GSAP for the landing.
+Next.js 16 (App Router, TypeScript) as a PWA on Vercel · Supabase Postgres with row-level security and anonymous demo sign-in · Claude (`claude-opus-5-5`) from server routes only · ElevenLabs for the twin's voice · Vitest and fast-check · three.js and GSAP for the landing and the mind tree.
 
 ## Run locally
 
 ```bash
 npm install
-cp .env.example .env.local   # add your Anthropic and Supabase keys
+cp .env.example .env.local   # add your Anthropic and Supabase keys; ElevenLabs is optional
 npm run dev
 ```
 
