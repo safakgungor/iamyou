@@ -89,8 +89,8 @@ to exist.
     - `studyUrl` and `conditionSearchUrl` exact strings; `studyUrl("")` is null
     - _Requirements: 6.2, 6.3, 6.4, 7.2, 7.3, 7.4, 7.5, 7.6, 8.5, 8.6_
 
-- [ ] 3. [kiro] Implement the family module `lib/family.ts`
-  - [ ] 3.1 Implement access, selection and validation
+- [x] 3. [kiro] Implement the family module `lib/family.ts`
+  - [x] 3.1 Implement access, selection and validation
     - Define `FAMILY_ENTRY_LIMIT = 40`, `FAMILY_ENTRY_KINDS` and the `FamilyAnswer` type
     - Implement `dontKnowAnswer(firstName)` ("I don't know how {first_name} would answer
       that.", "this person" when no first name), `familyModeAccess(digitalWill)` (trimmed
@@ -104,20 +104,20 @@ to exist.
       non-array or non-string fields count as empty
     - No I/O, no model call
     - _Requirements: 9.1, 9.2, 9.4, 10.1, 10.2, 10.3, 10.4, 10.8_
-  - [ ] 3.2 Write property test P2 for `validateFamilyAnswer` (tests/pbt)
+  - [x] 3.2 Write property test P2 for `validateFamilyAnswer` (tests/pbt)
     - **Property P2: A family answer is cited or admits it does not know**: for arbitrary
       answers, cited ids mixing existing ids, unknown ids and duplicates, and arbitrary
       entry sets, the result is either the input answer unchanged with a non-empty,
       duplicate-free, order-preserving subsequence of existing input ids, or exactly the
       Dont_Know_Answer with no ids; applying it twice equals applying it once
     - **Validates: Requirements 10.1, 10.2, 10.3, 10.4**
-  - [ ] 3.3 Write property test P4 for `selectFamilyEntries` (tests/pbt)
+  - [x] 3.3 Write property test P4 for `selectFamilyEntries` (tests/pbt)
     - **Property P4: Family entry selection never sends style examples**: for arbitrary
       entries across all five kinds, the result has at most 40 entries, none
       `style_example`, all from the input, and contains every allowed entry when there
       are 40 or fewer
     - **Validates: Requirements 9.2**
-  - [ ] 3.4 Write unit tests for `lib/family.ts`
+  - [x] 3.4 Write unit tests for `lib/family.ts`
     - `dontKnowAnswer("Maya")` exact text and the no-name case; `familyModeAccess` on
       Maya's `digital_will` returns `["Ella Linden (daughter)"]` and `[]` for null, a
       string, a non-array and non-string items; `isAllowedAsker` rejects near-misses
