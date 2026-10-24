@@ -1,0 +1,16 @@
+# Downloads and generated files stay local
+.venv/
+raw/
+windows.csv
+build.log
+*.log
+out/
+figures/
+robustness/results/
+robustness/windows/
+export/*.json
+export/*.npz
+export/*.md
+demo/*.json
+search/
+__pycache__/
