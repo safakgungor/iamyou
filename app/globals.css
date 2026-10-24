@@ -73,4 +73,34 @@
     text-transform: uppercase;
     color: var(--color-muted);
   }
+
+  /* The one entrance: content rises into place. Stagger with style={{ '--i': n }}. */
+  .rise {
+    animation: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
+  }
+
+  /* Press feedback for every tappable card and button. */
+  .tap {
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .tap:active {
+    transform: scale(0.98);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+  .tap:active {
+    transform: none;
+  }
 }
