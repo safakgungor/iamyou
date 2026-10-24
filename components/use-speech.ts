@@ -93,6 +93,8 @@ export interface UseSpeech {
   reset: () => void;
   /** Speak the given text via `speechSynthesis` (Req 5.2). */
   speak: (text: string) => void;
+  /** Stop anything `speak` is still saying. */
+  stopSpeaking: () => void;
 }
 
 export interface UseSpeechOptions {
@@ -202,6 +204,10 @@ export function useSpeech(options: UseSpeechOptions = {}): UseSpeech {
     [lang],
   );
 
+  const stopSpeaking = useCallback(() => {
+    if (speechSynthesisAvailable()) window.speechSynthesis.cancel();
+  }, []);
+
   return {
     supported,
     listening,
@@ -211,6 +217,7 @@ export function useSpeech(options: UseSpeechOptions = {}): UseSpeech {
     stop,
     reset,
     speak,
+    stopSpeaking,
   };
 }
 

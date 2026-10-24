@@ -35,6 +35,8 @@ export default function TwinPortrait({
   const formRef = useRef<TwinForm>({ ...rest, figure: 0, scatter: 1, opacity: 0 });
   const restRef = useRef(rest);
   restRef.current = rest;
+  const wakingRef = useRef(waking);
+  wakingRef.current = waking;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -55,7 +57,10 @@ export default function TwinPortrait({
           pointSize,
         });
         stageRef.current = stage;
-        gsap.to(formRef.current, { ...restRef.current, duration: reduce ? 0 : 2.4, ease: 'expo.out' });
+        // Gather into the resting form, or straight into the pulse if the twin
+        // is already working when it mounts.
+        const target = wakingRef.current ? PULSE : restRef.current;
+        gsap.to(formRef.current, { ...target, duration: reduce ? 0 : 2.4, ease: 'expo.out', overwrite: true });
       } catch {
         // No WebGL: the card simply stays empty.
       }
