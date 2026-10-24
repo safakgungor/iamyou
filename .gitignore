@@ -17,5 +17,3 @@ data/private/
 # OS and editor files
 .DS_Store
 *.log
-
-# Note: the .kiro/ directory must stay tracked. Do not add it here.
