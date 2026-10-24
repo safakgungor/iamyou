@@ -125,7 +125,7 @@ to exist.
     - _Requirements: 9.1, 9.2, 10.2_
 
 - [ ] 4. [kiro] Add the family-history relation to profiles
-  - [ ] 4.1 Write the migration `supabase/migrations/0004_care_outputs.sql`
+  - [x] 4.1 Write the migration `supabase/migrations/0004_care_outputs.sql`
     - Add the nullable `profiles.family_history_relation` column with a 1–40 character
       check; existing `profiles` RLS policies apply; renumber if task 1 found a
       different `health-baseline` migration number
@@ -190,7 +190,7 @@ to exist.
   - Run `npm run lint`, `npm run test:unit` and `npm run test:pbt`; ensure all pass, ask
     the user if questions arise.
 
-- [ ] 8. [kiro] Implement the trials cache `lib/trials-cache.ts`
+- [x] 8. [kiro] Implement the trials cache `lib/trials-cache.ts`
   - Define `TRIALS_CACHE_TTL_MS = 3_600_000`, `TrialsCacheEntry`, the `TrialsCache`
     interface and `InMemoryTrialsCache` (a `Map` keyed by condition that returns copies)
   - Unit test get/set, per-condition keys and copy semantics
