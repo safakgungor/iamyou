@@ -17,6 +17,7 @@
   body:has(.care-summary) .device-aside,
   body:has(.care-summary) .device-statusbar,
   body:has(.care-summary) .device-home,
+  body:has(.care-summary) .app-tabs,
   body:has(.care-summary) .device::before,
   body:has(.care-summary) .device::after {
     display: none !important;
@@ -45,6 +46,12 @@
     max-width: none !important;
     padding: 0 !important;
     gap: 0 !important;
+  }
+
+  /* Never print mid-entrance: the .rise animation starts transparent. */
+  .care-summary,
+  .care-summary * {
+    animation: none !important;
   }
 
   .care-summary {
