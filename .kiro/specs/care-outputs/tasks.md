@@ -35,8 +35,8 @@ to exist.
   - Update `care-outputs/design.md` wherever a name differs; never copy the logic
   - _Requirements: 2.5, 3.4_
 
-- [ ] 2. [kiro] Implement the trials module `lib/trials.ts`
-  - [ ] 2.1 Implement the pure trial functions and constants
+- [x] 2. [kiro] Implement the trials module `lib/trials.ts`
+  - [x] 2.1 Implement the pure trial functions and constants
     - Define `FamilyCondition`, `FAMILY_CONDITIONS`, `isFamilyCondition`, `TrialSource`,
       `Trial`, `CONDITION_QUERY`, `NO_MATCH_TEXT` ("No matching studies recruiting in
       Massachusetts right now."), `NOT_A_RECOMMENDATION_TEXT` and `MASSACHUSETTS`
@@ -62,7 +62,7 @@ to exist.
       `conditionSearchUrl(condition)` exactly as in the design
     - No I/O and no server-only imports
     - _Requirements: 5.1, 6.2, 6.3, 6.4, 6.5, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 8.1, 8.2, 8.3, 8.4, 8.5, 8.6_
-  - [ ] 2.2 Write property test P1 for `normalizeTrial` + `filterTrials` (tests/pbt)
+  - [x] 2.2 Write property test P1 for `normalizeTrial` + `filterTrials` (tests/pbt)
     - **Property P1: Filtered trials are recruiting and Massachusetts-anchored**: for
       arbitrary raw live studies (mixed statuses, states including "Massachusetts" in
       varied case, other states, blank and null) and raw slice rows, every returned trial
@@ -71,13 +71,13 @@ to exist.
       equal to `["Massachusetts"]`; deep-frozen input is not mutated; repeated calls are
       equal. Also assert the invariants for `filterTrials` over arbitrary `Trial` values
     - **Validates: Requirements 8.1, 8.2, 8.3, 8.4, 6.3, 6.4**
-  - [ ] 2.3 Write property test P5 for `phaseLabel` (tests/pbt)
+  - [x] 2.3 Write property test P5 for `phaseLabel` (tests/pbt)
     - **Property P5: Phase labels are total and deterministic**: for arbitrary strings,
       string arrays and other values, `phaseLabel` returns a non-empty string, equal
       across calls; single recognized tokens map to the table; combined values equal the
       recognized labels joined with " / " in input order
     - **Validates: Requirements 7.3, 7.4, 7.5, 7.6**
-  - [ ] 2.4 Write unit tests for `lib/trials.ts`
+  - [x] 2.4 Write unit tests for `lib/trials.ts`
     - Exact labels for every phase value in the slice (`NA`, blank, `EARLY_PHASE1`,
       `PHASE1`–`PHASE4`, `PHASE1, PHASE2`, `PHASE2, PHASE3`) and the API array form
     - Keyword matching including whole-word ALS, and no match on "also" or "deals"
