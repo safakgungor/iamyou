@@ -1,0 +1,825 @@
+{
+  "pbtResults": {
+    "2.3 Write property test P3 for `weeklyTrend` (tests/pbt)": {
+      "status": "passed",
+      "lastRunTimestamp": 1792864086026
+    },
+    "3.2 Write property test P2 for `buildPredictionRequest` (tests/pbt)": {
+      "status": "passed",
+      "lastRunTimestamp": 1792864104994
+    },
+    "7.2 Write property test P4 for `deleteVault` on the in-memory repo (tests/pbt)": {
+      "status": "passed",
+      "lastRunTimestamp": 1792864144402
+    }
+  },
+  "executionHistory": {
+    "1. [kiro] Scaffold the Next.js + TypeScript + Tailwind project (no create-next-app)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603456
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863610015
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863894545
+      }
+    ],
+    "2.1 Implement `clampScore` and `weeklyTrend`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603493
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863897360
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864020779
+      }
+    ],
+    "2.2 Write property test P1 for `clampScore` (tests/pbt)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603524
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864029088
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864157590
+      }
+    ],
+    "2.3 Write property test P3 for `weeklyTrend` (tests/pbt)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603557
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864030487
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864158988
+      }
+    ],
+    "3.1 Implement `selectPredictionContext` and `buildPredictionRequest`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603582
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863898809
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864022164
+      }
+    ],
+    "3.2 Write property test P2 for `buildPredictionRequest` (tests/pbt)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603605
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864031885
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864159938
+      }
+    ],
+    "3.3 Write the context-selection supporting property test (tests/pbt)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603629
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864032837
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864161386
+      }
+    ],
+    "4. [kiro] Implement safety copy module `lib/safety.ts`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603656
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863899758
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864023567
+      }
+    ],
+    "5.1 Implement `buildCheckInResult` and `sessionScore`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603681
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864308799
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864433340
+      }
+    ],
+    "5.2 Write property test P5 for `buildCheckInResult` (tests/pbt)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603706
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864436351
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865055251
+      }
+    ],
+    "6. Checkpoint - Ensure all pure-module tests pass": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603734
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792868311314
+      }
+    ],
+    "7.1 Define the `VaultRepository` interface and `InMemoryVaultRepository`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603763
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863901147
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864024525
+      }
+    ],
+    "7.2 Write property test P4 for `deleteVault` on the in-memory repo (tests/pbt)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603786
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864033868
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864162285
+      }
+    ],
+    "7.3 Implement `SupabaseVaultRepository`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603809
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864165215
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864302299
+      }
+    ],
+    "8. [kiro] Write the SQL migration `supabase/migrations/0001_twin_loop.sql`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603835
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863902129
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864025697
+      }
+    ],
+    "9. Checkpoint - Ensure repository and migration tests pass": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603857
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792868313681
+      }
+    ],
+    "10.1 Implement `lib/claude/schemas.ts`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603891
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864165906
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864302956
+      }
+    ],
+    "10.2 Implement `lib/claude/prompts.ts`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603915
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864309905
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864432544
+      }
+    ],
+    "10.3 Implement the client functions in `lib/claude/index.ts`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603939
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864437400
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865054428
+      }
+    ],
+    "10.4 Write unit tests for the Claude layer with a mocked client": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603965
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865353799
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865614480
+      }
+    ],
+    "11.1 Implement the route": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863603986
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865060500
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865348819
+      }
+    ],
+    "11.2 Write unit tests (in-memory repo + mocked Claude)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604013
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865623748
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865812661
+      }
+    ],
+    "12.1 Implement the route": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604037
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865061437
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865349807
+      }
+    ],
+    "12.2 Write the next-response non-leak supporting property test (tests/pbt)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604063
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865622950
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865814850
+      }
+    ],
+    "12.3 Write unit tests (in-memory repo + mocked Claude)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604086
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865621513
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865811709
+      }
+    ],
+    "13.1 Implement the route": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604109
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865062399
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865345979
+      }
+    ],
+    "13.2 Write unit tests (in-memory repo + mocked Claude)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604135
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865619162
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865814062
+      }
+    ],
+    "14.1 Implement the route": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604157
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865063790
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865347866
+      }
+    ],
+    "14.2 Write unit tests (in-memory repo + mocked Claude)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604181
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865620605
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865810276
+      }
+    ],
+    "15.1 Implement the route": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604205
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865064427
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865346914
+      }
+    ],
+    "15.2 Write unit tests (in-memory repo)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604225
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865817989
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866965577
+      }
+    ],
+    "16.1 Implement the route": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604262
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865352775
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865615095
+      }
+    ],
+    "16.2 Write unit tests (in-memory repo)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604285
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865819381
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866963426
+      }
+    ],
+    "17. Checkpoint - Ensure all route, property, and unit tests pass": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604305
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792868316083
+      }
+    ],
+    "18.1 Assert `checkin-prompts.json` has exactly 20 prompts; assert Claude imports": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604331
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865820174
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866964857
+      }
+    ],
+    "19.1 Implement `app/page.tsx` — landing + \"Try as Maya\" with a visible": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604355
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866980917
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792867172805
+      }
+    ],
+    "19.2 Implement `app/onboarding/page.tsx` — consent & settings": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604376
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866980138
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792867171806
+      }
+    ],
+    "19.3 Implement `app/home/page.tsx` — the hub": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604399
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866978708
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792867169464
+      }
+    ],
+    "19.4 Implement `app/check-in/page.tsx` — the loop UI": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604426
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866976338
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792867168004
+      }
+    ],
+    "19.5 Implement `components/use-speech.ts` — Web Speech hook": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604452
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866977747
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792867170847
+      }
+    ],
+    "19.6 Styling pass with Tailwind": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604476
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792867177527
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792867386236
+      }
+    ],
+    "19.7 Add the PWA web app manifest and icons under `public/`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604502
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792867388579
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792868094613
+      }
+    ],
+    "20. Final checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792863604525
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792868116751
+      },
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792868308243
+      }
+    ],
+    "2. [kiro] Implement scoring pure module `lib/score.ts`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864159020
+      }
+    ],
+    "3. [kiro] Implement prediction pure module `lib/prediction.ts`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864161419
+      }
+    ],
+    "7. [kiro] Implement the vault repository `lib/db/vault-repository.ts`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792864302335
+      }
+    ],
+    "5. [kiro] Implement check-in pure module `lib/check-in.ts`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865055286
+      }
+    ],
+    "10. [kiro] Implement the server-only Claude layer `lib/claude/`": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865614517
+      }
+    ],
+    "14. [kiro] Implement `POST /api/checkin/correct` with unit tests": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865810334
+      }
+    ],
+    "11. [kiro] Implement `POST /api/demo/start` with unit tests": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865812709
+      }
+    ],
+    "13. [kiro] Implement `POST /api/checkin/answer` with unit tests": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865814107
+      }
+    ],
+    "12. [kiro] Implement `GET /api/checkin/next` with unit tests": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792865814887
+      }
+    ],
+    "16. [kiro] Implement `DELETE /api/vault` with unit tests": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866963465
+      }
+    ],
+    "18. [kiro] Boundary/smoke tests": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866964903
+      }
+    ],
+    "15. [kiro] Implement `GET /api/scores` with unit tests": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792866965606
+      }
+    ],
+    "19. [claude-code] User-facing pages, voice, styling, and PWA assets (optional)": [
+      {
+        "executionId": "5a96a0f9-d9c3-49e0-bb50-1a52263cb64c",
+        "chatSessionId": "sess_ac36ef9c-0d38-4c97-a3f8-37ee8fb0fac0",
+        "timestamp": 1792868094704
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/**
+ * Design tokens and base styles for the iamyou PWA.
+ *
+ * Mobile-first, restrained palette: a near-white canvas, near-black ink, a
+ * single slate accent, amber for the "Synthetic data" label, and red reserved
+ * for errors and the safety/support messages. Tailwind v4 reads these via the
+ * @theme block so utilities like `text-ink` and `bg-canvas` are available.
+ */
+@theme {
+  --color-canvas: #f7f7f6;
+  --color-surface: #ffffff;
+  --color-ink: #18181b;
+  --color-muted: #52525b;
+  --color-accent: #1e293b;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family:
+      ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+      Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* A single, consistent, visible focus ring for keyboard users across every
+     interactive control. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
