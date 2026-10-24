@@ -17,7 +17,7 @@
  */
 
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import gsap from 'gsap';
 
 import { useSpeech } from '@/components/use-speech';
@@ -37,6 +37,9 @@ const MAX_SEEN = 2000;
 const SUGGESTIONS = ['What matters most to me?', 'Who do I call with good news?', 'How do I make big decisions?'];
 
 const DEMO_MESSAGE = 'Start the demo first: open the app and tap Try as Maya.';
+
+/** Stagger for the shared `.rise` entrance. */
+const rise = (i: number) => ({ '--i': i }) as CSSProperties;
 
 /* -------------------------------------------------------------------------- */
 /* Seen leaves                                                                */
@@ -199,18 +202,14 @@ export default function MindPage() {
 
   return (
     <>
-      <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-6 px-5 pb-12 pt-3">
-        <nav className="flex items-center justify-between">
-          <Link href="/home" className="label transition-colors hover:text-ink">
-            ← Hub
-          </Link>
-          <span className="rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted shadow-[inset_0_0_0_1px_var(--color-line)]">
-            Synthetic data
-          </span>
-        </nav>
-
-        <header className="flex flex-col gap-3">
-          <p className="label text-cyan-ink">Mind tree</p>
+      <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-6 px-5 pb-16 pt-3">
+        <header className="rise flex flex-col gap-3" style={rise(0)}>
+          <div className="flex items-center justify-between gap-3">
+            <p className="label text-cyan-ink">Mind tree</p>
+            <span className="rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted shadow-[inset_0_0_0_1px_var(--color-line)]">
+              Synthetic data
+            </span>
+          </div>
           <h1 className="text-[40px] font-light leading-[0.95] tracking-[-0.04em]">Your mind, mapped.</h1>
           <p className="text-[15px] text-muted">Everything I&apos;ve learned from you, grown from your vault.</p>
         </header>
@@ -239,7 +238,7 @@ export default function MindPage() {
 
         {mind && (
           <>
-            <section aria-labelledby="learned-heading" className="flex flex-col gap-1">
+            <section aria-labelledby="learned-heading" className="rise flex flex-col gap-1" style={rise(1)}>
               <div className="-mx-1">
                 <MindMap
                   tree={mind.tree}
@@ -286,12 +285,13 @@ export default function MindPage() {
             <AskCard sourcesFor={nodeForEntry} onOpenNode={select} />
 
             <div className="flex flex-col gap-3">
-              {mind.tree.branches.map((branch) => (
+              {mind.tree.branches.map((branch, b) => (
                 <section
                   key={branch.id}
                   id={`branch-${branch.id}`}
                   aria-labelledby={`branch-${branch.id}-heading`}
-                  className="glass flex scroll-mt-16 flex-col gap-3 p-5"
+                  className="glass rise flex scroll-mt-16 flex-col gap-3 p-5"
+                  style={rise(3 + b)}
                 >
                   <div className="flex items-baseline justify-between gap-3">
                     <h2 id={`branch-${branch.id}-heading`} className="label text-ink">
@@ -306,11 +306,11 @@ export default function MindPage() {
                       {branch.nodes.map((node, i) => {
                         const fresh = newIds.has(node.id);
                         return (
-                          <li key={node.id} className="mind-leaf" style={{ animationDelay: `${0.6 + i * 0.04}s` }}>
+                          <li key={node.id} className="rise" style={rise(4 + b + i * 0.4)}>
                             <button
                               type="button"
                               onClick={() => select(node.id)}
-                              className={`inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-left text-[14px] leading-tight transition-colors ${
+                              className={`tap inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-left text-[14px] leading-tight transition ${
                                 fresh
                                   ? 'bg-cyan/15 text-ink shadow-[inset_0_0_0_1.5px_var(--color-cyan-ink)]'
                                   : 'bg-white/75 shadow-[inset_0_0_0_1px_var(--color-line)] hover:bg-white'
@@ -331,7 +331,8 @@ export default function MindPage() {
 
             <Link
               href="/check-in"
-              className="glass group flex items-center justify-between gap-4 p-5 transition-transform duration-300 hover:-translate-y-0.5"
+              className="glass rise tap group flex items-center justify-between gap-4 p-5 transition-transform duration-300 hover:-translate-y-0.5"
+              style={rise(8)}
             >
               <span className="flex flex-col gap-1">
                 <span className="label text-cyan-ink">Grow it</span>
@@ -443,7 +444,7 @@ function AskCard({
   };
 
   return (
-    <section aria-labelledby="ask-heading" className="glass flex flex-col gap-4 p-5">
+    <section aria-labelledby="ask-heading" className="glass rise flex flex-col gap-4 p-5" style={rise(2)}>
       <div className="flex flex-col gap-1">
         <h2 id="ask-heading" className="label text-cyan-ink">
           Ask about yourself
@@ -474,7 +475,7 @@ function AskCard({
             onClick={listen}
             disabled={asking || speech.listening}
             aria-label={speech.listening ? 'Listening' : 'Ask by voice'}
-            className={`grid h-12 w-12 shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_var(--color-line)] transition-colors disabled:opacity-60 ${
+            className={`tap grid h-12 w-12 shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_var(--color-line)] transition disabled:opacity-60 ${
               speech.listening ? 'bg-cyan/20 text-cyan-ink' : 'bg-white/80 hover:bg-white'
             }`}
           >
@@ -485,7 +486,7 @@ function AskCard({
           type="submit"
           disabled={asking || question.trim().length === 0}
           aria-label="Ask"
-          className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-ink text-white transition-colors hover:bg-cyan-ink disabled:opacity-40"
+          className="tap grid h-12 w-12 shrink-0 place-items-center rounded-full bg-ink text-white transition hover:bg-cyan-ink disabled:opacity-40"
         >
           <span aria-hidden="true">→</span>
         </button>
@@ -498,7 +499,7 @@ function AskCard({
               <button
                 type="button"
                 onClick={() => void ask(s)}
-                className="rounded-full px-3 py-1.5 text-[13px] text-muted shadow-[inset_0_0_0_1px_var(--color-line)] transition-colors hover:bg-white/70 hover:text-ink"
+                className="tap rounded-full px-3 py-1.5 text-[13px] text-muted shadow-[inset_0_0_0_1px_var(--color-line)] transition hover:bg-white/70 hover:text-ink"
               >
                 {s}
               </button>
@@ -525,12 +526,12 @@ function AskCard({
           <>
             <p className="label text-[10px]">You asked · {asked}</p>
             {answer.kind === 'support' || answer.kind === 'counselor' || answer.kind === 'health' ? (
-              <div role="alert" className="flex flex-col gap-1 rounded-2xl border-l-4 border-l-cyan-ink bg-white/80 p-4">
+              <div role="alert" className="rise flex flex-col gap-1 rounded-2xl border-l-4 border-l-cyan-ink bg-white/80 p-4">
                 <span className="label text-cyan-ink">{FIXED_LABEL[answer.kind]}</span>
                 <p className="text-[16px] leading-relaxed">{answer.answer}</p>
               </div>
             ) : (
-              <div className="flex flex-col gap-1 rounded-[22px_22px_22px_6px] bg-white/80 p-4 shadow-[inset_0_0_0_1px_var(--color-line)]">
+              <div className="rise flex flex-col gap-1 rounded-[22px_22px_22px_6px] bg-white/80 p-4 shadow-[inset_0_0_0_1px_var(--color-line)]">
                 <span className="label text-cyan-ink">Twin</span>
                 <p className={`text-[16px] leading-relaxed ${answer.kind === 'empty' ? 'text-muted' : ''}`}>{answer.answer}</p>
               </div>
@@ -540,7 +541,7 @@ function AskCard({
               <div className="flex flex-col gap-2">
                 <span className="label">From your vault · {answer.sources.length}</span>
                 <ul className="flex flex-col gap-2">
-                  {answer.sources.map((s) => {
+                  {answer.sources.map((s, i) => {
                     const nodeId = sourcesFor(s.id);
                     const body = (
                       <>
@@ -552,12 +553,12 @@ function AskCard({
                       </>
                     );
                     return (
-                      <li key={s.id}>
+                      <li key={s.id} className="rise" style={rise(1 + i)}>
                         {nodeId ? (
                           <button
                             type="button"
                             onClick={() => onOpenNode(nodeId)}
-                            className="flex w-full flex-col gap-1.5 rounded-2xl border-l-2 border-l-cyan bg-white/60 p-3 text-left transition-colors hover:bg-white"
+                            className="tap flex w-full flex-col gap-1.5 rounded-2xl border-l-2 border-l-cyan bg-white/60 p-3 text-left transition hover:bg-white"
                           >
                             {body}
                           </button>

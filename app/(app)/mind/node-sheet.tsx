@@ -111,7 +111,7 @@ export default function NodeSheet({
             ref={closeRef}
             type="button"
             onClick={close}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/80 text-muted shadow-[inset_0_0_0_1px_var(--color-line)] transition-colors hover:text-ink"
+            className="tap grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/80 text-muted shadow-[inset_0_0_0_1px_var(--color-line)] transition hover:text-ink"
           >
             <span aria-hidden="true">✕</span>
             <span className="sr-only">Close</span>
@@ -125,8 +125,8 @@ export default function NodeSheet({
             From your vault · {sources.length}
           </h3>
           <ul className="flex flex-col gap-2">
-            {sources.map((s) => (
-              <li key={s.id} className="flex flex-col gap-2 rounded-2xl bg-white/80 p-4 shadow-[inset_0_0_0_1px_var(--color-line)]">
+            {sources.map((s, i) => (
+              <li key={s.id} className="rise flex flex-col gap-2 rounded-2xl bg-white/80 p-4 shadow-[inset_0_0_0_1px_var(--color-line)]" style={{ '--i': i + 2 } as CSSProperties}>
                 <span className="flex items-baseline justify-between gap-3">
                   <span className="label text-[10px] text-ink">{KIND_LABEL[s.kind]}</span>
                   <span className="label text-[10px]">{formatEntryDate(s.created_at)}</span>
