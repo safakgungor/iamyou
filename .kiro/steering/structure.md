@@ -11,7 +11,7 @@ The repository is currently at the planning/documentation stage; application cod
 │   └── specs/           # One spec per feature: requirements.md, design.md, tasks.md (source of truth)
 ├── data/
 │   ├── public/          # Open datasets from the Hackachusetts kit — shipped in the public build
-│   ├── synthetic/       # Maya's persona + history, generated from a fixed seed (reproducible)
+│   ├── synthetic/       # Maya's persona + history (see Data rules below)
 │   └── private/         # Gitignored; real data only; NEVER read into commits, fixtures, or prompts
 ├── docs/
 │   ├── brief.md                     # Product brief; input for Kiro spec generation
@@ -32,18 +32,20 @@ The repository is currently at the planning/documentation stage; application cod
 ## Data rules
 
 - `data/public/` and `data/synthetic/` are the only data used in the public build.
+- In `data/synthetic/`, `maya/profile.json`, `maya/vault-entries.json`, `maya/inbox.json` and `checkin-prompts.json` are hand-written. Only `maya/weekly-features.json` is generated, by `scripts/generate-maya.ts` from a fixed seed.
 - `data/private/` is gitignored and off-limits to commits, tests, fixtures, and prompts.
 - The trial finder uses the ClinicalTrials.gov API v2 at runtime, with the saved slice in `data/public/` as an offline fallback (only RECRUITING studies with a Massachusetts location).
 
-## Expected application layout (once scaffolded)
+## Application layout
 
-Next.js App Router with TypeScript. Keep all Anthropic/Supabase service-role access in server code (route handlers / server components), never in the client. A reasonable starting shape:
+Next.js App Router with TypeScript. Keep all Anthropic/Supabase service-role access in server code, never in the client.
 
-```
-app/            # routes, pages, layouts (App Router)
-  api/          # server route handlers — the only place Claude and secrets are used
-components/     # UI components (mobile-first, large tap targets, voice-first)
-lib/            # clients (Supabase), feature logic, deterministic speech features
-public/         # PWA manifest, icons, static assets
-tests/          # Vitest unit + fast-check property tests
-```
+- `app/` — pages, and `app/api/**/route.ts` handlers.
+- `components/` — UI components.
+- `lib/` — pure logic with no I/O: `score.ts`, `speech-features.ts`, `fillers.ts`, `baseline.ts`, `signal.ts`, `rtk-gate.ts`, `drafts.ts`, `trials.ts`, `family.ts`.
+- `lib/claude/` — server-only Claude calls, with all prompts in `prompts.ts`.
+- `lib/db/` — Supabase access behind repository interfaces, each with an in-memory fake used by tests.
+- `supabase/migrations/` — numbered SQL migrations.
+- `scripts/` — `generate-maya.ts`, and `scripts/hooks/` for hook scripts.
+- `tests/unit/` and `tests/pbt/`.
+- `public/` — manifest and icons.

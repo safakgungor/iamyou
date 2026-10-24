@@ -2,7 +2,7 @@
 
 ## Stack
 
-- **Framework:** Next.js (App Router) with TypeScript, installable as a PWA (manifest + service worker), deployed on Vercel.
+- **Framework:** Next.js (App Router) with TypeScript, installable as a PWA (web app manifest and icons only — no custom service worker), deployed on Vercel.
 - **Backend / data:** Supabase — Postgres with row-level security for the per-user vault, Supabase Auth, plus a "Try as Maya" demo mode that needs no login.
 - **AI:** Claude via the Anthropic API, called **only from server routes** — never from the client.
 - **Testing:** Vitest for unit tests, fast-check for property-based tests.
@@ -20,6 +20,28 @@ Defined in `.env.example` (copy to `.env.local`; never commit `.env` files):
 
 Secrets stay server-side: API keys and the service-role key are used only in server code.
 
+## Supabase
+
+- Browser and server clients use `@supabase/ssr`.
+- Row-level security is on for every table, keyed on `auth.uid()`.
+- "Try as Maya" uses Supabase anonymous sign-in (already enabled on the project).
+- The service-role key is used only in `POST /api/demo/start`, to seed the caller's own rows.
+
+## Claude API
+
+- SDK `@anthropic-ai/sdk`, server-only code in `lib/claude/`, model `"claude-opus-5-5"`.
+- JSON results come from `client.messages.parse` with `zodOutputFormat` from `"@anthropic-ai/sdk/helpers/zod"`; zod schemas for every request and response.
+- `output_config.effort` is `"low"` for spoken replies and email drafts, `"medium"` for grading and family-mode answers.
+- Check `stop_reason === "refusal"` before reading content, and return a safe fallback message.
+- The spoken-reply route uses `client.beta.messages.create` with `betas ["server-side-fallback-2026-07-01"]` and `fallbacks: "default"`.
+- Never send `temperature`, `top_p` or `top_k`. Never use assistant prefill.
+
+## Voice
+
+- Speech-to-text via the Web Speech API (`SpeechRecognition` / `webkitSpeechRecognition`).
+- Text-to-speech via `speechSynthesis`.
+- Fall back to a text input when recognition is unsupported.
+
 ## Conventions
 
 - Everything in the repo (code, UI, docs) is in English.
@@ -30,15 +52,13 @@ Secrets stay server-side: API keys and the service-role key are used only in ser
 
 ## Common commands
 
-The project is not yet scaffolded, so exact scripts may change. Expected commands once set up with npm:
+The package manager is **pnpm**. The project is not yet scaffolded, so verify the actual script names in `package.json` once it exists before relying on them.
 
 ```bash
-npm install            # install dependencies
-npm run dev            # start the local dev server (run manually in a terminal)
-npm run build          # production build
-npm run start          # serve the production build
-npm test               # run Vitest unit + property-based tests
-npm run lint           # lint
+pnpm install           # install dependencies
+pnpm dev               # start the local dev server (run manually in a terminal)
+pnpm build             # production build
+pnpm test:unit         # unit tests (vitest run tests/unit)
+pnpm test:pbt          # property-based tests (vitest run tests/pbt)
+pnpm lint              # lint
 ```
-
-Verify the actual script names in `package.json` once it exists before relying on them.
