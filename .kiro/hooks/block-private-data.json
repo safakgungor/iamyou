@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "block-private-data",
+      "description": "Block writes to data/private/ and .env files (allowing .env.example) before they happen.",
+      "trigger": "PreToolUse",
+      "matcher": "write",
+      "action": {
+        "type": "command",
+        "command": "bash scripts/hooks/block-private.sh"
+      }
+    }
+  ]
+}

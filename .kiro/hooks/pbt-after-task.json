@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "pbt-after-task",
+      "description": "Run the property-based test suite after each task finishes executing.",
+      "trigger": "PostTaskExec",
+      "action": {
+        "type": "command",
+        "command": "npm run test:pbt -- --reporter=dot"
+      }
+    }
+  ]
+}

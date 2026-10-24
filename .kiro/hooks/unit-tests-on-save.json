@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "unit-tests-on-save",
+      "description": "Run the unit test suite whenever a lib/ or app/ source file is saved.",
+      "trigger": "PostFileSave",
+      "matcher": "(^|/)(lib|app)/.+\\.tsx?$",
+      "action": {
+        "type": "command",
+        "command": "npm run test:unit -- --reporter=dot"
+      }
+    }
+  ]
+}

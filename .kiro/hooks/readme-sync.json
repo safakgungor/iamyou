@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "readme-sync",
+      "description": "After a task runs, update only the 'Run locally' section of README.md if setup steps changed.",
+      "trigger": "PostTaskExec",
+      "enabled": false,
+      "action": {
+        "type": "agent",
+        "prompt": "Update only the 'Run locally' section of README.md if this task changed setup steps."
+      }
+    }
+  ]
+}

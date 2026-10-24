@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "session-log",
+      "description": "Append a one-line session record to KIRO_LOG.md when the assistant finishes responding.",
+      "trigger": "Stop",
+      "action": {
+        "type": "command",
+        "command": "bash scripts/hooks/log-session.sh"
+      }
+    }
+  ]
+}
