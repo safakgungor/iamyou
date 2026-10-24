@@ -42,9 +42,9 @@ Next.js App Router with TypeScript. Keep all Anthropic/Supabase service-role acc
 
 - `app/` — pages, and `app/api/**/route.ts` handlers.
 - `components/` — UI components.
-- `lib/` — pure logic with no I/O: `score.ts`, `speech-features.ts`, `fillers.ts`, `baseline.ts`, `signal.ts`, `rtk-gate.ts`, `drafts.ts`, `trials.ts`, `family.ts`.
+- `lib/` — pure logic with no I/O: `score.ts`, `prediction.ts` (`buildPredictionRequest`, `selectPredictionContext`), `check-in.ts` (`buildCheckInResult`, `sessionScore`), `safety.ts` (`SUPPORT_MESSAGE`, `COUNSELOR_MESSAGE`), `speech-features.ts`, `fillers.ts`, `baseline.ts`, `signal.ts`, `rtk-gate.ts`, `drafts.ts`, `trials.ts`, `family.ts`.
 - `lib/claude/` — server-only Claude calls, with all prompts in `prompts.ts`.
-- `lib/db/` — Supabase access behind repository interfaces, each with an in-memory fake used by tests.
+- `lib/db/` — Supabase access behind repository interfaces, each with an in-memory fake used by tests. For `twin-loop`: `vault-repository.ts` defines the `VaultRepository` interface with `SupabaseVaultRepository` and `InMemoryVaultRepository` implementations.
 - `supabase/migrations/` — numbered SQL migrations.
 - `scripts/` — `generate-maya.ts`, and `scripts/hooks/` for hook scripts.
 - `tests/unit/` and `tests/pbt/`.

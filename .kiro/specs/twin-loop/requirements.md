@@ -42,7 +42,9 @@ approval, synthetic screens are labelled, and secrets stay server-side.
 - **deleteVault**: The operation that removes every row owned by a given user across all Vault tables.
 - **Synthetic_Label**: A visible "Synthetic data" label shown on any screen that displays synthetic persona or history data.
 - **crisis flag**: The boolean `crisis` field on a grading result; `true` when the user's answer expresses intent to harm oneself or a crisis that needs immediate support.
+- **genetics_question flag**: The boolean `genetics_question` field on a grading result; `true` when the user's answer asks about genetic testing or a test result.
 - **Support_Message**: A supportive message pointing the user to professional support, including the 988 Suicide & Crisis Lifeline (call or text 988 in the US).
+- **Counselor_Message**: A message suggesting the user talk to a genetic counselor, which never interprets any test result.
 
 ## Requirements
 
@@ -116,7 +118,7 @@ approval, synthetic screens are labelled, and secrets stay server-side.
 
 #### Acceptance Criteria
 
-1. WHEN the user submits an answer, THE Grading_Service SHALL grade the stored prediction against the submitted answer using Claude, which returns an object of the form `{score: number, rationale: string, crisis: boolean}`, where `crisis` is `true` when the answer expresses intent to harm oneself or a crisis that needs immediate support.
+1. WHEN the user submits an answer, THE Grading_Service SHALL grade the stored prediction against the submitted answer using Claude, which returns an object of the form `{score: number, rationale: string, crisis: boolean, genetics_question: boolean}`, where `crisis` is `true` when the answer expresses intent to harm oneself or a crisis that needs immediate support, and `genetics_question` is `true` when the answer asks about genetic testing or a test result.
 2. WHEN a raw score is received, THE Score_Service SHALL clamp the score to the range [0, 1] via `clampScore` and SHALL map `NaN` to 0.
 3. FOR ALL numeric inputs `x`, `clampScore(x)` SHALL return a value within [0, 1], and `clampScore(NaN)` SHALL return 0. _(Property P1)_
 4. WHEN the score has been clamped, THE Score_Service SHALL store the clamped score with the corresponding `answers` row.
@@ -153,7 +155,8 @@ approval, synthetic screens are labelled, and secrets stay server-side.
 
 1. IF the grading result has `crisis` equal to `true`, THEN THE Check_In_Service SHALL show no score and no twin reply, and SHALL show the Support_Message pointing to professional support, including the 988 Suicide & Crisis Lifeline (call or text 988 in the US). _(Property P5)_
 2. IF a correction expresses a crisis, THEN THE System SHALL show the Support_Message and SHALL NOT store anything in the Vault from that correction.
-3. IF the user asks about genetic testing or a test result, THEN THE System SHALL suggest talking to a genetic counselor and SHALL NOT interpret any result.
+3. IF the grading result has `crisis` equal to `false` and `genetics_question` equal to `true`, THEN THE Check_In_Service SHALL show the clamped score and the prediction and SHALL replace the twin reply with the Counselor_Message, which suggests talking to a genetic counselor and SHALL NOT interpret any result.
+4. IF a correction asks about genetic testing or a test result, THEN THE System SHALL show the Counselor_Message and SHALL NOT interpret any result.
 
 ## Correctness Properties
 
@@ -164,7 +167,7 @@ the requirement(s) it governs.
 - **P2 — Prediction never sees the answer.** `buildPredictionRequest` takes no answer parameter; for any vault and any answer string absent from that vault, the serialized prediction request never contains that answer string. _(Requirements 4)_
 - **P3 — Weekly trend shape and bounds.** `weeklyTrend` returns one value per ISO_week present in the input, and each value is within [0, 1]. _(Requirement 8)_
 - **P4 — Delete leaves nothing.** `deleteVault(userId)` leaves zero rows for that user in every Vault table, verified against the in-memory Vault_Repository. _(Requirement 3)_
-- **P5 — Crisis response.** For any grading result with crisis = true, the check-in result shown to the user contains the support message and contains no score and no twin reply. _(Requirements 6, 9)_
+- **P5 — Crisis response.** For any grading result with crisis = true, the check-in result shown to the user contains the support message and contains no score, no prediction and no twin reply — regardless of the value of genetics_question. (When crisis = false and genetics_question = true, the result still shows the score and prediction and replaces the reply with the counselor message; this does not weaken the crisis guarantee.) _(Requirements 6, 9)_
 
 ## Out of Scope
 
