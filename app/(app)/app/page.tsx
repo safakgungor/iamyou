@@ -93,7 +93,7 @@ export default function AppEntryPage() {
       await Promise.all([wake(), delay(prefersReducedMotion() ? 0 : 1200)]);
       await leave();
     } catch (err) {
-      console.error(err);
+      console.warn(err);
       setPhase('error');
     }
   }

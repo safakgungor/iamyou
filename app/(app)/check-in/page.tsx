@@ -132,7 +132,7 @@ export default function CheckInPage() {
         setQuestionNumber((n) => n + 1);
         setPhase('answering');
       } catch (err) {
-        console.error(err);
+        console.warn(err);
         setLoadError({ message: 'The twin lost its train of thought. Give it another go.', signedOut: false });
         setPhase('error');
       }
@@ -186,7 +186,7 @@ export default function CheckInPage() {
       // carries no reply and nothing is spoken (Req 9.1).
       if (data.kind === 'scored') speech.speak(data.reply);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
       // Keep the answer so a retry is one tap.
       setSubmitError('That didn’t reach the twin. Your answer is still here; try again.');
     } finally {
@@ -212,7 +212,7 @@ export default function CheckInPage() {
       const data = (await res.json()) as CheckInCorrectResponse;
       setCorrectionResult(data);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
       setCorrectionError('Couldn’t save that. Try again.');
     } finally {
       setCorrectionSubmitting(false);
