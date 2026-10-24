@@ -37,16 +37,20 @@ import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 
 import type { PredictionRequest } from '../prediction';
+import type { VaultEntry } from '../db/vault-repository';
 import { validateDraftSafety } from '../drafts';
+import { dontKnowAnswer, validateFamilyAnswer, type FamilyAnswer } from '../family';
 import {
   DRAFT_REPLY_SYSTEM,
   DRAFT_SAFETY_RETRY_SUFFIX,
+  FAMILY_ANSWER_SYSTEM,
   GRADING_SYSTEM,
   PREDICTION_SYSTEM,
   SCREENING_SYSTEM,
   SPOKEN_REPLY_SYSTEM,
   SPOKEN_REPLY_FALLBACK,
   buildDraftReplyUserMessage,
+  buildFamilyAnswerUserMessage,
   buildGradingUserMessage,
   buildPredictionUserMessage,
   buildScreeningUserMessage,
@@ -55,6 +59,7 @@ import {
 import {
   GradingSchema,
   ScreeningSchema,
+  familyAnswerSchemaFor,
   type Grading,
   type Screening,
 } from './schemas';
@@ -433,4 +438,91 @@ export async function draftReply(
     }
     throw error;
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/* familyAnswer — medium, messages.parse (zod), cited or "I don't know"        */
+/* -------------------------------------------------------------------------- */
+
+/** Hard wall-clock ceiling for a `familyAnswer` call, as for `draftReply`. */
+const FAMILY_ANSWER_TIMEOUT_MS = 30_000;
+
+/**
+ * Answers a relative's question the way the person would, grounded only in the
+ * supplied vault entries, for care-outputs family mode. (care-outputs Req 9, 10)
+ *
+ * Returns either an answer citing at least one supplied entry, or exactly the
+ * Dont_Know_Answer with no citations (P2):
+ *   1. No entries: the Dont_Know_Answer, with no call. (Req 9.4)
+ *   2. `messages.parse` with the schema `familyAnswerSchemaFor(ids)`, so the
+ *      output format itself limits citations to the ids sent. (Req 9.3, 9.5)
+ *   3. A refusal is never read; it, a parse failure or a 30-second timeout
+ *      gives the Dont_Know_Answer. (Req 9.6)
+ *   4. `validateFamilyAnswer` drops any unknown or repeated id. (Req 10.1–10.4)
+ *   5. `validateDraftSafety(answer, citedText)`: the answer may repeat a health
+ *      term from the entries it cites but may not add one. (Req 10.7)
+ *
+ * API errors other than a timeout propagate, like `draftReply`.
+ */
+export async function familyAnswer(
+  input: { firstName: string | null; question: string; entries: VaultEntry[] },
+  client: Anthropic = createClaudeClient(),
+): Promise<FamilyAnswer> {
+  const { firstName, question, entries } = input;
+  const dontKnow: FamilyAnswer = { answer: dontKnowAnswer(firstName), cited_entry_ids: [] };
+
+  if (entries.length === 0) {
+    return dontKnow;
+  }
+
+  const ids = entries.map((entry) => entry.id) as [string, ...string[]];
+  const schema = familyAnswerSchemaFor(ids);
+
+  const message = await withTimeout(
+    client.messages.parse({
+      model: MODEL,
+      max_tokens: MAX_TOKENS,
+      output_config: {
+        effort: 'medium',
+        format: zodOutputFormat(schema),
+      },
+      system: FAMILY_ANSWER_SYSTEM,
+      messages: [
+        { role: 'user', content: buildFamilyAnswerUserMessage({ firstName, question, entries }) },
+      ],
+    }),
+    FAMILY_ANSWER_TIMEOUT_MS,
+  ).catch((error: unknown) => {
+    // A timeout or an output the SDK could not parse: fail safe.
+    if (error instanceof Anthropic.APIError) throw error;
+    return null;
+  });
+
+  if (message === null) {
+    return dontKnow;
+  }
+
+  if (message.stop_reason === 'refusal') {
+    return dontKnow;
+  }
+
+  const parsed = schema.safeParse(message.parsed_output);
+  if (!parsed.success) {
+    return dontKnow;
+  }
+
+  const result = validateFamilyAnswer(parsed.data, entries, firstName);
+  if (result.cited_entry_ids.length === 0 || result.answer.trim() === '') {
+    return dontKnow;
+  }
+
+  const citedText = entries
+    .filter((entry) => result.cited_entry_ids.includes(entry.id))
+    .map((entry) => entry.text)
+    .join('\n');
+  if (!validateDraftSafety(result.answer, citedText).ok) {
+    return dontKnow;
+  }
+
+  return result;
 }

@@ -196,15 +196,15 @@ to exist.
   - Unit test get/set, per-condition keys and copy semantics
   - _Requirements: 5.4, 5.5_
 
-- [ ] 9. [kiro] Add `familyAnswer` to the server-only Claude layer
-  - [ ] 9.1 Add the family prompts to `lib/claude/prompts.ts`
+- [x] 9. [kiro] Add `familyAnswer` to the server-only Claude layer
+  - [x] 9.1 Add the family prompts to `lib/claude/prompts.ts`
     - `FAMILY_ANSWER_SYSTEM` (answer as the person, first person and brief, only from the
       entries, cite every entry used, return exactly the Dont_Know_Answer when the
       entries do not support an answer, never speculate about health, diagnosis, genetic
       status or test results) and `buildFamilyAnswerUserMessage({ firstName, question,
       entries })` listing `[id] (kind) text`
     - _Requirements: 9.3, 10.7_
-  - [ ] 9.2 Implement `familyAnswer` in `lib/claude/index.ts`
+  - [x] 9.2 Implement `familyAnswer` in `lib/claude/index.ts`
     - Return the Dont_Know_Answer without a call when `entries` is empty; otherwise
       `messages.parse` with model `"claude-opus-5-5"`, `effort: 'medium'` and
       `zodOutputFormat(familyAnswerSchemaFor(ids))`, no temperature/top_p/top_k, no
@@ -214,13 +214,13 @@ to exist.
       `validateDraftSafety(answer, citedEntriesText)` and return the Dont_Know_Answer when
       it fails
     - _Requirements: 9.3, 9.5, 9.6, 9.7, 10.2, 10.7_
-  - [ ] 9.3 Write unit tests for `familyAnswer` with a mocked client
+  - [x] 9.3 Write unit tests for `familyAnswer` with a mocked client
     - Request shape (model, effort, enum of sent ids, one user message, no sampling
       params); empty entries make no call; refusal content is never read; timeout; a
       cited answer passes through; an answer adding a health term absent from the cited
       entries becomes the Dont_Know_Answer
     - _Requirements: 9.3, 9.4, 9.6, 9.7, 10.7_
-  - [ ] 9.4 Extend property test P2 to `familyAnswer` (tests/pbt)
+  - [x] 9.4 Extend property test P2 to `familyAnswer` (tests/pbt)
     - **Property P2: A family answer is cited or admits it does not know**: with a fake
       client returning arbitrary outputs (arbitrary text and ids, malformed output, or
       `stop_reason: 'refusal'`), `familyAnswer` returns either a non-empty set of existing
