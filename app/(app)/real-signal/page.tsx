@@ -61,8 +61,8 @@ export default function RealSignalPage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-8 px-5 pb-16 pt-6">
       <nav className="flex items-center justify-between">
-        <Link href="/home" className="label transition-colors hover:text-ink">
-          ← Hub
+        <Link href="/health" className="label transition-colors hover:text-ink">
+          ← Health
         </Link>
         <a
           href={SOURCE}

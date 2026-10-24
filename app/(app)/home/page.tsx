@@ -99,7 +99,7 @@ export default function HomePage() {
   const latest = weeks.length ? weeks[weeks.length - 1][1] : null;
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 px-5 pb-10 pt-3">
+    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-5 px-5 pb-12 pt-3">
       <header className="flex items-center justify-between">
         <span className="text-[21px] font-medium tracking-[-0.03em]">iamyou</span>
         <span className="rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted shadow-[inset_0_0_0_1px_var(--color-line)]">
@@ -113,29 +113,43 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="flex flex-col gap-2">
+      <div className="rise flex flex-col gap-2" style={{ '--i': 1 } as React.CSSProperties}>
         <p className="label text-cyan-ink">Maya&apos;s twin</p>
         <h1 className="text-[38px] font-light leading-[0.95] tracking-[-0.04em]">Good to see you, Maya.</h1>
       </div>
 
       <Link
         href="/check-in"
-        className="glass group flex items-center justify-between gap-4 p-5 transition-transform duration-300 hover:-translate-y-0.5"
+        className="tap rise group flex items-center justify-between gap-4 rounded-[22px] bg-ink p-5 text-white shadow-[0_30px_60px_-30px_rgb(24_33_46/0.6)]"
+        style={{ '--i': 2 } as React.CSSProperties}
       >
         <span className="flex flex-col gap-1">
-          <span className="label">Today&apos;s check-in</span>
+          <span className="label text-cyan">Today&apos;s check-in</span>
           <span className="text-[19px] font-medium tracking-[-0.01em]">One question. The twin answers first.</span>
-          <span className="text-sm text-muted">About 30 seconds, by voice or text.</span>
+          <span className="text-sm text-white/60">About 30 seconds, by voice or text.</span>
         </span>
         <span
           aria-hidden="true"
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-white transition-colors group-hover:bg-cyan-ink"
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-cyan text-ink transition-colors group-hover:bg-white"
         >
           →
         </span>
       </Link>
 
-      <section aria-labelledby="knows-heading" className="glass flex flex-col gap-4 p-5">
+      <div className="rise grid grid-cols-2 gap-3" style={{ '--i': 3 } as React.CSSProperties}>
+        <Link href="/assistant" className="glass tap flex flex-col gap-1 p-4">
+          <span className="label text-cyan-ink">Second self</span>
+          <span className="text-[16px] font-medium">Your inbox</span>
+          <span className="text-[13px] leading-snug text-muted">Replies drafted in your voice.</span>
+        </Link>
+        <Link href="/mind" className="glass tap flex flex-col gap-1 p-4">
+          <span className="label text-cyan-ink">Mind tree</span>
+          <span className="text-[16px] font-medium">What it knows</span>
+          <span className="text-[13px] leading-snug text-muted">Everything it has learned about you.</span>
+        </Link>
+      </div>
+
+      <section aria-labelledby="knows-heading" className="glass rise flex flex-col gap-4 p-5" style={{ '--i': 4 } as React.CSSProperties}>
         <div className="flex items-baseline justify-between gap-3">
           <h2 id="knows-heading" className="label">
             How well it knows you
@@ -178,21 +192,7 @@ export default function HomePage() {
         )}
       </section>
 
-      <Link
-        href="/assistant"
-        className="glass flex items-center justify-between gap-4 p-5 transition-transform duration-300 hover:-translate-y-0.5"
-      >
-        <span className="flex flex-col gap-1">
-          <span className="label text-cyan-ink">Second self</span>
-          <span className="text-[17px] font-medium">Your inbox</span>
-          <span className="text-sm text-muted">The twin drafts replies in your voice.</span>
-        </span>
-        <span aria-hidden="true" className="text-xl text-muted">
-          →
-        </span>
-      </Link>
-
-      <section aria-labelledby="data-heading" className="mt-2 flex flex-col gap-3 px-1">
+      <section aria-labelledby="data-heading" className="rise mt-2 flex flex-col gap-3 px-1" style={{ '--i': 5 } as React.CSSProperties}>
         <h2 id="data-heading" className="label">
           Your data
         </h2>
