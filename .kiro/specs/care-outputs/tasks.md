@@ -174,7 +174,7 @@ to exist.
       field contains "likely", "risk" or "diagnosed"; identical output on repeat
     - _Requirements: 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 2.1, 2.3, 2.4, 3.1, 3.3, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 6. [kiro] Add the care-outputs zod schemas
+- [x] 6. [kiro] Add the care-outputs zod schemas
   - Add to `lib/api-schemas.ts` (zod only): `SummaryRequestSchema` (`discuss` ≤ 500,
     `contact` ≤ 200, both optional), `SummaryResponseSchema` (14 fields with a
     discriminated `measures` entry, `synthetic`, `synthetic_label`), `TrialSchema`,
