@@ -22,6 +22,7 @@ import {
   FAMILY_HISTORY_OPTIONS,
   RTK_OPTIONS,
   changedSettings,
+  familyAccessLine,
   profileToSave,
   settingsFrom,
   type ConsentSettings,
@@ -90,6 +91,7 @@ export default function ConsentForm() {
   const isNew = ready !== null && ready.profile === null;
   const canSave = ready !== null && !saving && !saved && (isNew || changeCount > 0);
   const name = ready?.profile?.firstName;
+  const familyLine = familyAccessLine(ready?.profile?.digitalWill ?? null);
 
   function update(patch: Partial<ConsentSettings>) {
     setSettings((s) => ({ ...s, ...patch }));
@@ -276,22 +278,24 @@ export default function ConsentForm() {
               )}
             </section>
 
-            <section
-              className="rise rounded-[22px] border border-dashed border-ink/15 p-5"
-              style={rise(4)}
-            >
-              <div className="flex items-baseline justify-between gap-3">
-                <p className="label">Digital will</p>
-                <span className="label text-[10px]">Soon</span>
-              </div>
-              <p className="mt-2 text-[14px] leading-snug text-muted">Decide who can talk to your twin later on.</p>
-              <button
-                type="button"
-                disabled
-                className="mt-3 h-10 rounded-full px-4 text-sm text-muted opacity-60 shadow-[inset_0_0_0_1px_var(--color-line)]"
-              >
-                Set up digital will
-              </button>
+            <section className="glass rise p-5" style={rise(4)}>
+              <p className="label">Digital will</p>
+              <p className="mt-1 text-[17px] font-medium tracking-[-0.01em]">Family mode</p>
+              {familyLine ? (
+                <>
+                  <p className="mt-1 text-[14px] leading-snug text-muted">
+                    {familyLine} Your twin answers only from your own words.
+                  </p>
+                  <Link
+                    href="/family"
+                    className="tap mt-3 inline-flex h-10 items-center gap-2 rounded-full bg-white/70 px-4 text-sm font-medium shadow-[inset_0_0_0_1px_var(--color-line)] hover:bg-white"
+                  >
+                    Open family mode <span aria-hidden="true">→</span>
+                  </Link>
+                </>
+              ) : (
+                <p className="mt-1 text-[14px] leading-snug text-muted">No one can ask your twin how you think.</p>
+              )}
             </section>
           </fieldset>
 

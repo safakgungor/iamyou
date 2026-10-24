@@ -8,7 +8,8 @@
  *   - `health_layer_opt_in` — boolean, defaults to `false` (Req 2.2).
  *   - `rtk_setting` — tell_me | doctor_only | record_only, shown as who hears
  *     about a change, defaults to `record_only` (Req 2.3, 2.4).
- *   - a disabled placeholder control for a future digital-will setting (Req 2.5).
+ *   - the digital will (Req 2.5): who the profile's `digital_will` lets ask the
+ *     twin through family mode, read-only, with a link to `/family`.
  *
  * A server component for the page title; the form itself is the client
  * component `ConsentForm`, which prefills from the caller's profile and keeps

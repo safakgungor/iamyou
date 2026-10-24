@@ -9,6 +9,7 @@
  */
 
 import type { FamilyHistory, Profile, RtkSetting } from '@/lib/db/vault-repository';
+import { familyModeAccess } from '@/lib/family';
 
 /** The approved strongest health-related sentence (Req 2.7). */
 export const DOCTOR_WORDING = 'You might want to talk to your doctor about this.';
@@ -37,6 +38,18 @@ export const RTK_OPTIONS: ReadonlyArray<{ value: RtkSetting; label: string; deta
   { value: 'doctor_only', label: 'Only my doctor', detail: "It goes in your doctor's summary, never on your screen." },
   { value: 'record_only', label: 'No one', detail: 'It stays in your vault. Nothing is shown.' },
 ];
+
+/**
+ * The digital will's family-mode line (Req 2.5): who may ask the twin how the
+ * person thinks, e.g. "Ella Linden (daughter) can ask how you think.", or null
+ * when the will names no one.
+ */
+export function familyAccessLine(digitalWill: unknown): string | null {
+  const names = familyModeAccess(digitalWill);
+  if (names.length === 0) return null;
+  const who = new Intl.ListFormat('en', { type: 'conjunction' }).format(names);
+  return `${who} can ask how you think.`;
+}
 
 /** The form's starting point: the caller's profile, or the Req 2 defaults. */
 export function settingsFrom(profile: Profile | null): ConsentSettings {
