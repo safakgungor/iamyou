@@ -1,5 +1,6 @@
 /**
- * Client-safe API route request/response schemas for the twin-loop.
+ * Client-safe API route request/response schemas for the twin-loop,
+ * assistant-tasks and health-baseline specs.
  *
  * This module holds every API route request/response body used by the routes
  * in the design, so each route can validate its input and output at the
@@ -262,3 +263,153 @@ export const TransitionResponseSchema = z.union([
   z.object({ discarded: z.literal(true) }),
 ]);
 export type TransitionResponse = z.infer<typeof TransitionResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* health-baseline: shared shapes                                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The six feature names, as a zod enum. This mirrors `FEATURES` in the pure
+ * `lib/baseline.ts` (same values, same canonical order), but is declared here
+ * with `zod` only so this module never imports other code. A unit test asserts
+ * `FeatureNameSchema.options` equals `FEATURES`. (Req 7.2)
+ */
+export const FeatureNameSchema = z.enum([
+  'vocabulary_diversity',
+  'mean_sentence_length',
+  'filler_rate',
+  'sleep_hours',
+  'active_minutes',
+  'twin_accuracy',
+]);
+export type FeatureName = z.infer<typeof FeatureNameSchema>;
+
+/** An ISO `YYYY-MM-DD` week start. */
+const IsoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+
+/** A feature value or z-score; zod 4 rejects `NaN` and `±Infinity`. */
+const NullableNumber = z.number().nullable();
+
+/** One nullable number per feature, keyed by feature name. */
+const featureShape = {
+  vocabulary_diversity: NullableNumber,
+  mean_sentence_length: NullableNumber,
+  filler_rate: NullableNumber,
+  sleep_hours: NullableNumber,
+  active_minutes: NullableNumber,
+  twin_accuracy: NullableNumber,
+};
+
+/* -------------------------------------------------------------------------- */
+/* GET /api/timeline (discriminated union on opted_in, D11)                   */
+/* -------------------------------------------------------------------------- */
+
+/** One stored weekly_features row: week start, the six features, synthetic flag. (Req 7.1) */
+export const TimelineRowSchema = z
+  .object({ week_start: IsoDate, ...featureShape, synthetic: z.boolean() })
+  .strict();
+export type TimelineRow = z.infer<typeof TimelineRowSchema>;
+
+/**
+ * The z-scores for one week; a feature with no z-score is an explicit null,
+ * never 0. (Req 7.2)
+ */
+export const TimelineZScoresSchema = z
+  .object({ week_start: IsoDate, ...featureShape })
+  .strict();
+export type TimelineZScores = z.infer<typeof TimelineZScoresSchema>;
+
+/** A feature's frozen baseline: mean and population standard deviation. (Req 7.2) */
+export const BaselineStatsSchema = z
+  .object({ mean: z.number(), sd: z.number().min(0) })
+  .strict();
+export type BaselineStatsResponse = z.infer<typeof BaselineStatsSchema>;
+
+/**
+ * A change signal as shown to the user: at least two deviating features, the
+ * first week of the earliest run, and the week it was detected. (Req 7.3)
+ */
+export const ChangeSignalResponseSchema = z
+  .object({
+    features: z.array(FeatureNameSchema).min(2),
+    first_week: IsoDate,
+    detected_week: IsoDate,
+  })
+  .strict();
+export type ChangeSignalResponse = z.infer<typeof ChangeSignalResponseSchema>;
+
+/** Opted out: exactly `{ opted_in: false }`, no other key. (Req 9.1, 9.4) */
+export const TimelineOptedOutSchema = z
+  .object({
+    opted_in: z.literal(false),
+  })
+  .strict();
+export type TimelineOptedOut = z.infer<typeof TimelineOptedOutSchema>;
+
+/**
+ * Opted in: the full timeline. `opted_in` is the first key (the discriminant);
+ * `signal` is always present and is null when there is no signal or the
+ * right-not-to-know gate hides it. (Req 7.1–7.4, 7.15, 9.3)
+ */
+export const TimelineOptedInSchema = z
+  .object({
+    opted_in: z.literal(true),
+    rtk_setting: z.enum(['tell_me', 'doctor_only', 'record_only']).nullable(),
+    rows: z.array(TimelineRowSchema),
+    z_scores: z.array(TimelineZScoresSchema),
+    baseline: z
+      .object({
+        vocabulary_diversity: BaselineStatsSchema.nullable(),
+        mean_sentence_length: BaselineStatsSchema.nullable(),
+        filler_rate: BaselineStatsSchema.nullable(),
+        sleep_hours: BaselineStatsSchema.nullable(),
+        active_minutes: BaselineStatsSchema.nullable(),
+        twin_accuracy: BaselineStatsSchema.nullable(),
+      })
+      .strict(),
+    signal: ChangeSignalResponseSchema.nullable(),
+  })
+  .strict();
+export type TimelineOptedIn = z.infer<typeof TimelineOptedInSchema>;
+
+/**
+ * Response body for `GET /api/timeline`. One schema validates both the
+ * opted-out and the opted-in body. (Req 7.6, 9.4)
+ */
+export const TimelineResponseSchema = z.discriminatedUnion('opted_in', [
+  TimelineOptedOutSchema,
+  TimelineOptedInSchema,
+]);
+export type TimelineResponse = z.infer<typeof TimelineResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* GET /api/county                                                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The county context card: exactly the five CSV values, never `population`,
+ * with `low <= prevalence <= high`. (Req 8.2, 8.12)
+ */
+export const CountyCardSchema = z
+  .object({
+    county: z.string().min(1),
+    year: z.number().int(),
+    prevalence: z.number().min(0).max(100),
+    low: z.number().min(0).max(100),
+    high: z.number().min(0).max(100),
+  })
+  .strict()
+  .refine((c) => c.low <= c.prevalence && c.prevalence <= c.high, {
+    message: 'expected low <= prevalence <= high',
+  });
+export type CountyCardResponse = z.infer<typeof CountyCardSchema>;
+
+/**
+ * Response body for `GET /api/county`: the card, or an explicit unavailable
+ * result that can never carry a number. (Req 8.2, 8.3, 8.5, 8.13)
+ */
+export const CountyResponseSchema = z.union([
+  z.object({ available: z.literal(true), card: CountyCardSchema }).strict(),
+  z.object({ available: z.literal(false) }).strict(),
+]);
+export type CountyResponse = z.infer<typeof CountyResponseSchema>;

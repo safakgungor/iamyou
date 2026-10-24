@@ -9,7 +9,9 @@
  * `lib/api-schemas.ts` (which imports only `zod`) so that client components can
  * import the response types without reaching into this server-only layer. They
  * are re-exported here so existing server-side imports from
- * `'@/lib/claude/schemas'` keep working.
+ * `'@/lib/claude/schemas'` keep working. The `export *` below also carries the
+ * health-baseline timeline and county schemas (`TimelineResponseSchema`,
+ * `CountyResponseSchema` and their types) for the server routes.
  */
 
 import { z } from 'zod';

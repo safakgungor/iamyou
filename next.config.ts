@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   // with the assistant routes instead of tracing the whole project.
   outputFileTracingIncludes: {
     "/api/assistant/*": ["./data/synthetic/maya/inbox.json"],
+    // app/api/county/route.ts reads the CDC PLACES file at request time.
+    "/api/county": ["./data/public/cdc-places-short-sleep-ma-2022.csv"],
   },
 };
 

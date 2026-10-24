@@ -10,12 +10,14 @@
  *     No user → 401 (Req 1.*, auth gate).
  *  2. Only then create a **service-role** client (reads
  *     `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`) and upsert Maya's
- *     `profile.json` and all 40 `vault-entries.json` rows for the caller's own
+ *     `profile.json`, all 40 `vault-entries.json` rows and all
+ *     `weekly-features.json` rows (`synthetic = true`) for the caller's own
  *     `user_id`. The service-role key is read ONLY here, in server code, and is
- *     never exposed to the client (Req 1.3, 1.4).
+ *     never exposed to the client (Req 1.3, 1.4; health-baseline Req 2.7–2.9).
  *  3. Upserts are idempotent — profile by `user_id`, vault entries by the
- *     composite `(user_id, id)` — so a repeated POST produces no duplicate rows
- *     (Req 1.2).
+ *     composite `(user_id, id)`, weekly features by `(user_id, week_start)` —
+ *     so a repeated POST produces no duplicate rows (Req 1.2; health-baseline
+ *     Req 2.10).
  *  4. On any seeding error, respond 500 `{ error }`. The client treats a non-200
  *     as "demo unavailable" and never presents a partial session (Req 1.6).
  *     Postgres has no cross-statement transaction over the REST client here, so
@@ -34,8 +36,14 @@ import {
   type VaultEntryKind,
   type VaultRepository,
 } from '@/lib/db/vault-repository';
+import {
+  SupabaseWeeklyFeatureRepository,
+  type WeeklyFeatureRepository,
+} from '@/lib/db/weekly-feature-repository';
+import type { WeeklyFeatureRow } from '@/lib/baseline';
 import mayaProfile from '@/data/synthetic/maya/profile.json';
 import mayaVaultEntries from '@/data/synthetic/maya/vault-entries.json';
+import mayaWeeklyFeatures from '@/data/synthetic/maya/weekly-features.json';
 
 /** Reads a required environment variable, throwing a clear error when missing. */
 function requireEnv(name: string): string {
@@ -84,23 +92,57 @@ export function mayaDemoVaultEntries(): VaultEntry[] {
 }
 
 /**
- * Seeds the demo into any `VaultRepository` for `userId`: one profile upsert and
- * one upsert per vault entry. Pure of HTTP and auth so a unit test can call it
- * with `InMemoryVaultRepository` (task 11.2). Throws on the first repository
- * error; the route maps that to a 500.
+ * Builds Maya's weekly feature rows (1,149 weeks) from `weekly-features.json`,
+ * mapping `week_start` → `weekStart` and forcing `synthetic = true` regardless
+ * of the file (health-baseline Req 2.7).
+ */
+export function mayaDemoWeeklyFeatures(): WeeklyFeatureRow[] {
+  return (mayaWeeklyFeatures as Array<{
+    week_start: string;
+    vocabulary_diversity: number | null;
+    mean_sentence_length: number | null;
+    filler_rate: number | null;
+    sleep_hours: number | null;
+    active_minutes: number | null;
+    twin_accuracy: number | null;
+  }>).map((r) => ({
+    weekStart: r.week_start,
+    vocabulary_diversity: r.vocabulary_diversity,
+    mean_sentence_length: r.mean_sentence_length,
+    filler_rate: r.filler_rate,
+    sleep_hours: r.sleep_hours,
+    active_minutes: r.active_minutes,
+    twin_accuracy: r.twin_accuracy,
+    synthetic: true,
+  }));
+}
+
+/**
+ * Seeds the demo for `userId`: one profile upsert, one upsert per vault entry,
+ * then one weekly-features upsert of `weeklyRows`, all owned by the caller
+ * (health-baseline Req 2.7). Pure of HTTP and auth so a unit test can call it
+ * with `InMemoryVaultRepository` and `InMemoryWeeklyFeatureRepository`. Every
+ * upsert is idempotent (vault on `(user_id, id)`, weekly on
+ * `(user_id, week_start)`), so a repeated call creates no duplicates
+ * (Req 1.2, 2.10). Throws on the first repository error; the route maps that
+ * to a 500.
  *
- * Signature: `seedDemo(repo, userId, profile, entries): Promise<void>`.
+ * Signature:
+ * `seedDemo(repo, weeklyRepo, userId, profile, entries, weeklyRows): Promise<void>`.
  */
 export async function seedDemo(
   repo: VaultRepository,
+  weeklyRepo: WeeklyFeatureRepository,
   userId: string,
   profile: Profile,
-  entries: VaultEntry[]
+  entries: VaultEntry[],
+  weeklyRows: readonly WeeklyFeatureRow[]
 ): Promise<void> {
   await repo.upsertProfile(userId, profile);
   for (const entry of entries) {
     await repo.upsertVaultEntry(userId, entry);
   }
+  await weeklyRepo.upsertWeeklyFeatures(userId, weeklyRows);
 }
 
 export async function POST(): Promise<NextResponse> {
@@ -128,8 +170,16 @@ export async function POST(): Promise<NextResponse> {
       { auth: { autoRefreshToken: false, persistSession: false } }
     );
     const repo = new SupabaseVaultRepository(serviceClient);
+    const weeklyRepo = new SupabaseWeeklyFeatureRepository(serviceClient);
 
-    await seedDemo(repo, userId, mayaDemoProfile(), mayaDemoVaultEntries());
+    await seedDemo(
+      repo,
+      weeklyRepo,
+      userId,
+      mayaDemoProfile(),
+      mayaDemoVaultEntries(),
+      mayaDemoWeeklyFeatures()
+    );
 
     return NextResponse.json({ ok: true });
   } catch (err) {
