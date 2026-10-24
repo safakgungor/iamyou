@@ -53,3 +53,13 @@ export const ScreeningSchema = z.object({
   genetics_question: z.boolean(),
 });
 export type Screening = z.infer<typeof ScreeningSchema>;
+
+/**
+ * The draft text returned by `draftReply` for `assistant-tasks`:
+ * `{ draft }`. Parsed out of the model in the server-only Claude layer.
+ * (Req 3.3, 7.4)
+ */
+export const DraftSchema = z.object({
+  draft: z.string(),
+});
+export type Draft = z.infer<typeof DraftSchema>;

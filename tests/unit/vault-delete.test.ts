@@ -17,6 +17,7 @@ import {
   InMemoryVaultRepository,
   type Profile,
 } from "@/lib/db/vault-repository";
+import { InMemoryDraftRepository } from "@/lib/db/draft-repository";
 
 /* -------------------------------------------------------------------------- */
 /* Fixtures                                                                   */
@@ -76,15 +77,17 @@ async function seedUser(
 describe("deleteVaultForUser", () => {
   it("returns { ok: true } (Req 3.5)", async () => {
     const repo = new InMemoryVaultRepository();
+    const draftRepo = new InMemoryDraftRepository();
     await seedUser(repo, USER_ID);
 
-    const result = await deleteVaultForUser(repo, USER_ID);
+    const result = await deleteVaultForUser(repo, draftRepo, USER_ID);
 
     expect(result).toEqual({ ok: true });
   });
 
   it("leaves the caller owning zero rows across all four tables (Req 3.5, 3.6)", async () => {
     const repo = new InMemoryVaultRepository();
+    const draftRepo = new InMemoryDraftRepository();
     const predictionId = await seedUser(repo, USER_ID);
 
     // Sanity check: the user owns rows before the delete.
@@ -93,7 +96,7 @@ describe("deleteVaultForUser", () => {
     expect(await repo.listAnswers(USER_ID)).toHaveLength(1);
     expect(await repo.getPrediction(USER_ID, predictionId)).not.toBeNull();
 
-    await deleteVaultForUser(repo, USER_ID);
+    await deleteVaultForUser(repo, draftRepo, USER_ID);
 
     expect(await repo.getProfile(USER_ID)).toBeNull();
     expect(await repo.listVaultEntries(USER_ID)).toEqual([]);
@@ -104,10 +107,11 @@ describe("deleteVaultForUser", () => {
 
   it("delegates to repo.deleteVault, leaving another user's rows untouched (Req 3.6)", async () => {
     const repo = new InMemoryVaultRepository();
+    const draftRepo = new InMemoryDraftRepository();
     const callerPrediction = await seedUser(repo, USER_ID);
     const otherPrediction = await seedUser(repo, OTHER_USER_ID);
 
-    await deleteVaultForUser(repo, USER_ID);
+    await deleteVaultForUser(repo, draftRepo, USER_ID);
 
     // The caller owns nothing...
     expect(await repo.getProfile(USER_ID)).toBeNull();

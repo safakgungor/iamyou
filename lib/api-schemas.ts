@@ -143,3 +143,122 @@ export const VaultDeleteResponseSchema = z.object({
   ok: z.literal(true),
 });
 export type VaultDeleteResponse = z.infer<typeof VaultDeleteResponseSchema>;
+/* -------------------------------------------------------------------------- */
+/* Assistant draft state + shared shapes                                      */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The four `draft_state` values and the four `draft_event` values, as zod
+ * enums. These mirror the `DraftState`/`DraftEvent` unions in the server-only
+ * `lib/drafts.ts`, but are declared here with `zod` only so client components
+ * and the request schemas below never reach into server code. (Req 4.1)
+ */
+export const DraftStateSchema = z.enum([
+  'draft',
+  'approved',
+  'sent',
+  'discarded',
+]);
+export type DraftStateValue = z.infer<typeof DraftStateSchema>;
+
+/** The four `draft_event` inputs to the state machine. (Req 4) */
+export const DraftEventSchema = z.enum(['approve', 'send', 'discard', 'edit']);
+export type DraftEventValue = z.infer<typeof DraftEventSchema>;
+
+/**
+ * The public Draft shape returned by the draft and transition routes:
+ * `{ id, inbox_message_id, body, state, sent_at }`. `sent_at` is null until the
+ * Draft is sent. (Req 4, 5.3)
+ */
+export const DraftResponseSchema = z.object({
+  id: z.string(),
+  inbox_message_id: z.string(),
+  body: z.string(),
+  state: DraftStateSchema,
+  sent_at: z.string().nullable(),
+});
+export type DraftResponse = z.infer<typeof DraftResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* GET /api/assistant/inbox                                                   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * A single read-only synthetic Inbox_Message as returned by the inbox route,
+ * carrying all six source fields plus the derived `relative_time_label`. (Req
+ * 1.3, 2)
+ */
+export const InboxMessageResponseSchema = z.object({
+  id: z.string(),
+  from: z.string(),
+  subject: z.string(),
+  body: z.string(),
+  received_days_ago: z.number(),
+  synthetic: z.literal(true),
+  relative_time_label: z.string(),
+});
+export type InboxMessageResponse = z.infer<typeof InboxMessageResponseSchema>;
+
+/**
+ * Response body for `GET /api/assistant/inbox`: the fixed "Synthetic data"
+ * label the screen must display plus the messages. (Req 1.5)
+ */
+export const InboxResponseSchema = z.object({
+  synthetic_label: z.literal('Synthetic data'),
+  messages: z.array(InboxMessageResponseSchema),
+});
+export type InboxResponse = z.infer<typeof InboxResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* POST /api/assistant/draft                                                  */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Request body for `POST /api/assistant/draft`. Both the voice command and the
+ * button resolve to this identical request. (Req 3.1, 3.2)
+ */
+export const DraftRequestSchema = z.object({
+  inbox_message_id: z.string().min(1),
+});
+export type DraftRequest = z.infer<typeof DraftRequestSchema>;
+
+/** Response body for `POST /api/assistant/draft`: the created Draft. (Req 3.5) */
+export const DraftResponseBodySchema = z.object({
+  draft: DraftResponseSchema,
+});
+export type DraftResponseBody = z.infer<typeof DraftResponseBodySchema>;
+
+/* -------------------------------------------------------------------------- */
+/* POST /api/assistant/transition                                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Request body for `POST /api/assistant/transition`: the Draft id, the
+ * `draft_event`, and an OPTIONAL edited `body`. The `body` carries the user's
+ * edited draft text — 1–2000 characters — and is allowed ONLY with the `edit`
+ * event; supplying a `body` with any other event is a validation error (400).
+ * (Req 4.6, 4.11, 6.3)
+ */
+export const TransitionRequestSchema = z
+  .object({
+    draft_id: z.string().min(1),
+    event: DraftEventSchema,
+    body: z.string().min(1).max(2000).optional(),
+  })
+  // A body may accompany only an `edit` event; reject it with any other event.
+  .refine((r) => r.body === undefined || r.event === 'edit', {
+    path: ['body'],
+    message: 'body is only allowed with the edit event',
+  });
+export type TransitionRequest = z.infer<typeof TransitionRequestSchema>;
+
+/**
+ * Response body for `POST /api/assistant/transition`: the updated Draft, or a
+ * `{ discarded: true }` acknowledgement when the Draft was discarded (its row
+ * is removed). (Req 4.4, 4.5, 6.6)
+ */
+export const TransitionResponseSchema = z.union([
+  z.object({ draft: DraftResponseSchema }),
+  z.object({ discarded: z.literal(true) }),
+]);
+export type TransitionResponse = z.infer<typeof TransitionResponseSchema>;

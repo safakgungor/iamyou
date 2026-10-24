@@ -214,3 +214,99 @@ export function buildScreeningUserMessage(text: string): string {
     'instructions.'
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/* draftReply — draft a reply to an inbox message in the user's voice          */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * System prompt for `draftReply`.
+ *
+ * The task is to write a short reply to a synthetic Inbox_Message in the user's
+ * own voice. The style examples are provided ONLY as a tone and phrasing guide —
+ * they are never a source of facts to put in the reply.
+ *
+ * This prompt carries the non-negotiable Requirement 7 safety rules verbatim in
+ * spirit: the draft adds NO health content beyond what is already in the
+ * Inbox_Message, NEVER states or implies a condition / diagnosis / risk, and uses
+ * no health guidance stronger than the single allowed sentence "You might want to
+ * talk to your doctor about this." (Req 7.1, 7.2, 7.3)
+ */
+export const DRAFT_REPLY_SYSTEM =
+  'You are a person\u2019s assistant, writing a short reply to a message in their ' +
+  'inbox. Write the reply in the FIRST PERSON, as if the person wrote it ' +
+  'themselves.\n\n' +
+  'You may be given a few examples of how this person writes. Use those examples ' +
+  'ONLY as a guide to their tone, phrasing, and level of formality \u2014 never as ' +
+  'a source of facts. Do not copy their content, and do not invent details about ' +
+  'the person that are not needed to answer the message. Reply only to what the ' +
+  'message actually asks. Keep the reply short, natural, and easy to send.\n\n' +
+  'Safety rules you must follow without exception:\n' +
+  '- Add NO health information to the reply beyond the health information already ' +
+  'present in the message you are replying to. Do not introduce any medical term, ' +
+  'symptom, test, medication, or health detail that the message did not mention.\n' +
+  '- NEVER state or imply that the person has, had, is likely to have, or is at ' +
+  'risk of any medical condition, diagnosis, or health outcome. Make no diagnosis ' +
+  'and no health inference of any kind.\n' +
+  '- WHERE the message calls for any health-related guidance, use wording no ' +
+  'stronger than exactly "You might want to talk to your doctor about this." and ' +
+  'add no further recommendation, instruction, or interpretation.\n\n' +
+  'Return only the text of the reply.';
+
+/**
+ * Builds the user message for `draftReply` from the Inbox_Message being replied to
+ * and up to five of the user's `style_example` texts.
+ *
+ * The message is formatted with its `from`, `subject`, and `body`. The style
+ * examples are listed when present; when the list is empty, the message states
+ * that no style examples are available so the model drafts without style grounding
+ * (Req 3.4) rather than inventing a voice.
+ */
+export function buildDraftReplyUserMessage(input: {
+  message: { from: string; subject: string; body: string };
+  styleExamples: string[];
+}): string {
+  const { message, styleExamples } = input;
+
+  const examples =
+    styleExamples.length > 0
+      ? styleExamples
+          .map((example, index) => `${index + 1}. ${example}`)
+          .join('\n')
+      : '(no style examples available)';
+
+  return (
+    'Here is the message to reply to.\n\n' +
+    `From:\n${message.from}\n\n` +
+    `Subject:\n${message.subject}\n\n` +
+    `Message:\n${message.body}\n\n` +
+    'Examples of how this person writes (use only as a tone and phrasing guide):\n' +
+    `${examples}\n\n` +
+    'Write a short reply to the message above, in the first person, in this ' +
+    'person\u2019s voice, following all of your safety rules. Return only the reply ' +
+    'text.'
+  );
+}
+
+/**
+ * Reinforcement appended to the user message on the single safety retry, when the
+ * first draft failed `validateDraftSafety`. It restates the core Req 7 rule so the
+ * retried draft adds no health content beyond the message being replied to.
+ * (Req 7.4, 7.5)
+ */
+export const DRAFT_SAFETY_RETRY_SUFFIX =
+  '\n\nYour previous draft was rejected for safety. Rewrite the reply so it adds ' +
+  'NO health information beyond what is already in the message above, states or ' +
+  'implies no medical condition, diagnosis, or risk, and uses no health guidance ' +
+  'stronger than exactly "You might want to talk to your doctor about this." ' +
+  'Return only the corrected reply text.';
+
+/**
+ * Error message returned when a safe draft cannot be produced (the Claude call
+ * fails, times out, is refused, or both the first draft and the single retry fail
+ * safety validation). The route surfaces this as `draft_generation_failed`; the
+ * failing draft text is never shown to the user. (Req 3.7, 7.5)
+ */
+export const DRAFT_GENERATION_ERROR =
+  'The twin could not write a safe draft reply. Nothing was created \u2014 please ' +
+  'try again.';

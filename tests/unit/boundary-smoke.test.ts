@@ -1,6 +1,6 @@
-// Feature: twin-loop, Task 18.1: boundary / smoke tests.
+// Feature: twin-loop, Task 18.1 + assistant-tasks, Task 12.1: boundary / smoke tests.
 //
-// Two kinds of guardrail live here:
+// Three kinds of guardrail live here:
 //
 //   1. Data boundary — the synthetic check-in deck must hold EXACTLY 20 prompts.
 //      The check-in route picks "the lowest-numbered unanswered prompt in the
@@ -8,15 +8,22 @@
 //      the loop's behaviour. We import the JSON directly and assert its length
 //      (Req 4.1).
 //
+//      The assistant-tasks inbox is the same kind of guardrail: the synthetic
+//      inbox at `data/synthetic/maya/inbox.json` must parse as an Inbox_Message
+//      collection and MUST include the doctor's-office appointment message
+//      ("Dr. Lee's office, Valley Family Medicine"), which the whole
+//      draft-a-reply flow is demoed against. We import the JSON directly and
+//      assert its shape and that message's presence (assistant-tasks Req 1.4).
+//
 //   2. Server-only boundary — the Claude SDK, the `@/lib/claude` layer, and the
 //      Supabase service-role key must never leak into client-reachable code.
 //      Rather than trust imports, we read the repository off disk and grep the
 //      *.ts / *.tsx sources under app/, components/ and lib/, asserting:
 //        - no file carrying a `'use client'` directive imports the Claude layer
-//          or the Anthropic SDK (Req 4.6, 6.6);
+//          or the Anthropic SDK (twin-loop Req 4.6, 6.6 / assistant-tasks Req 3.6);
 //        - every file that imports the Claude layer / SDK lives in the
 //          server-only allow-set: app/api/** (server routes) or lib/claude/**
-//          itself (Req 4.6, 6.6);
+//          itself (twin-loop Req 4.6, 6.6 / assistant-tasks Req 3.6);
 //        - `SUPABASE_SERVICE_ROLE_KEY` is referenced in exactly one source file,
 //          app/api/demo/start/route.ts, and nowhere a client could reach
 //          (Req 1.3, 1.4).
@@ -25,7 +32,8 @@
 //      files exist yet the directive check passes vacuously, and it stays valid
 //      as pages and hooks are added later.
 //
-// Validates: Requirements 1.3, 1.4, 4.1, 4.6, 6.6
+// Validates: Requirements 1.3, 1.4, 4.1, 4.6, 6.6 (twin-loop);
+//            Requirements 1.4, 3.6 (assistant-tasks)
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -33,6 +41,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 import prompts from "@/data/synthetic/checkin-prompts.json";
+import inbox from "@/data/synthetic/maya/inbox.json";
 
 /* -------------------------------------------------------------------------- */
 /* Repo layout                                                                */
@@ -118,6 +127,45 @@ describe("check-in prompt deck", () => {
   it("contains exactly 20 prompts (Req 4.1)", () => {
     expect(Array.isArray(prompts)).toBe(true);
     expect(prompts.length).toBe(20);
+  });
+});
+
+/**
+ * True when `value` is a well-formed Inbox_Message: the six required fields,
+ * each of the right type, with `synthetic === true`. Mirrors the `loadInbox`
+ * parser in `lib/inbox.ts` so the data boundary here matches what the service
+ * accepts at request time (assistant-tasks Req 1.3).
+ */
+function isInboxMessage(value: unknown): boolean {
+  if (typeof value !== "object" || value === null) return false;
+  const record = value as Record<string, unknown>;
+  return (
+    typeof record.id === "string" &&
+    typeof record.from === "string" &&
+    typeof record.subject === "string" &&
+    typeof record.body === "string" &&
+    typeof record.received_days_ago === "number" &&
+    record.synthetic === true
+  );
+}
+
+describe("assistant-tasks synthetic inbox", () => {
+  it("parses as an Inbox_Message collection (assistant-tasks Req 1.4)", () => {
+    expect(Array.isArray(inbox)).toBe(true);
+    expect(inbox.length).toBeGreaterThan(0);
+    expect(inbox.every(isInboxMessage)).toBe(true);
+  });
+
+  it("includes the Dr. Lee's office appointment message (assistant-tasks Req 1.4)", () => {
+    const doctorMessage = inbox.find(
+      (message) => message.from === "Dr. Lee's office, Valley Family Medicine",
+    );
+
+    expect(doctorMessage).toBeDefined();
+    // Req 1.4: the body asks the user to confirm or reschedule an appointment.
+    const body = (doctorMessage?.body ?? "").toLowerCase();
+    expect(body).toContain("confirm");
+    expect(body).toContain("reschedule");
   });
 });
 

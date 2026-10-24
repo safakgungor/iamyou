@@ -1,0 +1,503 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Implement the pure `transition` state machine": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237690
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872243839
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873296634
+      }
+    ],
+    "1.2 Write property test P1 for `transition` (tests/pbt)": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237718
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873304065
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873453399
+      }
+    ],
+    "1.3 Write property test P2 for `transition` (tests/pbt)": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237746
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873304999
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873454355
+      }
+    ],
+    "1.4 Write property test P3 for `transition` (tests/pbt)": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237777
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873306358
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873455837
+      }
+    ],
+    "1.5 Implement `validateDraftSafety` and write its unit tests": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237798
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873307324
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873457145
+      }
+    ],
+    "2.1 Implement `loadInbox` and `relativeTimeLabel`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237823
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872245241
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873298117
+      }
+    ],
+    "2.2 Write unit tests for `loadInbox` and `relativeTimeLabel`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237847
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873464588
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873613558
+      }
+    ],
+    "3. [kiro] Write the SQL migration `supabase/migrations/0002_assistant.sql`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237880
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872246190
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873299035
+      }
+    ],
+    "4.1 Define the `DraftRepository` interface and `InMemoryDraftRepository`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237906
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873308468
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873457893
+      }
+    ],
+    "4.2 Write unit tests for `InMemoryDraftRepository`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237927
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873617729
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873751264
+      }
+    ],
+    "4.3 Implement `SupabaseDraftRepository`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237953
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873618677
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873753534
+      }
+    ],
+    "4.4 [kiro] Update `deleteVaultForUser` to also delete the caller's drafts": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237976
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873762537
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874047086
+      }
+    ],
+    "5. [kiro] Add the assistant zod schemas to `lib/api-schemas.ts` and `lib/claude/schemas.ts`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872237998
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872247491
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873300285
+      }
+    ],
+    "6. Checkpoint - Ensure pure-module, migration, repository, and schema tests pass": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238022
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874184152
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874228517
+      }
+    ],
+    "7.1 Add the draft prompts to `lib/claude/prompts.ts`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238047
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873465704
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873614371
+      }
+    ],
+    "7.2 Implement `draftReply` in `lib/claude/index.ts`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238068
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873620104
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873752136
+      }
+    ],
+    "7.3 Write unit tests for `draftReply` with a mocked client": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238091
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873760454
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874049458
+      }
+    ],
+    "8.1 Implement the route": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238116
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873620844
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873754252
+      }
+    ],
+    "8.2 Write unit tests for the inbox route": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238147
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873761403
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874051588
+      }
+    ],
+    "9.1 Implement the route and exported `createDraft`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238167
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873758115
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874048508
+      }
+    ],
+    "9.2 Write unit tests (in-memory repos + mocked Claude)": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238188
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874055064
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874178731
+      }
+    ],
+    "10.1 Implement the route and exported `applyTransition`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238217
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873759053
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874050857
+      }
+    ],
+    "10.2 Write unit tests (in-memory repo)": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238245
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874056444
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874177366
+      }
+    ],
+    "11. Checkpoint - Ensure all route, property, and unit tests pass": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238267
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874230800
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874233679
+      }
+    ],
+    "12.1 Assert the synthetic inbox contains the doctor's-office message and that the": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238290
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874058455
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874179683
+      }
+    ],
+    "13. [kiro] Extend twin-loop property P4 to cover drafts deletion": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792872238317
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874057386
+      },
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874181037
+      }
+    ],
+    "1. [kiro] Implement the draft state machine and safety validator `lib/drafts.ts`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873457187
+      }
+    ],
+    "2. [kiro] Implement the read-only inbox module `lib/inbox.ts`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792873613591
+      }
+    ],
+    "4. [kiro] Implement the draft repository `lib/db/draft-repository.ts`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874047124
+      }
+    ],
+    "7. [kiro] Extend the server-only Claude layer for drafting `lib/claude/`": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874049486
+      }
+    ],
+    "8. [kiro] Implement `GET /api/assistant/inbox` with unit tests": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874051624
+      }
+    ],
+    "10. [kiro] Implement `POST /api/assistant/transition` with unit tests": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874177402
+      }
+    ],
+    "9. [kiro] Implement `POST /api/assistant/draft` with unit tests": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874178766
+      }
+    ],
+    "12. [kiro] Boundary/smoke tests": [
+      {
+        "executionId": "3840a88d-5a5b-4f85-97de-e5aa4552c9ee",
+        "chatSessionId": "sess_5689ede6-b4ab-43a5-bc47-2f7ca1dc3550",
+        "timestamp": 1792874179721
+      }
+    ]
+  }
+}

@@ -37,12 +37,16 @@ import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 
 import type { PredictionRequest } from '../prediction';
+import { validateDraftSafety } from '../drafts';
 import {
+  DRAFT_REPLY_SYSTEM,
+  DRAFT_SAFETY_RETRY_SUFFIX,
   GRADING_SYSTEM,
   PREDICTION_SYSTEM,
   SCREENING_SYSTEM,
   SPOKEN_REPLY_SYSTEM,
   SPOKEN_REPLY_FALLBACK,
+  buildDraftReplyUserMessage,
   buildGradingUserMessage,
   buildPredictionUserMessage,
   buildScreeningUserMessage,
@@ -84,6 +88,13 @@ const MAX_TOKENS = 1024;
 
 /** The beta header that enables server-side fallbacks for `spokenReply`. */
 const SPOKEN_REPLY_BETAS = ['server-side-fallback-2026-07-01'] as const;
+
+/**
+ * Hard wall-clock ceiling for a single `draftReply` Claude call. If the call
+ * does not resolve within this window the draft attempt is abandoned and the
+ * function returns `{ ok: false, reason: 'timeout' }`. (Req 3.7)
+ */
+const DRAFT_REPLY_TIMEOUT_MS = 30_000;
 
 /* -------------------------------------------------------------------------- */
 /* Client factory                                                             */
@@ -303,4 +314,123 @@ export async function screenText(
   }
 
   return { storeNothing: false, screening: parsed.data };
+}
+
+/* -------------------------------------------------------------------------- */
+/* draftReply — medium, messages.create, 30s timeout + safety-with-one-retry   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * A sentinel thrown internally when a `draftReply` Claude call exceeds
+ * `DRAFT_REPLY_TIMEOUT_MS`. It is caught inside `draftReply` and turned into a
+ * `{ ok: false, reason: 'timeout' }` result; it never escapes the module.
+ */
+const DRAFT_TIMEOUT = Symbol('draft-timeout');
+
+/**
+ * Races a promise against a wall-clock timeout. Resolves with the promise's
+ * value if it settles first; rejects with the `DRAFT_TIMEOUT` sentinel if the
+ * timeout wins. The timer is always cleared so a settled call never leaks a
+ * pending timeout.
+ */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout>;
+  const timeout = new Promise<never>((_resolve, reject) => {
+    timer = setTimeout(() => reject(DRAFT_TIMEOUT), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => {
+    clearTimeout(timer);
+  }) as Promise<T>;
+}
+
+/** The outcome of drafting a reply: a safe draft, or a typed failure reason. */
+export type DraftReplyResult =
+  | { ok: true; text: string }
+  | { ok: false; reason: 'timeout' | 'refusal' | 'unsafe' };
+
+/**
+ * Drafts a short reply to an Inbox_Message in the user's voice, grounded only
+ * in the supplied `styleExamples` (used as a tone/phrasing guide, never as a
+ * source of facts). The draft is screened for safety before it is returned, so
+ * no unsafe text ever leaves this server-only layer. (Req 3.6, 3.7, 7.4, 7.5)
+ *
+ * Call rules (matching the rest of this module): model `"claude-opus-5-5"`, no
+ * `temperature` / `top_p` / `top_k`, no assistant prefill — exactly a system
+ * prompt and one user message. `stop_reason === 'refusal'` is checked BEFORE
+ * reading content. The whole call is wrapped in a 30-second timeout.
+ *
+ * Safety flow (Req 7.4, 7.5):
+ *   1. Generate a draft and validate it with `validateDraftSafety(text, body)`.
+ *   2. If it passes, return `{ ok: true, text }`.
+ *   3. If it fails, retry ONCE with `DRAFT_SAFETY_RETRY_SUFFIX` appended to the
+ *      user message. If the retry passes, return it.
+ *   4. If the retry also fails validation, return `{ ok: false, reason: 'unsafe' }`.
+ *
+ * On refusal returns `{ ok: false, reason: 'refusal' }`; on timeout returns
+ * `{ ok: false, reason: 'timeout' }`. The caller (the draft route) turns any
+ * failure into `draft_generation_failed` and creates no Draft; the failing text
+ * is never shown to the user.
+ */
+export async function draftReply(
+  input: {
+    message: { from: string; subject: string; body: string };
+    styleExamples: string[];
+  },
+  client: Anthropic = createClaudeClient(),
+): Promise<DraftReplyResult> {
+  const { message, styleExamples } = input;
+  const baseUserMessage = buildDraftReplyUserMessage({ message, styleExamples });
+
+  /**
+   * Runs one Claude call for the given user message. Returns the extracted
+   * draft text, or `'refusal'` when the model refused before producing content.
+   */
+  async function attempt(
+    userMessage: string,
+  ): Promise<{ refusal: true } | { refusal: false; text: string }> {
+    const response = await client.messages.create({
+      model: MODEL,
+      max_tokens: MAX_TOKENS,
+      output_config: { effort: 'medium' },
+      system: DRAFT_REPLY_SYSTEM,
+      messages: [{ role: 'user', content: userMessage }],
+    });
+
+    if (response.stop_reason === 'refusal') {
+      return { refusal: true };
+    }
+
+    return { refusal: false, text: extractText(response.content) };
+  }
+
+  try {
+    // First attempt.
+    const first = await withTimeout(attempt(baseUserMessage), DRAFT_REPLY_TIMEOUT_MS);
+    if (first.refusal) {
+      return { ok: false, reason: 'refusal' };
+    }
+    if (validateDraftSafety(first.text, message.body).ok) {
+      return { ok: true, text: first.text };
+    }
+
+    // The first draft failed safety: retry ONCE with the reinforcement suffix.
+    const retry = await withTimeout(
+      attempt(baseUserMessage + DRAFT_SAFETY_RETRY_SUFFIX),
+      DRAFT_REPLY_TIMEOUT_MS,
+    );
+    if (retry.refusal) {
+      return { ok: false, reason: 'refusal' };
+    }
+    if (validateDraftSafety(retry.text, message.body).ok) {
+      return { ok: true, text: retry.text };
+    }
+
+    // Both the first draft and the single retry failed validation.
+    return { ok: false, reason: 'unsafe' };
+  } catch (error) {
+    if (error === DRAFT_TIMEOUT) {
+      return { ok: false, reason: 'timeout' };
+    }
+    throw error;
+  }
 }
