@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { speakAsTwin, stopTwinVoice } from './twin-voice';
 
 // ---------------------------------------------------------------------------
 // Minimal Web Speech API typings
@@ -91,7 +92,7 @@ export interface UseSpeech {
   stop: () => void;
   /** Clear the current transcript back to an empty string. */
   reset: () => void;
-  /** Speak the given text via `speechSynthesis` (Req 5.2). */
+  /** Speak the given text in the twin's voice, falling back to `speechSynthesis` (Req 5.2). */
   speak: (text: string) => void;
   /** Stop anything `speak` is still saying. */
   stopSpeaking: () => void;
@@ -193,19 +194,15 @@ export function useSpeech(options: UseSpeechOptions = {}): UseSpeech {
 
   const speak = useCallback(
     (text: string) => {
-      if (!speechSynthesisAvailable() || !text) return;
-      const synth = window.speechSynthesis;
-      // Clear anything already queued so replies don't stack up.
-      synth.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang;
-      synth.speak(utterance);
+      if (!text) return;
+      // The film's voice, or the most natural browser voice when it can't play.
+      void speakAsTwin(text, lang);
     },
     [lang],
   );
 
   const stopSpeaking = useCallback(() => {
-    if (speechSynthesisAvailable()) window.speechSynthesis.cancel();
+    stopTwinVoice();
   }, []);
 
   return {
