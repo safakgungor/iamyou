@@ -325,6 +325,10 @@ Request: `{ prediction_id: string, session_id: string, answer: string }`.
 
 1. Load the stored prediction for the caller.
 2. `gradeAnswer(prediction, answer)` → `{ score, rationale, crisis, genetics_question }`.
+   If `gradeAnswer` returns a refusal (`stop_reason === 'refusal'`), it **fails safe as
+   `crisis: true`**: the route stores **no** `answers` row and **no** score, and responds
+   immediately with the support result `{ kind: 'support', message: SUPPORT_MESSAGE }`,
+   skipping steps 3–6 (Req 6.1, 6.7, 9.1).
 3. `score = clampScore(raw.score)` (Req 6.2).
 4. Store an `answers` row with the clamped score, rationale, crisis, session id (Req 6.4).
 5. Compute the candidate reply with `spokenReply` (skipped when crisis, to avoid an
@@ -367,14 +371,14 @@ no assistant prefill.
 | Function | API | effort | Output | Notes |
 | --- | --- | --- | --- | --- |
 | `predictAnswer` | `messages.create` | medium | prediction text | context from `selectPredictionContext`; never style_example |
-| `gradeAnswer` | `messages.parse` (zod) | medium | `{score, rationale, crisis, genetics_question}` | compares **meaning**, not wording; genetics_question ⇒ Req 9.3 |
+| `gradeAnswer` | `messages.parse` (zod) | medium | `{score, rationale, crisis, genetics_question}` | compares **meaning**, not wording; genetics_question ⇒ Req 9.3; a refusal **fails safe as `crisis: true`** |
 | `spokenReply` | `client.beta.messages.create`, `betas: ["server-side-fallback-2026-07-01"]`, `fallbacks: "default"` | low | one warm, non-diagnostic sentence | Req 6.5 |
 | `screenText` | `messages.parse` (zod) | low | `{crisis, genetics_question}` | used by the correction route |
 
-Safe fallbacks: a grading refusal returns a neutral low-confidence grade with
-`crisis: false, genetics_question: false` and a rationale explaining the twin couldn't
-grade this one; a reply refusal returns a fixed gentle sentence; a screen refusal is
-treated as "store nothing" to fail safe. No prompt or reply ever states or implies the
+Safe fallbacks: a grading refusal **fails safe** — it returns a result treated as
+`crisis: true`, so the answer route shows the Support_Message and stores no answer and no
+score, exactly as a `screenText` refusal fails safe; a reply refusal returns a fixed
+gentle sentence; a screen refusal is treated as "store nothing" to fail safe. No prompt or reply ever states or implies the
 user has a condition (Req 2.6, 6.7; `safety.md`).
 
 ### Voice (`components/use-speech.ts`, Req 5)
@@ -585,7 +589,7 @@ Two further universals are verified as fast-check tests and tied to their requir
 | No authenticated caller on a protected route | Return 401; client routes to landing | 1, 3.3, 3.4 |
 | Demo seed fails (any step) | Return 500 `{ error }`; client shows an error and never presents a partial session | 1.6 |
 | Repeated `POST /api/demo/start` | Upserts by id → idempotent; no duplicate rows | 1.2 |
-| Claude grading refusal (`stop_reason === 'refusal'`) | Return a neutral low-confidence grade `{ crisis:false, genetics_question:false }` with a non-diagnostic rationale; still store an answer | 6.1, 6.7 |
+| Claude grading refusal (`stop_reason === 'refusal'`) | Fail safe — treat as `crisis = true`, show SUPPORT_MESSAGE, store no answer and no score | 6.1, 6.7, 9.1 |
 | Claude reply refusal | Use a fixed gentle, non-diagnostic sentence | 6.5, 6.7 |
 | Claude screen (`screenText`) refusal | Fail safe: treat as "store nothing" and show the Support_Message path is not triggered unless crisis is detected; when uncertain, do not store | 7.3, 9.2 |
 | Invalid request body (zod parse fails) | Return 400 with a validation error | all routes |
