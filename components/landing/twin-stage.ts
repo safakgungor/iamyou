@@ -1,8 +1,9 @@
 /**
- * The twin orb: one point cloud that morphs between four forms as the page
- * scrolls. Scattered fragments assemble into a sphere (the twin), the sphere
- * pulses like a heartbeat (the health baseline), and finally re-forms as Maya's
- * silhouette (the vision). One draw call; every motion is in the vertex shader.
+ * The twin: one point cloud that morphs between forms as the page scrolls.
+ * It opens as a stipple portrait of Maya at 18, scatters into fragments,
+ * assembles into a sphere (the twin), pulses like a heartbeat (the health
+ * baseline), and ends as Maya at 40 with particles rising out of her (the
+ * vision). One draw call; every motion is in the vertex shader.
  *
  * Browser-only. The landing page imports this module dynamically.
  */
@@ -12,7 +13,12 @@ import * as THREE from 'three';
 /** The animated form of the orb. Tweened by the landing page, read every frame. */
 export type TwinForm = {
   scatter: number;
+  /** Maya at 18 (hero). */
   figure: number;
+  /** Maya at 40 (vision). */
+  figure2: number;
+  /** Share of particles rising out of the figure. */
+  dissolve: number;
   pulse: number;
   x: number;
   y: number;
@@ -24,6 +30,8 @@ const VERT = /* glsl */ `
 uniform float uTime;
 uniform float uScatter;
 uniform float uFigure;
+uniform float uFigure2;
+uniform float uDissolve;
 uniform float uPulse;
 uniform float uSize;
 uniform float uPixelRatio;
@@ -32,6 +40,7 @@ uniform vec2 uMouse;
 uniform float uMouseForce;
 attribute vec3 aScatter;
 attribute vec3 aFigure;
+attribute vec3 aFigure2;
 attribute vec4 aSeed;
 varying float vAlpha;
 varying float vDepth;
@@ -56,8 +65,15 @@ void main() {
   vec3 scatter = spin * aScatter;
   vec3 p = mix(sphere, scatter, uScatter);
   p = mix(p, aFigure, uFigure);
+  p = mix(p, aFigure2, uFigure2);
 
-  float amp = 0.01 + uScatter * 0.08 + min(abs(uVelocity) * 0.0015, 0.06);
+  // A share of particles leave the figure and rise, looping: "outside her body".
+  float leave = step(0.6, aSeed.x) * uDissolve;
+  float rise = fract(t * 0.045 + aSeed.w);
+  p += vec3((aSeed.w - 0.5) * 1.8 * rise, rise * 2.0, (aSeed.y - 1.0) * 0.7 * rise) * leave;
+
+  float figureness = max(uFigure, uFigure2);
+  float amp = 0.01 * (1.0 - figureness * 0.6) + uScatter * 0.08 + min(abs(uVelocity) * 0.0015, 0.06);
   p += vec3(
     sin(t * 0.6 + aSeed.x * 40.0),
     cos(t * 0.5 + aSeed.x * 31.0),
@@ -71,14 +87,17 @@ void main() {
 
   vec4 mv = viewMatrix * world;
   gl_Position = projectionMatrix * mv;
-  gl_PointSize = uSize * aSeed.y * (1.0 + aSeed.z * 1.4) * uPixelRatio / -mv.z;
+  float size = uSize * aSeed.y * (1.0 + aSeed.z * 1.4 * (1.0 - figureness));
+  gl_PointSize = size * mix(1.0, 0.9, figureness) * uPixelRatio / -mv.z;
 
   vDepth = clamp((p.z + 1.1) / 2.2, 0.0, 1.0);
   float rim = 1.0 - abs(normalize(sphere).z);
-  float sphereness = (1.0 - uScatter) * (1.0 - uFigure);
+  float sphereness = (1.0 - uScatter) * (1.0 - figureness);
   vAlpha = mix(0.28, 0.95, vDepth) * (1.0 - uScatter * 0.3);
   vAlpha *= mix(1.0, mix(0.6, 1.35, rim * rim), sphereness);
-  vAlpha *= mix(1.0, smoothstep(-1.2, -0.6, aFigure.y), uFigure);
+  float fy = mix(aFigure.y, aFigure2.y, uFigure2);
+  vAlpha *= mix(1.0, smoothstep(-1.1, -0.45, fy) * 1.3, figureness);
+  vAlpha *= 1.0 - leave * smoothstep(0.2, 1.0, rise);
 }
 `;
 
@@ -147,7 +166,7 @@ export class TwinStage {
 
   constructor(
     private canvas: HTMLCanvasElement,
-    figure: Float32Array,
+    portraits: { young: Int16Array; older: Int16Array },
     opts: { count: number; dpr: number; frozen: boolean },
   ) {
     this.frozen = opts.frozen;
@@ -161,8 +180,10 @@ export class TwinStage {
     const sphere = new Float32Array(n * 3);
     const scatter = new Float32Array(n * 3);
     const fig = new Float32Array(n * 3);
+    const fig2 = new Float32Array(n * 3);
     const seed = new Float32Array(n * 4);
-    const figCount = figure.length / 2;
+    const figCount = Math.min(portraits.young.length, portraits.older.length) / 3;
+    const unit = 1 / 10000;
     const golden = Math.PI * (3 - Math.sqrt(5));
 
     for (let i = 0; i < n; i++) {
@@ -175,11 +196,11 @@ export class TwinStage {
       const g = () => rand() + rand() + rand() - 1.5;
       scatter.set([g() * 3.6, g() * 2.2, g() * 1.8 - 0.3], i * 3);
 
+      // Both portraits share one framing, so point k of Maya at 18 morphs to point k at 40.
       const k = (i * 7919) % figCount;
-      fig.set(
-        [figure[k * 2] * 1.15 + (rand() - 0.5) * 0.012, figure[k * 2 + 1] * 1.15 + (rand() - 0.5) * 0.012, (rand() - 0.5) * 0.12],
-        i * 3,
-      );
+      const j = () => (rand() - 0.5) * 0.008;
+      fig.set([portraits.young[k * 3] * unit + j(), portraits.young[k * 3 + 1] * unit + j(), portraits.young[k * 3 + 2] * unit], i * 3);
+      fig2.set([portraits.older[k * 3] * unit + j(), portraits.older[k * 3 + 1] * unit + j(), portraits.older[k * 3 + 2] * unit], i * 3);
 
       seed.set([rand(), 0.55 + rand() * 0.9, rand() < 0.04 ? 1 : 0, rand()], i * 4);
     }
@@ -188,6 +209,7 @@ export class TwinStage {
     this.geometry.setAttribute('position', new THREE.BufferAttribute(sphere, 3));
     this.geometry.setAttribute('aScatter', new THREE.BufferAttribute(scatter, 3));
     this.geometry.setAttribute('aFigure', new THREE.BufferAttribute(fig, 3));
+    this.geometry.setAttribute('aFigure2', new THREE.BufferAttribute(fig2, 3));
     this.geometry.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4));
     this.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 6);
 
@@ -201,6 +223,8 @@ export class TwinStage {
         uTime: { value: 0 },
         uScatter: { value: 1 },
         uFigure: { value: 0 },
+        uFigure2: { value: 0 },
+        uDissolve: { value: 0 },
         uPulse: { value: 0 },
         uSize: { value: 15 },
         uPixelRatio: { value: opts.dpr },
@@ -263,9 +287,11 @@ export class TwinStage {
     u.uVelocity.value += (this.velocity - u.uVelocity.value) * 0.1;
     u.uScatter.value = form.scatter;
     u.uFigure.value = form.figure;
+    u.uFigure2.value = form.figure2;
+    u.uDissolve.value = form.dissolve;
     u.uPulse.value = form.pulse;
     u.uOpacity.value = form.opacity;
-    this.halo.uniforms.uOpacity.value = 0.2 * form.opacity * (1 - form.scatter) * (1 - form.figure * 0.55);
+    this.halo.uniforms.uOpacity.value = 0.2 * form.opacity * (1 - form.scatter) * (1 - Math.max(form.figure, form.figure2) * 0.55);
 
     this.group.position.set(form.x, form.y, 0);
     this.group.scale.setScalar(form.scale);

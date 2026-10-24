@@ -2,8 +2,8 @@
 
 /**
  * iamyou landing page. One idea runs through it: the twin forms. A particle
- * cloud assembles into the orb behind the loader, changes form chapter by
- * chapter as the visitor scrolls, and becomes Maya's silhouette at the end.
+ * cloud assembles into Maya at 18 behind the loader, becomes the twin's sphere
+ * chapter by chapter as the visitor scrolls, and ends as Maya at 40.
  * A HUD readout counts the twin's age and patterns alongside it.
  *
  * Copy lives in the DOM; the canvas is decoration (aria-hidden). Reduced
@@ -25,18 +25,18 @@ import type { TwinForm, TwinStage } from './twin-stage';
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
-const BASE: TwinForm = { scatter: 0, figure: 0, pulse: 0, x: 0, y: 0, scale: 1, opacity: 1 };
+const BASE: TwinForm = { scatter: 0, figure: 0, figure2: 0, dissolve: 0, pulse: 0, x: 0, y: 0, scale: 1, opacity: 1 };
 const form = (f: Partial<TwinForm>): TwinForm => ({ ...BASE, ...f });
 
 /** Orb form per chapter: [desktop, mobile]. */
 const ORB = {
-  hero: [form({ x: 1.35, y: 0.05 }), form({ y: 0.85, scale: 0.68, opacity: 0.9 })],
+  hero: [form({ figure: 1, x: 1.6, y: -0.02, scale: 1.2 }), form({ figure: 1, y: 0.8, scale: 0.78, opacity: 0.9 })],
   gap: [form({ scatter: 0.9, x: 0.7, scale: 1.15, opacity: 0.5 }), form({ scatter: 0.9, y: 0.3, scale: 0.85, opacity: 0.32 })],
   loop: [form({ x: -0.08, y: -0.15, scale: 0.44 }), form({ y: 1.05, scale: 0.5, opacity: 0.35 })],
   assist: [form({ x: 0, y: 0.62, scale: 0.4 }), form({ y: 1.05, scale: 0.5, opacity: 0.35 })],
   baseline: [form({ pulse: 1, x: 1.95, y: 0.95, scale: 0.5 }), form({ pulse: 1, y: 1.1, scale: 0.45, opacity: 0.35 })],
   film: [form({ x: 0, scale: 1.6, opacity: 0.1 }), form({ scale: 1.2, opacity: 0.1 })],
-  beyond: [form({ figure: 1, x: 1.4, y: -0.1, scale: 1.05 }), form({ figure: 1, y: 0.4, scale: 0.8, opacity: 0.45 })],
+  beyond: [form({ figure2: 1, dissolve: 1, x: 1.55, y: -0.15, scale: 1.08 }), form({ figure2: 1, dissolve: 1, y: 0.45, scale: 0.8, opacity: 0.45 })],
   end: [form({ scatter: 0.22, y: 0.3, scale: 0.8, opacity: 0.55 }), form({ scatter: 0.22, y: 0.6, scale: 0.6, opacity: 0.4 })],
 } satisfies Record<string, [TwinForm, TwinForm]>;
 type OrbKey = keyof typeof ORB;
@@ -82,13 +82,11 @@ export default function Landing({ signal }: { signal: RealSignal }) {
 
     (async () => {
       try {
-        const [{ TwinStage }, buf] = await Promise.all([
-          import('./twin-stage'),
-          fetch('/landing/figure.bin').then((r) => r.arrayBuffer()),
-        ]);
+        const load = (name: string) => fetch(`/landing/${name}.bin`).then((r) => r.arrayBuffer());
+        const [{ TwinStage }, young, older] = await Promise.all([import('./twin-stage'), load('maya18'), load('maya40')]);
         if (cancelled) return;
-        stage = new TwinStage(canvas, new Float32Array(buf), {
-          count: light ? 9000 : 22000,
+        stage = new TwinStage(canvas, { young: new Int16Array(young), older: new Int16Array(older) }, {
+          count: light ? 14000 : 22000,
           dpr: Math.min(window.devicePixelRatio, light ? 1.5 : 1.75),
           frozen: reduce,
         });
