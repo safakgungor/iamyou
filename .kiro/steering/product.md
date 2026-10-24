@@ -12,11 +12,11 @@ Built for Hackachusetts 2026 (Healthcare & Biotech track). The deliverable is a 
 
 ## Non-negotiable rules
 
-1. **Synthetic data only.** No real personal data in the repo, demo, or tests. Real data lives only in gitignored `data/private/` and is never read into commits, fixtures, or prompts.
+1. **Synthetic data only.** No real personal data in the repo, demo, or tests. Real data lives only in gitignored `data/private/` and is never read into commits, fixtures, or prompts. One exception: the de-identified open research sample `data/public/physionet-stress-v1-sample.json` (PhysioNet, ODC-By), shown only as a labeled research example, never as a user's own data.
 2. **Never diagnose.** UI copy and model prompts never state a user has or is likely to have a condition. Strongest allowed wording: "You might want to talk to your doctor about this."
 3. **Right not to know.** Every change signal passes through the user's setting — `tell_me`, `doctor_only`, or `record_only`. With `record_only`, nothing about a change is shown to the user; with `doctor_only`, it appears only in the clinician summary.
 4. **Nothing is sent without approval.** The assistant only drafts; sending requires an explicit user action. A draft reaches `sent` only via `approved`.
-5. **Label synthetic screens.** Any screen showing synthetic history or persona data shows a visible "Synthetic data" label.
+5. **Label synthetic screens.** Any screen showing synthetic history or persona data shows a visible "Synthetic data" label. A screen showing the PhysioNet sample shows "Open research data · PhysioNet" with a link to the source.
 6. **Crisis and genetics.** Crisis expressions get pointed to professional support; genetic-testing questions go to a genetic counselor. The twin never interprets a test result.
 
 ## Demo persona

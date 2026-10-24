@@ -25,6 +25,8 @@ Every change signal passes through the user's setting — `tell_me`, `doctor_onl
 
 Any screen showing synthetic history or persona data shows a visible "Synthetic data" label.
 
+A screen showing the PhysioNet sample (`data/public/physionet-stress-v1-sample.json`) shows "Open research data · PhysioNet" with a link to the source. It is a research example, never presented as the user's own data.
+
 ## Crisis and genetics (rule 6)
 
 - A user expressing crisis is pointed to professional support.
