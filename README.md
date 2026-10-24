@@ -31,7 +31,7 @@ Kiro wrote the plan and most of the code. All four specs live in [`.kiro/specs/`
 | `care-outputs` | 14 | Clinician summary, trial finder, family mode | Claude Code, from Kiro's spec |
 
 - **Steering** ([`.kiro/steering/`](.kiro/steering)) carries product, tech, structure and safety rules into every Kiro session.
-- **Hooks** ([`.kiro/hooks/`](.kiro/hooks)): unit tests on save, property tests after each task, a guard that blocks writes to private data and `.env` files, and a session log in [`KIRO_LOG.md`](KIRO_LOG.md).
+- **Hooks** ([`.kiro/hooks/`](.kiro/hooks)): unit tests on save, property tests after each task, and a guard that blocks writes to private data and `.env` files.
 - **Property-based tests.** Every rule that can be stated as a property has one: the twin's guess never leaks before the answer, crisis handling wins over everything else, a draft reaches `sent` only through `approved`, deleting the vault removes every row of that user, the mind tree cites only the user's own entries. 48 property tests run next to 371 unit tests.
 - **In the history.** Commits made from Kiro's output end with `Generated-by: Kiro IDE` (`git log --grep "Generated-by: Kiro"`). Those 15 commits hold about 60% of the code, test and spec lines.
 
