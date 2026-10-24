@@ -34,10 +34,6 @@ export default function HealthPage() {
         i={2}
       />
 
-      <p className="rise mt-2 px-1 text-[13px] leading-snug text-muted" style={{ '--i': 3 } as React.CSSProperties}>
-        Never a diagnosis. The strongest thing it will say is that you might want to talk to your
-        doctor.
-      </p>
     </main>
   );
 }

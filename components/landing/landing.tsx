@@ -38,7 +38,7 @@ const APP_MAP = [
   { href: '/real-signal', kicker: 'Wrist signal', title: 'Same heart, two reasons', text: 'Real PhysioNet wristband data.' },
   { href: '/app?next=/care', kicker: 'Care', title: 'Ready for the visit', text: 'Summary, studies, family mode.' },
   { href: '/app?next=/onboarding', kicker: 'Consent', title: 'Her right not to know', text: 'Who hears about a change.' },
-  { href: '/app', kicker: 'Start', title: 'Try as Maya', text: 'No sign-up. Synthetic persona.' },
+  { href: '/signal', kicker: 'Our model', title: 'iamyou Signal', text: 'Trained on 33 people. 0.77 balanced accuracy.' },
 ];
 
 /** Orb form per chapter: [desktop, mobile]. */
@@ -422,6 +422,7 @@ export default function Landing({ signal }: { signal: RealSignal }) {
           <button type="button" onClick={() => scrollTo('baseline')}>
             Baseline
           </button>
+          <Link href="/signal">Model</Link>
           <button type="button" onClick={() => scrollTo('film')}>
             Film
           </button>
@@ -622,6 +623,9 @@ export default function Landing({ signal }: { signal: RealSignal }) {
               <Link href="/app?next=/timeline" className="lx-btn lx-btn--glass lx-btn--sm">
                 See Maya&apos;s 22 years <span aria-hidden="true">→</span>
               </Link>
+              <Link href="/signal" className="lx-btn lx-btn--glass lx-btn--sm">
+                How the model works <span aria-hidden="true">→</span>
+              </Link>
             </div>
           </div>
           <div data-reveal="fade" data-hud-hide>
@@ -651,7 +655,7 @@ export default function Landing({ signal }: { signal: RealSignal }) {
             {!playing && (
               <button type="button" className="lx-film__play" onClick={playFilm} aria-label="Play the film">
                 <span className="lx-film__icon" aria-hidden="true" />
-                <span className="lx-label">Play the film · 2:52</span>
+                <span className="lx-label">Play the film · 2:55</span>
               </button>
             )}
           </div>

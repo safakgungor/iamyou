@@ -313,8 +313,10 @@ html.lx-locked {
   margin-left: auto;
 }
 
-.lx-nav button {
+.lx-nav button,
+.lx-nav a {
   border: 0;
+  text-decoration: none;
   background: none;
   padding: 6px 0;
   cursor: pointer;
@@ -326,7 +328,8 @@ html.lx-locked {
   transition: color 0.3s ease;
 }
 
-.lx-nav button:hover {
+.lx-nav button:hover,
+.lx-nav a:hover {
   color: var(--ink);
 }
 
