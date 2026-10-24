@@ -192,6 +192,8 @@ export default function HomePage() {
         </span>
       </Link>
 
+      <CareCard />
+
       <section aria-labelledby="data-heading" className="mt-2 flex flex-col gap-3 px-1">
         <h2 id="data-heading" className="label">
           Your data
@@ -239,5 +241,40 @@ export default function HomePage() {
         )}
       </section>
     </main>
+  );
+}
+
+/** The three care outputs: the clinician summary, the trial finder and family mode. */
+const CARE_LINKS = [
+  { href: '/summary', title: 'Clinician summary', text: 'One printable page for your doctor.' },
+  { href: '/trials', title: 'Trials', text: 'Studies recruiting in Massachusetts.' },
+  { href: '/family', title: 'Family mode', text: 'Ella asks how you would answer.' },
+] as const;
+
+function CareCard() {
+  return (
+    <section aria-labelledby="care-heading" className="glass flex flex-col p-2">
+      <h2 id="care-heading" className="label px-3 pb-1 pt-3 text-cyan-ink">
+        Care
+      </h2>
+      <ul className="flex flex-col">
+        {CARE_LINKS.map((link, index) => (
+          <li key={link.href} className={index > 0 ? 'border-t border-line' : undefined}>
+            <Link
+              href={link.href}
+              className="group flex items-center justify-between gap-4 rounded-2xl px-3 py-3 transition-colors hover:bg-white/60"
+            >
+              <span className="flex flex-col">
+                <span className="text-[17px] font-medium">{link.title}</span>
+                <span className="text-sm text-muted">{link.text}</span>
+              </span>
+              <span aria-hidden="true" className="text-xl text-muted transition-colors group-hover:text-cyan-ink">
+                →
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
