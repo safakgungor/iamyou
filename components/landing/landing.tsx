@@ -447,7 +447,6 @@ export default function Landing({ signal }: { signal: RealSignal }) {
             0
           </span>
         </span>
-        <span className="lx-label lx-hud__note">Synthetic persona</span>
       </aside>
 
       <main className="lx-main">

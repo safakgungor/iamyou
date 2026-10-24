@@ -224,7 +224,7 @@ export default function AppEntryPage() {
                 Start fresh as Maya
               </button>
             ) : (
-              <p className="label text-[10px]">No sign-up · Synthetic persona</p>
+              <p className="label text-[10px]">No sign-up</p>
             )}
           </div>
         </div>
