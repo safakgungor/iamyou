@@ -286,35 +286,32 @@ export default function CheckInPage() {
         <section className="flex flex-col gap-4">
           <h2 className="text-sm font-medium">Your answer</h2>
 
-          {/* Voice input when supported, with a text fallback otherwise
-              (Req 5.1, 5.3). */}
-          {speech.supported && speech.startListening ? (
-            <div className="flex flex-col gap-3">
-              <button
-                type="button"
-                onClick={() => speech.startListening?.()}
-                disabled={submitting}
-                className="self-start rounded-lg border border-gray-300 bg-surface px-4 py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50"
-              >
-                🎤 Speak your answer
-              </button>
-              <p
-                aria-live="polite"
-                className="min-h-12 rounded-lg border border-gray-200 bg-surface p-3 text-base text-muted"
-              >
-                {answer ? answer : 'Listening will appear here…'}
-              </p>
-            </div>
-          ) : (
-            <textarea
-              aria-label="Your answer"
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              rows={4}
-              placeholder="Type your answer…"
+          {/* Typing always works; voice is offered on top when the browser
+              supports it and fills the same field (Req 5.1, 5.3). */}
+          <textarea
+            aria-label="Your answer"
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+            rows={4}
+            placeholder={
+              speech.supported ? 'Type your answer, or tap Speak…' : 'Type your answer…'
+            }
+            disabled={submitting}
+            className="w-full rounded-lg border border-gray-300 bg-surface p-3 text-base disabled:opacity-50"
+          />
+          {speech.supported && speech.startListening && (
+            <button
+              type="button"
+              onClick={() => speech.startListening?.()}
               disabled={submitting}
-              className="w-full rounded-lg border border-gray-300 bg-surface p-3 text-base disabled:opacity-50"
-            />
+              className="inline-flex items-center gap-2 self-start rounded-full border border-gray-300 bg-surface px-4 py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50"
+            >
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <rect x="9" y="3" width="6" height="11" rx="3" />
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
+              </svg>
+              Speak your answer
+            </button>
           )}
 
           <div>

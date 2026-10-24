@@ -115,6 +115,20 @@ export default function HomePage() {
         Start a check-in
       </Link>
 
+      <Link
+        href="/assistant"
+        className="glass flex items-center justify-between gap-4 px-5 py-4 transition-transform duration-300 hover:-translate-y-0.5"
+      >
+        <span className="flex flex-col gap-1">
+          <span className="label text-cyan-ink">Second self</span>
+          <span className="text-base font-medium">Your inbox</span>
+          <span className="text-sm text-muted">The twin drafts replies in your voice.</span>
+        </span>
+        <span aria-hidden="true" className="text-xl text-muted">
+          →
+        </span>
+      </Link>
+
       <section
         aria-labelledby="scores-heading"
         className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-surface p-4"

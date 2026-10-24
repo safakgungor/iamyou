@@ -3,17 +3,22 @@
 /**
  * Design tokens and base styles for the iamyou PWA.
  *
- * Mobile-first, restrained palette: a near-white canvas, near-black ink, a
- * single slate accent, amber for the "Synthetic data" label, and red reserved
- * for errors and the safety/support messages. Tailwind v4 reads these via the
- * @theme block so utilities like `text-ink` and `bg-canvas` are available.
+ * The app shares the landing page's world: an ice-white ground, near-black
+ * ink, one cyan, Outfit for text and JetBrains Mono for labels. Red stays
+ * reserved for errors and the safety/support messages. Tailwind v4 reads these
+ * via the @theme block, so utilities like `text-ink` and `bg-canvas` exist.
  */
 @theme {
-  --color-canvas: #f7f7f6;
+  --color-canvas: #f4f7fb;
   --color-surface: #ffffff;
-  --color-ink: #18181b;
-  --color-muted: #52525b;
-  --color-accent: #1e293b;
+  --color-ink: #18212e;
+  --color-muted: #5a6a7e;
+  --color-accent: #18212e;
+  --color-cyan: #36d1f0;
+  --color-cyan-ink: #0b86a8;
+  --color-line: rgb(24 33 46 / 0.1);
+  --font-sans: var(--lx-display), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--lx-mono), ui-monospace, monospace;
 }
 
 @layer base {
@@ -22,11 +27,12 @@
   }
 
   body {
-    background-color: var(--color-canvas);
+    min-height: 100vh;
+    background:
+      radial-gradient(90% 60% at 72% 0%, #ffffff 0%, rgb(255 255 255 / 0) 60%),
+      linear-gradient(180deg, #f4f7fb 0%, #e9eef5 100%) fixed;
     color: var(--color-ink);
-    font-family:
-      ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
-      Arial, sans-serif;
+    font-family: var(--font-sans);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -35,7 +41,36 @@
   /* A single, consistent, visible focus ring for keyboard users across every
      interactive control. */
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-cyan-ink);
     outline-offset: 2px;
+  }
+
+  ::selection {
+    background: rgb(54 209 240 / 0.35);
+  }
+}
+
+@layer components {
+  /* The one glass treatment, shared with the landing page's cards. */
+  .glass {
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.78), rgb(255 255 255 / 0.48));
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    backdrop-filter: blur(22px) saturate(160%);
+    border: 1px solid rgb(255 255 255 / 0.9);
+    border-radius: 22px;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.95),
+      0 30px 80px -40px rgb(24 33 46 / 0.35),
+      0 2px 8px -3px rgb(24 33 46 / 0.08);
+  }
+
+  /* Uppercase mono readout label. */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--color-muted);
   }
 }
