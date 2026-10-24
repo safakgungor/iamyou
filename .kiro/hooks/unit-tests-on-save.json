@@ -9,7 +9,8 @@
       "action": {
         "type": "command",
         "command": "npm run test:unit -- --reporter=dot"
-      }
+      },
+      "enabled": true
     }
   ]
 }

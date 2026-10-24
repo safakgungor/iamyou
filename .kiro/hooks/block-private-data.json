@@ -9,7 +9,8 @@
       "action": {
         "type": "command",
         "command": "bash scripts/hooks/block-private.sh"
-      }
+      },
+      "enabled": true
     }
   ]
 }

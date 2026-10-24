@@ -8,7 +8,8 @@
       "action": {
         "type": "command",
         "command": "npm run test:pbt -- --reporter=dot"
-      }
+      },
+      "enabled": true
     }
   ]
 }
