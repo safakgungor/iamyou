@@ -66,6 +66,7 @@ export function mayaDemoProfile(): Profile {
     dateOfBirth: mayaProfile.date_of_birth,
     county: mayaProfile.county,
     familyHistory: mayaProfile.family_history as Profile['familyHistory'],
+    familyHistoryRelation: mayaProfile.family_history_relation,
     healthLayerOptIn: true,
     rtkSetting: 'tell_me',
     digitalWill: mayaProfile.digital_will,

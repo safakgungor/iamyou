@@ -1,6 +1,6 @@
 /**
  * Client-safe API route request/response schemas for the twin-loop,
- * assistant-tasks and health-baseline specs.
+ * assistant-tasks, health-baseline and care-outputs specs.
  *
  * This module holds every API route request/response body used by the routes
  * in the design, so each route can validate its input and output at the
@@ -413,3 +413,165 @@ export const CountyResponseSchema = z.union([
   z.object({ available: z.literal(false) }).strict(),
 ]);
 export type CountyResponse = z.infer<typeof CountyResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* care-outputs: POST /api/summary                                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Request body for `POST /api/summary`: the person's own words for field 11
+ * and a contact for fields 4 and 13. Neither is stored or sent to a model.
+ * (care-outputs Req 1.2)
+ */
+export const SummaryRequestSchema = z.object({
+  discuss: z.string().max(500).optional(),
+  contact: z.string().max(200).optional(),
+});
+export type SummaryRequest = z.infer<typeof SummaryRequestSchema>;
+
+/** The six summary features, in field 8 row order. (care-outputs Req 2.1) */
+export const SummaryFeatureSchema = z.enum([
+  'vocabulary_diversity',
+  'mean_sentence_length',
+  'filler_rate',
+  'sleep_hours',
+  'active_minutes',
+  'twin_accuracy',
+]);
+
+/**
+ * One field 8 row: the person's own baseline mean, recent 4-week mean and
+ * z-score. There is no target field. (care-outputs Req 2.2–2.4)
+ */
+export const MeasureRowSchema = z.object({
+  feature: SummaryFeatureSchema,
+  label: z.string(),
+  baselineMean: z.number().nullable(),
+  recentMean: z.number().nullable(),
+  z: z.number().nullable(),
+});
+export type MeasureRowResponse = z.infer<typeof MeasureRowSchema>;
+
+/** The 13 text fields' keys. */
+export const SummaryTextFieldKeySchema = z.enum([
+  'subject',
+  'intro',
+  'person',
+  'from',
+  'focus',
+  'family_history',
+  'dates',
+  'data_sources',
+  'what_changed',
+  'discuss',
+  'rtk',
+  'questions',
+  'footer',
+]);
+
+/** A summary field: field 8 carries measure rows, every other field text. */
+export const SummaryFieldSchema = z.union([
+  z.object({
+    n: z.literal(8),
+    key: z.literal('measures'),
+    label: z.literal('Measures'),
+    rows: z.array(MeasureRowSchema).length(6),
+  }),
+  z.object({
+    n: z.number().int().min(1).max(14),
+    key: SummaryTextFieldKeySchema,
+    label: z.string(),
+    text: z.string(),
+  }),
+]);
+export type SummaryFieldResponse = z.infer<typeof SummaryFieldSchema>;
+
+/**
+ * Response body for `POST /api/summary`: exactly 14 fields in order, the
+ * synthetic flag, and the "Synthetic data" label whenever it is true.
+ * (care-outputs Req 1.2, 4.1–4.3)
+ */
+export const SummaryResponseSchema = z.object({
+  fields: z.array(SummaryFieldSchema).length(14),
+  synthetic: z.boolean(),
+  synthetic_label: z.literal('Synthetic data').nullable(),
+});
+export type SummaryResponse = z.infer<typeof SummaryResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* care-outputs: GET /api/trials                                              */
+/* -------------------------------------------------------------------------- */
+
+/** A normalized trial. (care-outputs Req 7.1) */
+export const TrialSchema = z.object({
+  nctId: z.string(),
+  title: z.string(),
+  phaseLabel: z.string(),
+  conditions: z.array(z.string()),
+  status: z.string(),
+  cities: z.array(z.string()),
+  source: z.enum(['live', 'saved_ma_slice']),
+});
+export type TrialResponse = z.infer<typeof TrialSchema>;
+
+/**
+ * Response body for `GET /api/trials`. One `no_matches` state covers an empty
+ * live result and an empty fallback. (care-outputs Req 5.3, 5.7, 6.5)
+ */
+export const TrialsResponseSchema = z.discriminatedUnion('status', [
+  z.object({
+    status: z.literal('ok'),
+    origin: z.enum(['live', 'cache', 'stale_cache', 'saved_ma_slice']),
+    trials: z.array(TrialSchema).min(1),
+    search_url: z.string(),
+  }),
+  z.object({
+    status: z.literal('no_matches'),
+    trials: z.array(TrialSchema).max(0),
+    message: z.string(),
+    search_url: z.string(),
+  }),
+  z.object({
+    status: z.literal('no_family_condition'),
+    trials: z.array(TrialSchema).max(0),
+  }),
+]);
+export type TrialsResponse = z.infer<typeof TrialsResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* care-outputs: GET and POST /api/family                                     */
+/* -------------------------------------------------------------------------- */
+
+/** Response body for `GET /api/family`: who may ask. (care-outputs Req 9.1) */
+export const FamilyAskersResponseSchema = z.object({
+  first_name: z.string().nullable(),
+  askers: z.array(z.string()),
+  synthetic_label: z.literal('Synthetic data').nullable(),
+});
+export type FamilyAskersResponse = z.infer<typeof FamilyAskersResponseSchema>;
+
+/** Request body for `POST /api/family`. */
+export const FamilyRequestSchema = z.object({
+  asker: z.string().min(1).max(200),
+  question: z.string().trim().min(1).max(500),
+});
+export type FamilyRequest = z.infer<typeof FamilyRequestSchema>;
+
+/**
+ * Response body for `POST /api/family`: the answer and only the entries it
+ * cites, in citation order. (care-outputs Req 10.5, 10.6)
+ */
+export const FamilyResponseSchema = z.object({
+  asker: z.string(),
+  answer: z.string(),
+  cited_entries: z.array(
+    z.object({
+      id: z.string(),
+      // Never `style_example`: those entries are never sent. (care-outputs Req 9.2)
+      kind: z.enum(['story', 'opinion', 'conversation', 'correction']),
+      text: z.string(),
+    }),
+  ),
+  synthetic_label: z.literal('Synthetic data').nullable(),
+});
+export type FamilyResponse = z.infer<typeof FamilyResponseSchema>;

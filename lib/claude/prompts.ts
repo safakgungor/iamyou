@@ -22,6 +22,7 @@
  *    interpreted or acted on inside a prompt. (Req 9)
  */
 
+import { dontKnowAnswer } from '../family';
 import type { PredictionRequest } from '../prediction';
 
 /* -------------------------------------------------------------------------- */
@@ -310,3 +311,57 @@ export const DRAFT_SAFETY_RETRY_SUFFIX =
 export const DRAFT_GENERATION_ERROR =
   'The twin could not write a safe draft reply. Nothing was created \u2014 please ' +
   'try again.';
+
+/* -------------------------------------------------------------------------- */
+/* familyAnswer — answer a relative's question as the person, from the vault  */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * System prompt for `familyAnswer` (care-outputs).
+ *
+ * A family member asks how the person would answer a question. The twin answers
+ * in the person's first person, briefly, from the provided vault entries only,
+ * cites every entry it used, and otherwise returns the exact "I don't know"
+ * sentence given in the user message. It never speculates about health,
+ * diagnosis, genetic status or test results, and states or implies no condition
+ * for anyone. (care-outputs Req 9.3, 10.7)
+ */
+export const FAMILY_ANSWER_SYSTEM =
+  'A family member is asking how a specific person would answer a question. You ' +
+  'answer the way that person would, in the first person, as they would say it to ' +
+  'this relative: briefly, in one to three sentences.\n\n' +
+  'You are given entries from the person’s vault: their own stories, opinions, ' +
+  'check-in answers and corrections, each with an id. Use ONLY these entries. Do ' +
+  'not add any fact, memory, feeling or opinion the entries do not support. Cite ' +
+  'the id of every entry you used in cited_entry_ids.\n\n' +
+  'When the entries do not support an answer, set answer to exactly the "I don’t ' +
+  'know" sentence given in the message and leave cited_entry_ids empty. Never ' +
+  'guess.\n\n' +
+  'Never speculate about anyone’s health, diagnosis, genetic status, genetic ' +
+  'tests or test results, and never state or imply that anyone has, or may get, ' +
+  'any medical condition. If the question asks about any of these, answer with ' +
+  'exactly the "I don’t know" sentence and no citations.';
+
+/**
+ * Builds the user message for `familyAnswer`: the person's name, every entry as
+ * `[id] (kind) text`, the question, and the exact "I don't know" sentence.
+ * (care-outputs Req 9.3)
+ */
+export function buildFamilyAnswerUserMessage(input: {
+  firstName: string | null;
+  question: string;
+  entries: ReadonlyArray<{ id: string; kind: string; text: string }>;
+}): string {
+  const name = input.firstName?.trim() || 'this person';
+  const entries = input.entries
+    .map((entry) => `[${entry.id}] (${entry.kind}) ${entry.text}`)
+    .join('\n');
+
+  return (
+    `The person is ${name}.\n\n` +
+    `Vault entries:\n${entries}\n\n` +
+    `Question from a family member:\n${input.question}\n\n` +
+    'If the entries do not support an answer, the answer is exactly:\n' +
+    dontKnowAnswer(input.firstName)
+  );
+}

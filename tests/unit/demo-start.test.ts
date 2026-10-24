@@ -101,6 +101,8 @@ describe("seedDemo (POST /api/demo/start)", () => {
     expect(profile?.rtkSetting).toBe("tell_me");
     expect(profile?.healthLayerOptIn).toBe(true);
     expect(profile?.synthetic).toBe(true);
+    // care-outputs 4.2: the relation for the summary's family-history field.
+    expect(profile?.familyHistoryRelation).toBe("father");
 
     // Exactly 40 vault entries with ids v001–v040 (Req 1.2).
     const entries = await repo.listVaultEntries(USER_ID);
