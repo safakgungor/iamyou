@@ -16,7 +16,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "iamyou",
     short_name: "iamyou",
     description: "Your digital twin: a predict-and-correct check-in loop.",
-    start_url: "/",
+    start_url: "/app",
     display: "standalone",
     background_color: "#f7f7f6",
     theme_color: "#1e293b",
