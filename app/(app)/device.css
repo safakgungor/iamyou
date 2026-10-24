@@ -23,7 +23,7 @@
   flex: 1 0 auto;
 }
 
-@media (min-width: 900px) and (min-height: 620px) {
+@media (min-width: 900px) and (min-height: 560px) {
   .device-stage {
     position: fixed;
     inset: 0;
@@ -45,11 +45,16 @@
     color: var(--color-ink);
   }
 
-  /* Titanium band, black bezel, a deep soft shadow. */
+  /* Titanium band, black bezel, a deep soft shadow. True phone size, scaled to
+     fit the window (see device-scale.tsx). */
   .device {
     position: relative;
-    height: min(864px, calc(100vh - 56px));
+    height: 866px;
     padding: 11px;
+    transform: scale(var(--device-scale, 1));
+    /* A transform does not shrink the layout box; pull its edges in so the
+       grid centres the phone at its scaled size. */
+    margin-block: calc(433px * (var(--device-scale, 1) - 1));
     border-radius: 66px;
     background: #0c1015;
     box-shadow:
@@ -168,7 +173,7 @@
   }
 }
 
-@media (min-width: 1180px) and (min-height: 620px) {
+@media (min-width: 1180px) and (min-height: 560px) {
   .device-aside {
     position: absolute;
     top: 50%;

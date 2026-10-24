@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import QRCode from 'qrcode';
+import DeviceScale from './device-scale';
 import './device.css';
 
 const APP_URL = 'https://www.iamyou.si/app';
@@ -20,6 +21,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="device-stage">
+      <DeviceScale />
       <Link href="/" className="device-back label">
         ← iamyou.si
       </Link>

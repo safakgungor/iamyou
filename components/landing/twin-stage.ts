@@ -254,9 +254,10 @@ export class TwinStage {
     this.resize();
   }
 
+  /** Sizes to the canvas's own box, so the stage works full-screen or in a card. */
   resize() {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    const w = this.canvas.clientWidth || window.innerWidth;
+    const h = this.canvas.clientHeight || window.innerHeight;
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
