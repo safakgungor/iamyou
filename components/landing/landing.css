@@ -962,6 +962,53 @@ html.lx-locked {
   padding-top: 18vh;
 }
 
+/* Every screen in the app, in the footer. */
+.lx-appmap {
+  width: min(1080px, 100%);
+  margin-top: 14vh;
+  text-align: left;
+}
+
+.lx-appmap__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.lx-appmap__tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  text-decoration: none;
+  color: var(--ink);
+  transition:
+    transform 0.4s var(--ease-out),
+    box-shadow 0.3s ease;
+}
+
+.lx-appmap__tile:hover {
+  transform: translateY(-3px);
+}
+
+.lx-appmap__tile .lx-label {
+  color: var(--cyan-ink);
+}
+
+.lx-appmap__title {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.lx-appmap__text {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
 /* ---------- Small screens ---------- */
 
 @media (max-width: 899px) {
@@ -1061,6 +1108,14 @@ html.lx-locked {
 
   .lx-footer__meta {
     padding-top: 14vh;
+  }
+
+  .lx-appmap__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lx-appmap__tile {
+    padding: 16px;
   }
 }
 

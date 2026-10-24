@@ -1,0 +1,40 @@
+/* Motion for the mind tree beyond the shared .rise and .tap utilities: the
+   radial map grows with GSAP (mind-map.tsx), new leaves pulse, the sheet
+   slides. Everything here is switched off for reduced motion. */
+
+@keyframes mind-halo {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+.mind-halo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mind-halo 2.4s ease-in-out infinite;
+}
+
+.mind-sheet-backdrop {
+  transition: opacity 0.24s ease;
+}
+
+.mind-sheet-panel {
+  transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mind-halo {
+    animation: none;
+  }
+
+  .mind-sheet-backdrop,
+  .mind-sheet-panel {
+    transition: none;
+  }
+}

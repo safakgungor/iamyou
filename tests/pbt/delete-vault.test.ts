@@ -1,16 +1,22 @@
 // Feature: twin-loop, Property 4: Delete leaves nothing (extended for drafts)
+// Feature: health-baseline, Property 17: Deleting a vault also deletes weekly features
 //
-// Validates: Requirements 3.5, 3.6, 6.6
+// Validates: Requirements 3.5, 3.6, 6.6 (twin-loop); Requirements 2.11 (health-baseline)
 //
 // Property 4 — Delete leaves nothing: after `deleteVaultForUser(vaultRepo,
-// draftRepo, userId)` the in-memory repositories hold zero rows for `userId`
-// across all four vault tables (profiles, vault_entries, predictions, answers)
-// AND zero drafts; every other user's vault rows and drafts are unchanged.
+// draftRepo, weeklyRepo, userId)` the in-memory repositories hold zero rows for
+// `userId` across all four vault tables (profiles, vault_entries, predictions,
+// answers) AND zero drafts; every other user's vault rows and drafts are unchanged.
 //
 // The extension (task 13, Req 6.6) seeds an `InMemoryDraftRepository` alongside
 // the vault repo and asserts that clearing a user's vault via
 // `deleteVaultForUser` also clears that user's drafts (`deleteAllDrafts` was
 // called) while every other user's drafts survive.
+//
+// Property 17 (health-baseline task 14.2, Req 2.11) further seeds an
+// `InMemoryWeeklyFeatureRepository` with each user's weekly rows and asserts
+// the target's `listWeeklyFeatures` is `[]` after the delete while every other
+// user's weekly rows deep-equal their pre-delete snapshot.
 
 import { describe, it, expect } from "vitest";
 import fc from "fast-check";
@@ -28,7 +34,10 @@ import {
   InMemoryDraftRepository,
   type NewDraft,
 } from "@/lib/db/draft-repository";
+import { InMemoryWeeklyFeatureRepository } from "@/lib/db/weekly-feature-repository";
+import type { WeeklyFeatureRow } from "@/lib/baseline";
 import { deleteVaultForUser } from "@/app/api/vault/route";
+import { storedWeeklyRowsArb } from "./helpers/weekly-rows";
 
 const familyHistoryArb: fc.Arbitrary<FamilyHistory> = fc.constantFrom(
   "huntington",
@@ -110,7 +119,7 @@ const newDraftArb: fc.Arbitrary<NewDraft> = fc.record({
 
 /**
  * Everything that can be seeded for a single user across the four vault tables
- * plus the drafts table.
+ * plus the drafts and weekly_features tables.
  */
 type UserSeed = {
   profile: Profile | null;
@@ -118,6 +127,7 @@ type UserSeed = {
   predictions: NewPrediction[];
   answers: NewAnswer[];
   drafts: NewDraft[];
+  weeklyRows: WeeklyFeatureRow[];
 };
 
 const userSeedArb: fc.Arbitrary<UserSeed> = fc.record({
@@ -126,6 +136,9 @@ const userSeedArb: fc.Arbitrary<UserSeed> = fc.record({
   predictions: fc.array(newPredictionArb, { maxLength: 6 }),
   answers: fc.array(newAnswerArb, { maxLength: 6 }),
   drafts: fc.array(newDraftArb, { maxLength: 6 }),
+  // Modest history sizes keep the property fast; some duplicate weeks exercise
+  // the repository's one-row-per-weekStart upsert (snapshots read the repo).
+  weeklyRows: storedWeeklyRowsArb({ maxWeeks: 8, duplicateRate: 0.1 }),
 });
 
 /**
@@ -146,6 +159,7 @@ const seedMapArb: fc.Arbitrary<Map<string, UserSeed>> = fc
 async function readUser(
   repo: InMemoryVaultRepository,
   draftRepo: InMemoryDraftRepository,
+  weeklyRepo: InMemoryWeeklyFeatureRepository,
   userId: string,
   draftIds: string[],
 ) {
@@ -158,11 +172,12 @@ async function readUser(
     vaultEntries: await repo.listVaultEntries(userId),
     answers: await repo.listAnswers(userId),
     drafts,
+    weeklyRows: await weeklyRepo.listWeeklyFeatures(userId),
   };
 }
 
-describe("Property 4: deleteVaultForUser leaves nothing — including drafts (Requirements 3.5, 3.6, 6.6)", () => {
-  it("removes all of the target user's vault rows and drafts while leaving other users unchanged", async () => {
+describe("Property 4 / Property 17: deleteVaultForUser leaves nothing — including drafts and weekly features (Requirements 3.5, 3.6, 6.6, 2.11)", () => {
+  it("removes all of the target user's vault rows, drafts and weekly features while leaving other users unchanged", async () => {
     await fc.assert(
       fc.asyncProperty(
         seedMapArb,
@@ -173,8 +188,9 @@ describe("Property 4: deleteVaultForUser leaves nothing — including drafts (Re
         async (seeds, targetIndex, fallbackId) => {
           const repo = new InMemoryVaultRepository();
           const draftRepo = new InMemoryDraftRepository();
+          const weeklyRepo = new InMemoryWeeklyFeatureRepository();
 
-          // Populate both repos for every user across all tables, capturing the
+          // Populate all three repos for every user across all tables, capturing the
           // ids each repo assigns so we can later probe getPrediction/getDraft.
           const createdPredictionIds = new Map<string, string[]>();
           const createdDraftIds = new Map<string, string[]>();
@@ -200,24 +216,32 @@ describe("Property 4: deleteVaultForUser leaves nothing — including drafts (Re
               draftIds.push(created.id);
             }
             createdDraftIds.set(userId, draftIds);
+            await weeklyRepo.upsertWeeklyFeatures(userId, seed.weeklyRows);
           }
 
           const userIds = [...seeds.keys()];
           const targetUserId =
             userIds.length > 0 ? userIds[targetIndex % userIds.length] : fallbackId;
 
-          // Snapshot every other user's rows (including drafts) before the delete.
+          // Snapshot every other user's rows (including drafts and weekly rows,
+          // as listed by the repo after upsert) before the delete.
           const otherUserIds = userIds.filter((id) => id !== targetUserId);
           const before = new Map<string, Awaited<ReturnType<typeof readUser>>>();
           for (const id of otherUserIds) {
             before.set(
               id,
-              await readUser(repo, draftRepo, id, createdDraftIds.get(id) ?? []),
+              await readUser(
+                repo,
+                draftRepo,
+                weeklyRepo,
+                id,
+                createdDraftIds.get(id) ?? [],
+              ),
             );
           }
 
-          // Act: the real DELETE helper clears both the vault and the drafts.
-          await deleteVaultForUser(repo, draftRepo, targetUserId);
+          // Act: the real DELETE helper clears the vault, drafts and weekly features.
+          await deleteVaultForUser(repo, draftRepo, weeklyRepo, targetUserId);
 
           // Assert: the target user holds zero rows across all four vault tables.
           expect(await repo.getProfile(targetUserId)).toBeNull();
@@ -232,11 +256,15 @@ describe("Property 4: deleteVaultForUser leaves nothing — including drafts (Re
             expect(await draftRepo.getDraft(targetUserId, draftId)).toBeNull();
           }
 
-          // Assert: every other user's rows and drafts are exactly unchanged.
+          // Assert (P17): the target user's weekly features are gone.
+          expect(await weeklyRepo.listWeeklyFeatures(targetUserId)).toEqual([]);
+
+          // Assert: every other user's rows, drafts and weekly rows are exactly unchanged.
           for (const id of otherUserIds) {
             const after = await readUser(
               repo,
               draftRepo,
+              weeklyRepo,
               id,
               createdDraftIds.get(id) ?? [],
             );

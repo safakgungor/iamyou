@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import QRCode from 'qrcode';
+import AppTabs from '@/components/app-tabs';
 import DeviceScale from './device-scale';
 import './device.css';
 
@@ -9,7 +10,8 @@ const APP_URL = 'https://www.iamyou.si/app';
  * Every app screen lives inside a phone. On a desktop the screens render in a
  * device frame (status bar, Dynamic Island, home indicator) with a QR code to
  * open the app on a real phone; on a phone the frame disappears and the app is
- * full-screen. Pages scroll inside the device screen, which is also the
+ * full-screen. On the desktop frame, pages scroll inside the screen's content
+ * area between the status bar and the tab bar; the screen is also the
  * container for container queries and for any fixed-position element.
  */
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -37,6 +39,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <div className="device-screen @container">
           <StatusBar />
           <div className="device-content">{children}</div>
+          <AppTabs />
           <span className="device-home" aria-hidden="true" />
         </div>
       </div>

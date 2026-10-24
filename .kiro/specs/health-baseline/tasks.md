@@ -30,15 +30,15 @@ is optional. No Claude call is added by this spec.
 
 ## Tasks
 
-- [ ] 1. [kiro] Implement the speech feature modules `lib/fillers.ts` and `lib/speech-features.ts`
-  - [ ] 1.1 Implement `lib/fillers.ts`
+- [x] 1. [kiro] Implement the speech feature modules `lib/fillers.ts` and `lib/speech-features.ts`
+  - [x] 1.1 Implement `lib/fillers.ts`
     - Export `FILLERS` as the ordered `as const` tuple `'um', 'uh', 'er', 'like',
       'you know', 'i mean', 'basically', 'actually'` and the `Filler` type
     - Export `MULTI_WORD_FILLERS` (`{'you know', 'i mean'}`) and `SINGLE_WORD_FILLERS`
       (the six one-word fillers) as `ReadonlySet<string>` derived from `FILLERS`
     - No I/O, no imports beyond types
     - _Requirements: 1.5, 1.6_
-  - [ ] 1.2 Implement `lib/speech-features.ts`
+  - [x] 1.2 Implement `lib/speech-features.ts`
     - Export the `SpeechFeatures` type, `MATTR_WINDOW = 50`, `tokenize(text)`,
       `splitSentences(text)` and `extractSpeechFeatures(transcript)` with the exact
       signatures from the design
@@ -55,7 +55,7 @@ is optional. No Claude call is added by this spec.
     - Return all three as `0` when there are zero tokens or zero non-empty sentences,
       before any division; no model call, no I/O, no input mutation
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.7, 1.8, 1.9_
-  - [ ] 1.3 Write property test P4 in `tests/pbt/speech-features.test.ts`
+  - [x] 1.3 Write property test P4 in `tests/pbt/speech-features.test.ts`
     - **Property P4: Speech features are deterministic and bounded** — for any transcript
       string (including empty, whitespace-only and punctuation-only strings, generated with
       `fc.string({ unit: 'grapheme' })` plus explicit whitespace/punctuation strings), two
@@ -64,7 +64,7 @@ is optional. No Claude call is added by this spec.
       all three values `0`
     - Tag comment `// Feature: health-baseline, Property 4: …` and a `Validates:` line
     - **Validates: Requirements 1.7, 1.8, 1.9**
-  - [ ] 1.4 Write property test P8 in `tests/pbt/speech-features.test.ts`
+  - [x] 1.4 Write property test P8 in `tests/pbt/speech-features.test.ts`
     - **Property P8: Speech features follow their definitions** — for word lists (length
       0–120) drawn from a filler-heavy vocabulary including the parts of `you know` and
       `i mean`, joined with arbitrary whitespace, mixed case and `.!?` runs that create
@@ -73,15 +73,15 @@ is optional. No Claude call is added by this spec.
       scan; changing the case of the transcript does not change the result
     - Add as a second `it(...)` in the same file as P4, with its own tag comment
     - **Validates: Requirements 1.1, 1.2, 1.3, 1.4, 1.5**
-  - [ ] 1.5 Write unit tests in `tests/unit/speech-features.test.ts`
+  - [x] 1.5 Write unit tests in `tests/unit/speech-features.test.ts`
     - Assert `FILLERS` equals the eight strings in order; `"you know like"` counts 2
       fillers in 3 tokens; `"um, I mean... like."` tokenizes to
       `["um","i","mean","like"]`; `""`, `"   "` and `"?!."` return all zeros; a 60-token
       sample matches a hand-computed MATTR value
     - _Requirements: 1.2, 1.5, 1.6, 1.7_
 
-- [ ] 2. [kiro] Implement the frozen-baseline pure module `lib/baseline.ts`
-  - [ ] 2.1 Implement constants, types, helpers and the shared run detector
+- [x] 2. [kiro] Implement the frozen-baseline pure module `lib/baseline.ts`
+  - [x] 2.1 Implement constants, types, helpers and the shared run detector
     - Export `FEATURES` (canonical order), `Feature`, and the constants
       `Z_THRESHOLD = 2.0`, `WEEKS_REQUIRED = 3`, `FEATURES_REQUIRED = 2`,
       `MIN_BASELINE_WEEKS = 12`, `SD_FLOOR = 1e-6`, defined together
@@ -101,7 +101,7 @@ is optional. No Claude call is added by this spec.
       `signalFromZScores(weeks) = weeks.reduce(advanceRuns, initialRunState()).signal`
     - No I/O, no environment reads, no input mutation, no import from `lib/signal.ts`
     - _Requirements: 3.1, 3.4, 3.13, 4.3, 4.4, 4.9_
-  - [ ] 2.2 Implement `evaluateHistory`, `zScores`, `computeBaseline` and `recentMean`
+  - [x] 2.2 Implement `evaluateHistory`, `zScores`, `computeBaseline` and `recentMean`
     - Implement the single chronological pass of the design: for each week of
       `canonicalOrder(rows)`, (a) compute z-scores against the baseline sets as they stand
       before W (`null` for missing values and for weeks in a feature's initial set;
@@ -115,7 +115,7 @@ is optional. No Claude call is added by this spec.
     - Implement `recentMean(rows, feature, windowWeeks = 4)` over rows with `weekStart` in
       `(latest − 7·windowWeeks days, latest]`, returning `null` when none has a value
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11, 3.12, 3.14, 3.15_
-  - [ ] 2.3 Implement the shared fast-check arbitraries `tests/pbt/helpers/weekly-rows.ts`
+  - [x] 2.3 Implement the shared fast-check arbitraries `tests/pbt/helpers/weekly-rows.ts`
     - Export `weeklyRowsArb({ minWeeks, maxWeeks, nullRate, gapRate, duplicateRate })`
       (7-day steps from a random start date, random 14+ day gaps, optional duplicates,
       per-feature nulls/missing keys, occasional non-finite values), `stableThenSpikeArb`
@@ -128,14 +128,14 @@ is optional. No Claude call is added by this spec.
       (task 8.1) and counting `listWeeklyFeatures` calls in `.listCalls`, so P18 and the
       Req 9.7 unit tests can assert that no weekly row was read
     - _Requirements: 3.2, 4.6, 4.8, 9.2, 9.7_
-  - [ ] 2.4 Write property test P9 in `tests/pbt/baseline-order-independent.test.ts`
+  - [x] 2.4 Write property test P9 in `tests/pbt/baseline-order-independent.test.ts`
     - **Property P9: History evaluation is order-independent and well-shaped** — for any
       rows from `weeklyRowsArb` (nulls, missing keys, gaps and duplicate weeks allowed) and
       any permutation, `zScores` and `computeBaseline` return deep-equal results;
       `zScores(rows)` has one entry per input row in ascending `weekStart` order, each with
       all six feature keys as a finite number or explicit `null`, and `zScores([])` is `[]`
     - **Validates: Requirements 3.2, 3.15**
-  - [ ] 2.5 Write property test P11 in `tests/pbt/baseline-frozen.test.ts`
+  - [x] 2.5 Write property test P11 in `tests/pbt/baseline-frozen.test.ts`
     - **Property P11: The frozen baseline never absorbs deviating or post-signal weeks** —
       over `weeklyRowsArb` ∪ `driftArb` ∪ constant columns, a naive reference rebuild of each
       feature's baseline set from the sorted rows reproduces every z-score and the final
@@ -146,7 +146,7 @@ is optional. No Claude call is added by this spec.
       `openAt[i]` is `false`; features with fewer than 12 non-null weeks have no z-score
       and a `null` baseline
     - **Validates: Requirements 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11, 3.12**
-  - [ ] 2.6 Write unit tests in `tests/unit/baseline.test.ts`
+  - [x] 2.6 Write unit tests in `tests/unit/baseline.test.ts`
     - Assert the constants equal 2.0 / 3 / 2 / 12; exactly 12 non-null weeks give no
       z-score but a non-null baseline and 11 give a `null` baseline; a constant initial set
       gives `z = 0` for an equal value and a large finite z otherwise; a null week is
@@ -154,8 +154,8 @@ is optional. No Claude call is added by this spec.
       `recentMean` over the last 4 weeks, and `null` with no data
     - _Requirements: 3.4, 3.6, 3.7, 3.9, 3.11, 3.13_
 
-- [ ] 3. [kiro] Implement change-signal detection and the RTK gate `lib/signal.ts`
-  - [ ] 3.1 Implement `lib/signal.ts`
+- [x] 3. [kiro] Implement change-signal detection and the RTK gate `lib/signal.ts`
+  - [x] 3.1 Implement `lib/signal.ts`
     - Re-export `Z_THRESHOLD`, `WEEKS_REQUIRED`, `FEATURES_REQUIRED`,
       `MIN_BASELINE_WEEKS` and the `ChangeSignal` / `Feature` types with
       `export { … } from './baseline'` (same bindings, never redefined)
@@ -169,22 +169,22 @@ is optional. No Claude call is added by this spec.
     - `gate` is defined and exported only here; no other module re-exports or
       reimplements it, and every consumer imports it from `lib/signal.ts`
     - _Requirements: 4.1, 4.2, 4.5, 4.6, 4.7, 4.8, 5.1, 5.2, 5.3, 5.4, 5.5_
-  - [ ] 3.2 Write property test P1 in `tests/pbt/signal-single-spike.test.ts`
+  - [x] 3.2 Write property test P1 in `tests/pbt/signal-single-spike.test.ts`
     - **Property P1: A single spike never signals** — over `stableThenSpikeArb` rows,
       shuffled, first assert through `zScores` that exactly one week has any
       `|z| >= Z_THRESHOLD`, then assert `detectSignal(rows)` is `null`
     - **Validates: Requirements 4.6**
-  - [ ] 3.3 Write property test P2 in `tests/pbt/gate.test.ts`
+  - [x] 3.3 Write property test P2 in `tests/pbt/gate.test.ts`
     - **Property P2: `record_only` hides everywhere** — for any `ChangeSignal | null`,
       `gate(signal, 'record_only')` returns `{ showToUser: false, includeInSummary: false }`
     - **Validates: Requirements 5.4**
-  - [ ] 3.4 Write property test P3 in `tests/pbt/gate.test.ts`
+  - [x] 3.4 Write property test P3 in `tests/pbt/gate.test.ts`
     - **Property P3: `doctor_only` hides from the user** — for any `ChangeSignal | null`,
       `gate(signal, 'doctor_only')` returns `showToUser: false` and
       `includeInSummary: true`
     - Add as a second `it(...)` in the same file as P2
     - **Validates: Requirements 5.3**
-  - [ ] 3.5 Write property test P7 in `tests/pbt/gate.test.ts`
+  - [x] 3.5 Write property test P7 in `tests/pbt/gate.test.ts`
     - **Property P7: The gate is total and fails closed** — for any `ChangeSignal | null`
       and any value from `fc.anything()` plus near-miss strings (`'TELL_ME'`,
       `' tell_me'`, `''`), `gate` returns `{ true, true }` exactly for `'tell_me'`,
@@ -192,25 +192,25 @@ is optional. No Claude call is added by this spec.
       throws
     - Add as a third `it(...)` in the same file as P2 and P3
     - **Validates: Requirements 5.1, 5.2, 5.5**
-  - [ ] 3.6 Write property test P5 in `tests/pbt/signal-order-independent.test.ts`
+  - [x] 3.6 Write property test P5 in `tests/pbt/signal-order-independent.test.ts`
     - **Property P5: Detection is order-independent** — for rows with distinct
       `week_start` values from `weeklyRowsArb` ∪ `driftArb` and two permutations, both
       results are `null` or both are signals with identical `features` (same order),
       `firstWeek` and `detectedWeek`
     - **Validates: Requirements 4.8**
-  - [ ] 3.7 Write property test P6 in `tests/pbt/signal-min-history.test.ts`
+  - [x] 3.7 Write property test P6 in `tests/pbt/signal-min-history.test.ts`
     - **Property P6: Not enough history, no signal** — for any history with 0–11 distinct
       `week_start` values (duplicates allowed) and any feature values including extreme
       ones, `detectSignal(rows)` returns `null`
     - **Validates: Requirements 4.7**
-  - [ ] 3.8 Write property test P10 in `tests/pbt/signal-agreement.test.ts`
+  - [x] 3.8 Write property test P10 in `tests/pbt/signal-agreement.test.ts`
     - **Property P10: Detection agrees with the pass** — for deep-frozen rows from
       `weeklyRowsArb` ∪ `driftArb`, `detectSignal(rows)` deep-equals
       `evaluateHistory(rows).signal`, and every `evaluateHistory(rows).openAt[i]` equals
       `signalFromZScores(zScores(rows).slice(0, i + 1)) !== null`; neither call mutates
       the input
     - **Validates: Requirements 3.14, 4.2**
-  - [ ] 3.9 Write property test P12 in `tests/pbt/signal-well-formed.test.ts`
+  - [x] 3.9 Write property test P12 in `tests/pbt/signal-well-formed.test.ts`
     - **Property P12: A change signal is well-formed and earliest** — with an independent
       run counter over `zScores(rows)` defining `Q(W)` (features deviating in at least 3
       consecutive 7-day-apart weeks ending at W, no null z), `detectSignal` is `null`
@@ -218,7 +218,7 @@ is optional. No Claude call is added by this spec.
       such W, `features` is `Q(W)` in canonical `FEATURES` order, and `firstWeek` is the
       earliest start of the listed features' runs ending at W
     - **Validates: Requirements 4.3, 4.4, 4.5, 4.9**
-  - [ ] 3.10 Write unit tests in `tests/unit/signal.test.ts`
+  - [x] 3.10 Write unit tests in `tests/unit/signal.test.ts`
     - Assert each re-exported constant is `===` its `lib/baseline.ts` counterpart;
       a two-feature, three-week shift yields one signal with the expected
       `features` / `firstWeek` / `detectedWeek`; a two-week shift or a 14-day gap inside
@@ -226,24 +226,24 @@ is optional. No Claude call is added by this spec.
       `[]` yields `null`; the gate truth table for the three settings
     - _Requirements: 4.1, 4.3, 4.4, 4.5, 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 4. [kiro] Implement weekly sleep aggregation `lib/weekly.ts`
-  - [ ] 4.1 Implement `weeklySleepHours`
+- [x] 4. [kiro] Implement weekly sleep aggregation `lib/weekly.ts`
+  - [x] 4.1 Implement `weeklySleepHours`
     - Export `DailyWearableRow` and `weeklySleepHours(dailyRows)`: the mean of the finite
       `sleep_hours` values; missing, `null` and non-finite values are excluded from both
       the sum and the count, never treated as 0; `null` when no day has a value; no I/O
     - _Requirements: 6.10, 6.11, 6.12, 6.13_
-  - [ ] 4.2 Write property test P14 in `tests/pbt/weekly-sleep.test.ts`
+  - [x] 4.2 Write property test P14 in `tests/pbt/weekly-sleep.test.ts`
     - **Property P14: Weekly sleep ignores missing days** — for daily rows whose
       `sleep_hours` is a finite number, `null` or absent, the result is `null` when no day
       has a value and otherwise the arithmetic mean of exactly the valued days (within
       `1e-9`); inserting any number of null or missing days anywhere does not change it
     - **Validates: Requirements 6.11, 6.12, 6.13**
-  - [ ] 4.3 Write unit tests in `tests/unit/weekly.test.ts`
+  - [x] 4.3 Write unit tests in `tests/unit/weekly.test.ts`
     - Assert `[7, null, 8]` → `7.5`; `[]` and all-null → `null`
     - _Requirements: 6.11, 6.12, 6.13_
 
-- [ ] 5. [kiro] Implement the county CSV lookup `lib/county.ts`
-  - [ ] 5.1 Implement `parseShortSleepCsv`, `toCountyCard` and `findCountyCard`
+- [x] 5. [kiro] Implement the county CSV lookup `lib/county.ts`
+  - [x] 5.1 Implement `parseShortSleepCsv`, `toCountyCard` and `findCountyCard`
     - Export `ShortSleepCsvRow` and `CountyCard`; `parseShortSleepCsv` strips a leading
       BOM, splits on `/\r?\n/`, drops trailing empty lines, maps the six required columns
       by header name in any order (missing column → `null`), skips lines whose cell count
@@ -256,13 +256,13 @@ is optional. No Claude call is added by this spec.
       `toCountyCard`
     - No I/O; the file read stays in the route module
     - _Requirements: 8.1, 8.2, 8.3, 8.12_
-  - [ ] 5.2 Write property test P15 in `tests/pbt/county.test.ts`
+  - [x] 5.2 Write property test P15 in `tests/pbt/county.test.ts`
     - **Property P15: County CSV parsing round-trips** — for rows whose cells contain no
       comma, CR or LF, printing them with a local test helper `formatShortSleepCsv`
       (header in any column order, LF or CRLF endings) and parsing with
       `parseShortSleepCsv` returns the same rows with every cell unchanged
     - **Validates: Requirements 8.1, 8.2**
-  - [ ] 5.3 Write property test P16 in `tests/pbt/county.test.ts`
+  - [x] 5.3 Write property test P16 in `tests/pbt/county.test.ts`
     - **Property P16: County lookup is exact and fails closed** — for tables with valid,
       invalid and duplicate counties and queries including case variants, `null`, `''`
       and non-strings, `findCountyCard` returns a card exactly when the query equals the
@@ -272,11 +272,11 @@ is optional. No Claude call is added by this spec.
     - Add as a second `it(...)` in the same file as P15
     - **Validates: Requirements 8.1, 8.2, 8.3, 8.12**
 
-- [ ] 6. Checkpoint - Ensure all pure-module property and unit tests pass
+- [x] 6. Checkpoint - Ensure all pure-module property and unit tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 7. [kiro] Write the SQL migration `supabase/migrations/0003_health_baseline.sql`
-  - [ ] 7.1 Create the `weekly_features` table with RLS
+- [x] 7. [kiro] Write the SQL migration `supabase/migrations/0003_health_baseline.sql`
+  - [x] 7.1 Create the `weekly_features` table with RLS
     - Header comment in the style of 0001/0002 listing the requirements
     - Columns `user_id uuid not null references auth.users on delete cascade`,
       `week_start date not null`, the six nullable `numeric` feature columns, and
@@ -286,15 +286,15 @@ is optional. No Claude call is added by this spec.
       keyed on `user_id = auth.uid()` (update with both `using` and `with check`); do not
       alter the `twin-loop` or `assistant-tasks` tables
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
-  - [ ] 7.2 Write a static migration test in `tests/unit/migration-health-baseline.test.ts`
+  - [x] 7.2 Write a static migration test in `tests/unit/migration-health-baseline.test.ts`
     - Read the SQL file as text and assert the `weekly_features` table declares exactly the
       Req 2.1 columns, the `unique (user_id, week_start)` constraint, `enable row level
       security`, and four select/insert/update/delete policies each keyed on
       `user_id = auth.uid()`; no live database is used
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
 
-- [ ] 8. [kiro] Implement the weekly feature repository `lib/db/weekly-feature-repository.ts`
-  - [ ] 8.1 Define `WeeklyFeatureRepository` and `InMemoryWeeklyFeatureRepository`
+- [x] 8. [kiro] Implement the weekly feature repository `lib/db/weekly-feature-repository.ts`
+  - [x] 8.1 Define `WeeklyFeatureRepository` and `InMemoryWeeklyFeatureRepository`
     - Interface methods `listWeeklyFeatures(userId)` (ascending `weekStart`),
       `upsertWeeklyFeatures(userId, rows)` (insert-or-replace on `(userId, weekStart)`)
       and `deleteForUser(userId)`, using `WeeklyFeatureRow` from `lib/baseline.ts`
@@ -302,7 +302,7 @@ is optional. No Claude call is added by this spec.
       `Map<userId, Map<weekStart, WeeklyFeatureRow>>`; returns sorted copies so callers
       cannot mutate stored rows; `deleteForUser` drops only that user's inner map
     - _Requirements: 2.3, 2.4, 2.10, 2.11, 7.1_
-  - [ ] 8.2 Implement `SupabaseWeeklyFeatureRepository`
+  - [x] 8.2 Implement `SupabaseWeeklyFeatureRepository`
     - Runs on an injected `SupabaseClient`; every statement filters by
       `user_id = userId`; maps `week_start` ↔ `weekStart`
     - `upsertWeeklyFeatures` sends chunks of 500 rows with
@@ -312,14 +312,14 @@ is optional. No Claude call is added by this spec.
     - Export `toNullableNumber` (number or numeric string → number; anything else → `null`)
       for the `numeric` columns
     - _Requirements: 2.4, 2.5, 2.10, 2.11, 7.1_
-  - [ ] 8.3 Write unit tests in `tests/unit/weekly-feature-repository.test.ts`
+  - [x] 8.3 Write unit tests in `tests/unit/weekly-feature-repository.test.ts`
     - Assert upserting the same rows twice yields no duplicates; the list is sorted by
       `weekStart` and scoped to the owner; returned rows are copies; `deleteForUser`
       leaves other users intact; `toNullableNumber("7.31")` is `7.31` and
       `toNullableNumber(null)` is `null`
     - _Requirements: 2.3, 2.4, 2.10, 2.11, 7.1_
 
-- [ ] 9. [kiro] Add the timeline and county zod schemas to `lib/api-schemas.ts`
+- [x] 9. [kiro] Add the timeline and county zod schemas to `lib/api-schemas.ts`
   - Add (zod only, no server imports) `FeatureNameSchema` mirroring `FEATURES`,
     `TimelineRowSchema`, `TimelineZScoresSchema`, `BaselineStatsSchema` and
     `ChangeSignalResponseSchema` (`features` min 2, `first_week`, `detected_week`), all
@@ -338,8 +338,8 @@ is optional. No Claude call is added by this spec.
     existing routes do
   - _Requirements: 7.2, 7.6, 8.2, 8.3, 8.5, 8.13, 9.1, 9.3, 9.4_
 
-- [ ] 10. [kiro] Implement pure timeline shaping `lib/timeline.ts`
-  - [ ] 10.1 Implement `buildTimeline(rows, rtkSetting: unknown): TimelineOptedIn`
+- [x] 10. [kiro] Implement pure timeline shaping `lib/timeline.ts`
+  - [x] 10.1 Implement `buildTimeline(rows, rtkSetting: unknown): TimelineOptedIn`
     - Shapes only the opted-in branch (called by `getTimeline` after the opt-in check);
       the returned object has `opted_in: true` as its first key, then `rtk_setting`,
       `rows`, `z_scores`, `baseline`, `signal`
@@ -352,7 +352,7 @@ is optional. No Claude call is added by this spec.
       otherwise `signal: null` through the same code path, so a gated signal is
       byte-identical to no signal; fixed key order for deterministic JSON
     - _Requirements: 5.6, 5.7, 7.1, 7.2, 7.3, 7.4, 7.15, 9.3_
-  - [ ] 10.2 Write property test P13 in `tests/pbt/timeline-no-leak.test.ts`
+  - [x] 10.2 Write property test P13 in `tests/pbt/timeline-no-leak.test.ts`
     - **Property P13: The timeline never leaks a gated signal** — over `weeklyRowsArb`
       (distinct weeks, may be empty) ∪ `driftArb` × `fc.oneof(the three settings,
       fc.anything())`: a gated signal produces `JSON.stringify` output identical to the
@@ -364,11 +364,11 @@ is optional. No Claude call is added by this spec.
       `TimelineResponseSchema`)
     - **Validates: Requirements 7.1, 7.2, 7.3, 7.4, 7.15, 9.3**
 
-- [ ] 11. Checkpoint - Ensure migration, repository, schema, and timeline tests pass
+- [x] 11. Checkpoint - Ensure migration, repository, schema, and timeline tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 12. [kiro] Implement Maya's reproducible history `scripts/generate-maya.ts`
-  - [ ] 12.1 Implement the seeded generator
+- [x] 12. [kiro] Implement Maya's reproducible history `scripts/generate-maya.ts`
+  - [x] 12.1 Implement the seeded generator
     - Self-contained: import only `node:fs`, `node:path`, `node:url`; use only
       `+ - * /`, `Math.imul`, bit shifts and `Number.prototype.toFixed` (no `Math.pow`,
       `Math.exp`, `**`, `Math.random`, `Date.now`, `toLocale*`, `process.env`)
@@ -385,13 +385,13 @@ is optional. No Claude call is added by this spec.
       `data/synthetic/maya/weekly-features.json`, and runs only when the file is executed
       directly (`import.meta.url === pathToFileURL(process.argv[1]).href`)
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.8_
-  - [ ] 12.2 Add the npm script and generate the committed data file
+  - [x] 12.2 Add the npm script and generate the committed data file
     - Add `"generate:maya": "node scripts/generate-maya.ts"` to `package.json` scripts
       (leave all other scripts and dependencies unchanged)
     - Run `npm run generate:maya` to write `data/synthetic/maya/weekly-features.json`
       (1,149 rows, 2026-10-24 through 2048-10-24 inclusive)
     - _Requirements: 6.1, 6.3, 6.8_
-  - [ ] 12.3 Write the calibration test `tests/unit/maya-calibration.test.ts`
+  - [x] 12.3 Write the calibration test `tests/unit/maya-calibration.test.ts`
     - Over the committed `weekly-features.json`: 1,149 rows; first `week_start` =
       profile `start_date`, last = `simulated_through`, every step exactly 7 days; every
       row `synthetic: true`; below age 38.5 each value is within `a_f` (plus rounding) of
@@ -403,7 +403,7 @@ is optional. No Claude call is added by this spec.
     - If calibration fails, adjust the generator parameters within the design's model and
       regenerate the file (12.2) until it passes
     - _Requirements: 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9_
-  - [ ] 12.4 Write the determinism test `tests/unit/maya-generate.test.ts`
+  - [x] 12.4 Write the determinism test `tests/unit/maya-generate.test.ts`
     - Assert two calls of `serializeWeeklyFeatures(generateMayaWeeklyFeatures(profile))`
       return identical strings equal byte-for-byte to the committed file (read as a
       `Buffer`); a source scan asserts the script contains no `Date.now`, argument-less
@@ -411,8 +411,8 @@ is optional. No Claude call is added by this spec.
       `**`; importing the module writes no file
     - _Requirements: 6.1, 6.2_
 
-- [ ] 13. [kiro] Extend `POST /api/demo/start` to seed weekly features
-  - [ ] 13.1 Extend `seedDemo` and the handler in `app/api/demo/start/route.ts`
+- [x] 13. [kiro] Extend `POST /api/demo/start` to seed weekly features
+  - [x] 13.1 Extend `seedDemo` and the handler in `app/api/demo/start/route.ts`
     - Add `mayaDemoWeeklyFeatures()` importing `@/data/synthetic/maya/weekly-features.json`
       like the existing profile/vault imports, mapping `week_start` → `weekStart` and
       forcing `synthetic: true`
@@ -423,15 +423,15 @@ is optional. No Claude call is added by this spec.
       service-role client and pass `mayaDemoWeeklyFeatures()`; the service-role key stays
       read only in this route; a failure keeps mapping to 500
     - _Requirements: 2.7, 2.8, 2.9, 2.10_
-  - [ ] 13.2 Update `tests/unit/demo-start.test.ts`
+  - [x] 13.2 Update `tests/unit/demo-start.test.ts`
     - Update existing calls to the new signature with an `InMemoryWeeklyFeatureRepository`
       and keep the vault assertions; assert after `seedDemo` the caller owns 1,149 weekly
       rows, all `synthetic: true`, with dates equal to the file, and no other user owns
       any; a second call still yields 1,149; a throwing weekly repo makes `seedDemo` reject
     - _Requirements: 2.7, 2.10_
 
-- [ ] 14. [kiro] Extend `DELETE /api/vault` to delete weekly features
-  - [ ] 14.1 Extend `deleteVaultForUser` in `app/api/vault/route.ts`
+- [x] 14. [kiro] Extend `DELETE /api/vault` to delete weekly features
+  - [x] 14.1 Extend `deleteVaultForUser` in `app/api/vault/route.ts`
     - Change the signature to `deleteVaultForUser(repo, draftRepo, weeklyRepo, userId)`
       and call `weeklyRepo.deleteForUser(userId)` after the vault and draft deletes;
       update the header comment
@@ -439,7 +439,7 @@ is optional. No Claude call is added by this spec.
       request-scoped client so RLS scopes the delete to the caller
     - The existing callers are updated in 14.2 and 14.3
     - _Requirements: 2.11_
-  - [ ] 14.2 Extend the delete-vault property in `tests/pbt/delete-vault.test.ts` (P17)
+  - [x] 14.2 Extend the delete-vault property in `tests/pbt/delete-vault.test.ts` (P17)
     - **Property P17: Deleting a vault also deletes weekly features (extends twin-loop
       P4)** — keep the `// Feature: twin-loop, Property 4: …` header and add
       `// Feature: health-baseline, Property 17: Deleting a vault also deletes weekly
@@ -448,13 +448,13 @@ is optional. No Claude call is added by this spec.
       assert the target's `listWeeklyFeatures` is `[]` while every other user's weekly
       rows (and existing vault and draft rows) deep-equal their snapshot
     - **Validates: Requirements 2.11**
-  - [ ] 14.3 Update `tests/unit/vault-delete.test.ts`
+  - [x] 14.3 Update `tests/unit/vault-delete.test.ts`
     - Update calls to the four-argument signature; assert the caller's weekly rows are
       removed and another user's are kept
     - _Requirements: 2.11_
 
-- [ ] 15. [kiro] Implement `GET /api/timeline` with unit tests
-  - [ ] 15.1 Implement `app/api/timeline/route.ts` and the exported `getTimeline`
+- [x] 15. [kiro] Implement `GET /api/timeline` with unit tests
+  - [x] 15.1 Implement `app/api/timeline/route.ts` and the exported `getTimeline`
     - Export `ProfileReader = Pick<VaultRepository, 'getProfile'>`, `TimelineOutcome`
       (200 with either branch of `TimelineResponse`, or 503
       `{ error: 'timeline_unavailable' }`) and `getTimeline(weekly, profiles, userId)`
@@ -475,7 +475,7 @@ is optional. No Claude call is added by this spec.
       otherwise wire `SupabaseWeeklyFeatureRepository` and `SupabaseVaultRepository` on
       the request-scoped client and return the outcome's status and body
     - _Requirements: 5.6, 5.7, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.15, 7.16, 9.1, 9.2, 9.3, 9.4_
-  - [ ] 15.2 Write property test P18 in `tests/pbt/timeline-opt-in.test.ts`
+  - [x] 15.2 Write property test P18 in `tests/pbt/timeline-opt-in.test.ts`
     - **Property P18: Opted-out callers get nothing** — for any caller whose profile is
       absent or has `healthLayerOptIn` ∈ {`false`, `null`, `undefined`}, any
       `rtk_setting`, and any weekly rows stored for that caller (`weeklyRowsArb` ∪
@@ -486,7 +486,7 @@ is optional. No Claude call is added by this spec.
       and the repository's `listWeeklyFeatures` call count is `0`
     - Tag comment `// Feature: health-baseline, Property 18: …` and a `Validates:` line
     - **Validates: Requirements 9.1, 9.2, 9.4**
-  - [ ] 15.3 Write unit tests in `tests/unit/timeline-route.test.ts`
+  - [x] 15.3 Write unit tests in `tests/unit/timeline-route.test.ts`
     - All cases use `countingWeeklyRepo` over `InMemoryWeeklyFeatureRepository` and
       `InMemoryVaultRepository`
     - (a) No profile: status 200, body deep-equals and JSON-equals `{"opted_in":false}`,
@@ -512,8 +512,8 @@ is optional. No Claude call is added by this spec.
       when there is no user, without calling `getProfile`
     - _Requirements: 7.1, 7.3, 7.4, 7.5, 7.6, 7.15, 7.16, 9.1, 9.2, 9.3, 9.4, 9.7_
 
-- [ ] 16. [kiro] Implement `GET /api/county` with unit tests
-  - [ ] 16.1 Implement `app/api/county/route.ts` and the exported `getCountyCard`
+- [x] 16. [kiro] Implement `GET /api/county` with unit tests
+  - [x] 16.1 Implement `app/api/county/route.ts` and the exported `getCountyCard`
     - Export `CountyOutcome` and `getCountyCard(profiles, readCsv, userId)` (type-only
       import of `ProfileReader` from the timeline route): a thrown profile read, missing
       profile, or `null`/`''` county → `{ available: false }`; a throwing `readCsv` or a
@@ -528,7 +528,7 @@ is optional. No Claude call is added by this spec.
     - Add `"/api/county": ["./data/public/cdc-places-short-sleep-ma-2022.csv"]` to
       `outputFileTracingIncludes` in `next.config.ts`, keeping the existing entry
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.12, 8.13_
-  - [ ] 16.2 Write unit tests in `tests/unit/county-route.test.ts`
+  - [x] 16.2 Write unit tests in `tests/unit/county-route.test.ts`
     - Maya (`Hampshire`) → `{ available: true, card: { county: 'Hampshire', year: 2022,
       prevalence: 31.5, low: 26.8, high: 36.4 } }` with no `population` key, read from the
       real CSV; `hampshire`, `null`, `''`, a missing profile and an unknown county →
@@ -537,8 +537,8 @@ is optional. No Claude call is added by this spec.
       500 `county_unavailable`; a mocked server client with no user → 401
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.12, 8.13_
 
-- [ ] 17. [kiro] Boundary/smoke tests
-  - [ ] 17.1 Extend `tests/unit/boundary-smoke.test.ts`
+- [x] 17. [kiro] Boundary/smoke tests
+  - [x] 17.1 Extend `tests/unit/boundary-smoke.test.ts`
     - Assert `SUPABASE_SERVICE_ROLE_KEY` still appears only in
       `app/api/demo/start/route.ts`; the pure modules `lib/fillers.ts`,
       `lib/speech-features.ts`, `lib/baseline.ts`, `lib/signal.ts`, `lib/weekly.ts`,
@@ -549,7 +549,7 @@ is optional. No Claude call is added by this spec.
       `gate` is reachable only from `lib/signal.ts` (Req 5.1, D6)
     - _Requirements: 1.1, 2.8, 2.9, 3.1, 4.2, 5.1, 6.10_
 
-- [ ] 18. Final checkpoint - Ensure all tests pass
+- [x] 18. Final checkpoint - Ensure all tests pass
   - Run `npm run lint`, `npm run test:unit` and `npm run test:pbt`; ensure all pass, ask
     the user if questions arise.
 

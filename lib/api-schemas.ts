@@ -1,5 +1,6 @@
 /**
- * Client-safe API route request/response schemas for the twin-loop.
+ * Client-safe API route request/response schemas for the twin-loop,
+ * assistant-tasks, health-baseline and care-outputs specs.
  *
  * This module holds every API route request/response body used by the routes
  * in the design, so each route can validate its input and output at the
@@ -262,3 +263,315 @@ export const TransitionResponseSchema = z.union([
   z.object({ discarded: z.literal(true) }),
 ]);
 export type TransitionResponse = z.infer<typeof TransitionResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* health-baseline: shared shapes                                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The six feature names, as a zod enum. This mirrors `FEATURES` in the pure
+ * `lib/baseline.ts` (same values, same canonical order), but is declared here
+ * with `zod` only so this module never imports other code. A unit test asserts
+ * `FeatureNameSchema.options` equals `FEATURES`. (Req 7.2)
+ */
+export const FeatureNameSchema = z.enum([
+  'vocabulary_diversity',
+  'mean_sentence_length',
+  'filler_rate',
+  'sleep_hours',
+  'active_minutes',
+  'twin_accuracy',
+]);
+export type FeatureName = z.infer<typeof FeatureNameSchema>;
+
+/** An ISO `YYYY-MM-DD` week start. */
+const IsoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+
+/** A feature value or z-score; zod 4 rejects `NaN` and `±Infinity`. */
+const NullableNumber = z.number().nullable();
+
+/** One nullable number per feature, keyed by feature name. */
+const featureShape = {
+  vocabulary_diversity: NullableNumber,
+  mean_sentence_length: NullableNumber,
+  filler_rate: NullableNumber,
+  sleep_hours: NullableNumber,
+  active_minutes: NullableNumber,
+  twin_accuracy: NullableNumber,
+};
+
+/* -------------------------------------------------------------------------- */
+/* GET /api/timeline (discriminated union on opted_in, D11)                   */
+/* -------------------------------------------------------------------------- */
+
+/** One stored weekly_features row: week start, the six features, synthetic flag. (Req 7.1) */
+export const TimelineRowSchema = z
+  .object({ week_start: IsoDate, ...featureShape, synthetic: z.boolean() })
+  .strict();
+export type TimelineRow = z.infer<typeof TimelineRowSchema>;
+
+/**
+ * The z-scores for one week; a feature with no z-score is an explicit null,
+ * never 0. (Req 7.2)
+ */
+export const TimelineZScoresSchema = z
+  .object({ week_start: IsoDate, ...featureShape })
+  .strict();
+export type TimelineZScores = z.infer<typeof TimelineZScoresSchema>;
+
+/** A feature's frozen baseline: mean and population standard deviation. (Req 7.2) */
+export const BaselineStatsSchema = z
+  .object({ mean: z.number(), sd: z.number().min(0) })
+  .strict();
+export type BaselineStatsResponse = z.infer<typeof BaselineStatsSchema>;
+
+/**
+ * A change signal as shown to the user: at least two deviating features, the
+ * first week of the earliest run, and the week it was detected. (Req 7.3)
+ */
+export const ChangeSignalResponseSchema = z
+  .object({
+    features: z.array(FeatureNameSchema).min(2),
+    first_week: IsoDate,
+    detected_week: IsoDate,
+  })
+  .strict();
+export type ChangeSignalResponse = z.infer<typeof ChangeSignalResponseSchema>;
+
+/** Opted out: exactly `{ opted_in: false }`, no other key. (Req 9.1, 9.4) */
+export const TimelineOptedOutSchema = z
+  .object({
+    opted_in: z.literal(false),
+  })
+  .strict();
+export type TimelineOptedOut = z.infer<typeof TimelineOptedOutSchema>;
+
+/**
+ * Opted in: the full timeline. `opted_in` is the first key (the discriminant);
+ * `signal` is always present and is null when there is no signal or the
+ * right-not-to-know gate hides it. (Req 7.1–7.4, 7.15, 9.3)
+ */
+export const TimelineOptedInSchema = z
+  .object({
+    opted_in: z.literal(true),
+    rtk_setting: z.enum(['tell_me', 'doctor_only', 'record_only']).nullable(),
+    rows: z.array(TimelineRowSchema),
+    z_scores: z.array(TimelineZScoresSchema),
+    baseline: z
+      .object({
+        vocabulary_diversity: BaselineStatsSchema.nullable(),
+        mean_sentence_length: BaselineStatsSchema.nullable(),
+        filler_rate: BaselineStatsSchema.nullable(),
+        sleep_hours: BaselineStatsSchema.nullable(),
+        active_minutes: BaselineStatsSchema.nullable(),
+        twin_accuracy: BaselineStatsSchema.nullable(),
+      })
+      .strict(),
+    signal: ChangeSignalResponseSchema.nullable(),
+  })
+  .strict();
+export type TimelineOptedIn = z.infer<typeof TimelineOptedInSchema>;
+
+/**
+ * Response body for `GET /api/timeline`. One schema validates both the
+ * opted-out and the opted-in body. (Req 7.6, 9.4)
+ */
+export const TimelineResponseSchema = z.discriminatedUnion('opted_in', [
+  TimelineOptedOutSchema,
+  TimelineOptedInSchema,
+]);
+export type TimelineResponse = z.infer<typeof TimelineResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* GET /api/county                                                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The county context card: exactly the five CSV values, never `population`,
+ * with `low <= prevalence <= high`. (Req 8.2, 8.12)
+ */
+export const CountyCardSchema = z
+  .object({
+    county: z.string().min(1),
+    year: z.number().int(),
+    prevalence: z.number().min(0).max(100),
+    low: z.number().min(0).max(100),
+    high: z.number().min(0).max(100),
+  })
+  .strict()
+  .refine((c) => c.low <= c.prevalence && c.prevalence <= c.high, {
+    message: 'expected low <= prevalence <= high',
+  });
+export type CountyCardResponse = z.infer<typeof CountyCardSchema>;
+
+/**
+ * Response body for `GET /api/county`: the card, or an explicit unavailable
+ * result that can never carry a number. (Req 8.2, 8.3, 8.5, 8.13)
+ */
+export const CountyResponseSchema = z.union([
+  z.object({ available: z.literal(true), card: CountyCardSchema }).strict(),
+  z.object({ available: z.literal(false) }).strict(),
+]);
+export type CountyResponse = z.infer<typeof CountyResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* care-outputs: POST /api/summary                                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Request body for `POST /api/summary`: the person's own words for field 11
+ * and a contact for fields 4 and 13. Neither is stored or sent to a model.
+ * (care-outputs Req 1.2)
+ */
+export const SummaryRequestSchema = z.object({
+  discuss: z.string().max(500).optional(),
+  contact: z.string().max(200).optional(),
+});
+export type SummaryRequest = z.infer<typeof SummaryRequestSchema>;
+
+/** The six summary features, in field 8 row order. (care-outputs Req 2.1) */
+export const SummaryFeatureSchema = z.enum([
+  'vocabulary_diversity',
+  'mean_sentence_length',
+  'filler_rate',
+  'sleep_hours',
+  'active_minutes',
+  'twin_accuracy',
+]);
+
+/**
+ * One field 8 row: the person's own baseline mean, recent 4-week mean and
+ * z-score. There is no target field. (care-outputs Req 2.2–2.4)
+ */
+export const MeasureRowSchema = z.object({
+  feature: SummaryFeatureSchema,
+  label: z.string(),
+  baselineMean: z.number().nullable(),
+  recentMean: z.number().nullable(),
+  z: z.number().nullable(),
+});
+export type MeasureRowResponse = z.infer<typeof MeasureRowSchema>;
+
+/** The 13 text fields' keys. */
+export const SummaryTextFieldKeySchema = z.enum([
+  'subject',
+  'intro',
+  'person',
+  'from',
+  'focus',
+  'family_history',
+  'dates',
+  'data_sources',
+  'what_changed',
+  'discuss',
+  'rtk',
+  'questions',
+  'footer',
+]);
+
+/** A summary field: field 8 carries measure rows, every other field text. */
+export const SummaryFieldSchema = z.union([
+  z.object({
+    n: z.literal(8),
+    key: z.literal('measures'),
+    label: z.literal('Measures'),
+    rows: z.array(MeasureRowSchema).length(6),
+  }),
+  z.object({
+    n: z.number().int().min(1).max(14),
+    key: SummaryTextFieldKeySchema,
+    label: z.string(),
+    text: z.string(),
+  }),
+]);
+export type SummaryFieldResponse = z.infer<typeof SummaryFieldSchema>;
+
+/**
+ * Response body for `POST /api/summary`: exactly 14 fields in order, the
+ * synthetic flag, and the "Synthetic data" label whenever it is true.
+ * (care-outputs Req 1.2, 4.1–4.3)
+ */
+export const SummaryResponseSchema = z.object({
+  fields: z.array(SummaryFieldSchema).length(14),
+  synthetic: z.boolean(),
+  synthetic_label: z.literal('Synthetic data').nullable(),
+});
+export type SummaryResponse = z.infer<typeof SummaryResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* care-outputs: GET /api/trials                                              */
+/* -------------------------------------------------------------------------- */
+
+/** A normalized trial. (care-outputs Req 7.1) */
+export const TrialSchema = z.object({
+  nctId: z.string(),
+  title: z.string(),
+  phaseLabel: z.string(),
+  conditions: z.array(z.string()),
+  status: z.string(),
+  cities: z.array(z.string()),
+  source: z.enum(['live', 'saved_ma_slice']),
+});
+export type TrialResponse = z.infer<typeof TrialSchema>;
+
+/**
+ * Response body for `GET /api/trials`. One `no_matches` state covers an empty
+ * live result and an empty fallback. (care-outputs Req 5.3, 5.7, 6.5)
+ */
+export const TrialsResponseSchema = z.discriminatedUnion('status', [
+  z.object({
+    status: z.literal('ok'),
+    origin: z.enum(['live', 'cache', 'stale_cache', 'saved_ma_slice']),
+    trials: z.array(TrialSchema).min(1),
+    search_url: z.string(),
+  }),
+  z.object({
+    status: z.literal('no_matches'),
+    trials: z.array(TrialSchema).max(0),
+    message: z.string(),
+    search_url: z.string(),
+  }),
+  z.object({
+    status: z.literal('no_family_condition'),
+    trials: z.array(TrialSchema).max(0),
+  }),
+]);
+export type TrialsResponse = z.infer<typeof TrialsResponseSchema>;
+
+/* -------------------------------------------------------------------------- */
+/* care-outputs: GET and POST /api/family                                     */
+/* -------------------------------------------------------------------------- */
+
+/** Response body for `GET /api/family`: who may ask. (care-outputs Req 9.1) */
+export const FamilyAskersResponseSchema = z.object({
+  first_name: z.string().nullable(),
+  askers: z.array(z.string()),
+  synthetic_label: z.literal('Synthetic data').nullable(),
+});
+export type FamilyAskersResponse = z.infer<typeof FamilyAskersResponseSchema>;
+
+/** Request body for `POST /api/family`. */
+export const FamilyRequestSchema = z.object({
+  asker: z.string().min(1).max(200),
+  question: z.string().trim().min(1).max(500),
+});
+export type FamilyRequest = z.infer<typeof FamilyRequestSchema>;
+
+/**
+ * Response body for `POST /api/family`: the answer and only the entries it
+ * cites, in citation order. (care-outputs Req 10.5, 10.6)
+ */
+export const FamilyResponseSchema = z.object({
+  asker: z.string(),
+  answer: z.string(),
+  cited_entries: z.array(
+    z.object({
+      id: z.string(),
+      // Never `style_example`: those entries are never sent. (care-outputs Req 9.2)
+      kind: z.enum(['story', 'opinion', 'conversation', 'correction']),
+      text: z.string(),
+    }),
+  ),
+  synthetic_label: z.literal('Synthetic data').nullable(),
+});
+export type FamilyResponse = z.infer<typeof FamilyResponseSchema>;

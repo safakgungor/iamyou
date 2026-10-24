@@ -35,8 +35,8 @@ to exist.
   - Update `care-outputs/design.md` wherever a name differs; never copy the logic
   - _Requirements: 2.5, 3.4_
 
-- [ ] 2. [kiro] Implement the trials module `lib/trials.ts`
-  - [ ] 2.1 Implement the pure trial functions and constants
+- [x] 2. [kiro] Implement the trials module `lib/trials.ts`
+  - [x] 2.1 Implement the pure trial functions and constants
     - Define `FamilyCondition`, `FAMILY_CONDITIONS`, `isFamilyCondition`, `TrialSource`,
       `Trial`, `CONDITION_QUERY`, `NO_MATCH_TEXT` ("No matching studies recruiting in
       Massachusetts right now."), `NOT_A_RECOMMENDATION_TEXT` and `MASSACHUSETTS`
@@ -62,7 +62,7 @@ to exist.
       `conditionSearchUrl(condition)` exactly as in the design
     - No I/O and no server-only imports
     - _Requirements: 5.1, 6.2, 6.3, 6.4, 6.5, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 8.1, 8.2, 8.3, 8.4, 8.5, 8.6_
-  - [ ] 2.2 Write property test P1 for `normalizeTrial` + `filterTrials` (tests/pbt)
+  - [x] 2.2 Write property test P1 for `normalizeTrial` + `filterTrials` (tests/pbt)
     - **Property P1: Filtered trials are recruiting and Massachusetts-anchored**: for
       arbitrary raw live studies (mixed statuses, states including "Massachusetts" in
       varied case, other states, blank and null) and raw slice rows, every returned trial
@@ -71,13 +71,13 @@ to exist.
       equal to `["Massachusetts"]`; deep-frozen input is not mutated; repeated calls are
       equal. Also assert the invariants for `filterTrials` over arbitrary `Trial` values
     - **Validates: Requirements 8.1, 8.2, 8.3, 8.4, 6.3, 6.4**
-  - [ ] 2.3 Write property test P5 for `phaseLabel` (tests/pbt)
+  - [x] 2.3 Write property test P5 for `phaseLabel` (tests/pbt)
     - **Property P5: Phase labels are total and deterministic**: for arbitrary strings,
       string arrays and other values, `phaseLabel` returns a non-empty string, equal
       across calls; single recognized tokens map to the table; combined values equal the
       recognized labels joined with " / " in input order
     - **Validates: Requirements 7.3, 7.4, 7.5, 7.6**
-  - [ ] 2.4 Write unit tests for `lib/trials.ts`
+  - [x] 2.4 Write unit tests for `lib/trials.ts`
     - Exact labels for every phase value in the slice (`NA`, blank, `EARLY_PHASE1`,
       `PHASE1`–`PHASE4`, `PHASE1, PHASE2`, `PHASE2, PHASE3`) and the API array form
     - Keyword matching including whole-word ALS, and no match on "also" or "deals"
@@ -89,8 +89,8 @@ to exist.
     - `studyUrl` and `conditionSearchUrl` exact strings; `studyUrl("")` is null
     - _Requirements: 6.2, 6.3, 6.4, 7.2, 7.3, 7.4, 7.5, 7.6, 8.5, 8.6_
 
-- [ ] 3. [kiro] Implement the family module `lib/family.ts`
-  - [ ] 3.1 Implement access, selection and validation
+- [x] 3. [kiro] Implement the family module `lib/family.ts`
+  - [x] 3.1 Implement access, selection and validation
     - Define `FAMILY_ENTRY_LIMIT = 40`, `FAMILY_ENTRY_KINDS` and the `FamilyAnswer` type
     - Implement `dontKnowAnswer(firstName)` ("I don't know how {first_name} would answer
       that.", "this person" when no first name), `familyModeAccess(digitalWill)` (trimmed
@@ -104,33 +104,33 @@ to exist.
       non-array or non-string fields count as empty
     - No I/O, no model call
     - _Requirements: 9.1, 9.2, 9.4, 10.1, 10.2, 10.3, 10.4, 10.8_
-  - [ ] 3.2 Write property test P2 for `validateFamilyAnswer` (tests/pbt)
+  - [x] 3.2 Write property test P2 for `validateFamilyAnswer` (tests/pbt)
     - **Property P2: A family answer is cited or admits it does not know**: for arbitrary
       answers, cited ids mixing existing ids, unknown ids and duplicates, and arbitrary
       entry sets, the result is either the input answer unchanged with a non-empty,
       duplicate-free, order-preserving subsequence of existing input ids, or exactly the
       Dont_Know_Answer with no ids; applying it twice equals applying it once
     - **Validates: Requirements 10.1, 10.2, 10.3, 10.4**
-  - [ ] 3.3 Write property test P4 for `selectFamilyEntries` (tests/pbt)
+  - [x] 3.3 Write property test P4 for `selectFamilyEntries` (tests/pbt)
     - **Property P4: Family entry selection never sends style examples**: for arbitrary
       entries across all five kinds, the result has at most 40 entries, none
       `style_example`, all from the input, and contains every allowed entry when there
       are 40 or fewer
     - **Validates: Requirements 9.2**
-  - [ ] 3.4 Write unit tests for `lib/family.ts`
+  - [x] 3.4 Write unit tests for `lib/family.ts`
     - `dontKnowAnswer("Maya")` exact text and the no-name case; `familyModeAccess` on
       Maya's `digital_will` returns `["Ella Linden (daughter)"]` and `[]` for null, a
       string, a non-array and non-string items; `isAllowedAsker` rejects near-misses
       (case, whitespace inside the name); selection order and tie-break
     - _Requirements: 9.1, 9.2, 10.2_
 
-- [ ] 4. [kiro] Add the family-history relation to profiles
-  - [ ] 4.1 Write the migration `supabase/migrations/0004_care_outputs.sql`
+- [x] 4. [kiro] Add the family-history relation to profiles
+  - [x] 4.1 Write the migration `supabase/migrations/0004_care_outputs.sql`
     - Add the nullable `profiles.family_history_relation` column with a 1–40 character
       check; existing `profiles` RLS policies apply; renumber if task 1 found a
       different `health-baseline` migration number
     - _Requirements: 1.2_
-  - [ ] 4.2 Thread the relation through the profile and the demo seed
+  - [x] 4.2 Thread the relation through the profile and the demo seed
     - Add `familyHistoryRelation?: string | null` to `Profile`; map the column in
       `SupabaseVaultRepository`; keep it in `InMemoryVaultRepository`
     - Add `"family_history_relation": "father"` to `data/synthetic/maya/profile.json` and
@@ -174,7 +174,7 @@ to exist.
       field contains "likely", "risk" or "diagnosed"; identical output on repeat
     - _Requirements: 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 2.1, 2.3, 2.4, 3.1, 3.3, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 6. [kiro] Add the care-outputs zod schemas
+- [x] 6. [kiro] Add the care-outputs zod schemas
   - Add to `lib/api-schemas.ts` (zod only): `SummaryRequestSchema` (`discuss` ≤ 500,
     `contact` ≤ 200, both optional), `SummaryResponseSchema` (14 fields with a
     discriminated `measures` entry, `synthetic`, `synthetic_label`), `TrialSchema`,
@@ -190,21 +190,21 @@ to exist.
   - Run `npm run lint`, `npm run test:unit` and `npm run test:pbt`; ensure all pass, ask
     the user if questions arise.
 
-- [ ] 8. [kiro] Implement the trials cache `lib/trials-cache.ts`
+- [x] 8. [kiro] Implement the trials cache `lib/trials-cache.ts`
   - Define `TRIALS_CACHE_TTL_MS = 3_600_000`, `TrialsCacheEntry`, the `TrialsCache`
     interface and `InMemoryTrialsCache` (a `Map` keyed by condition that returns copies)
   - Unit test get/set, per-condition keys and copy semantics
   - _Requirements: 5.4, 5.5_
 
-- [ ] 9. [kiro] Add `familyAnswer` to the server-only Claude layer
-  - [ ] 9.1 Add the family prompts to `lib/claude/prompts.ts`
+- [x] 9. [kiro] Add `familyAnswer` to the server-only Claude layer
+  - [x] 9.1 Add the family prompts to `lib/claude/prompts.ts`
     - `FAMILY_ANSWER_SYSTEM` (answer as the person, first person and brief, only from the
       entries, cite every entry used, return exactly the Dont_Know_Answer when the
       entries do not support an answer, never speculate about health, diagnosis, genetic
       status or test results) and `buildFamilyAnswerUserMessage({ firstName, question,
       entries })` listing `[id] (kind) text`
     - _Requirements: 9.3, 10.7_
-  - [ ] 9.2 Implement `familyAnswer` in `lib/claude/index.ts`
+  - [x] 9.2 Implement `familyAnswer` in `lib/claude/index.ts`
     - Return the Dont_Know_Answer without a call when `entries` is empty; otherwise
       `messages.parse` with model `"claude-opus-5-5"`, `effort: 'medium'` and
       `zodOutputFormat(familyAnswerSchemaFor(ids))`, no temperature/top_p/top_k, no
@@ -214,21 +214,21 @@ to exist.
       `validateDraftSafety(answer, citedEntriesText)` and return the Dont_Know_Answer when
       it fails
     - _Requirements: 9.3, 9.5, 9.6, 9.7, 10.2, 10.7_
-  - [ ] 9.3 Write unit tests for `familyAnswer` with a mocked client
+  - [x] 9.3 Write unit tests for `familyAnswer` with a mocked client
     - Request shape (model, effort, enum of sent ids, one user message, no sampling
       params); empty entries make no call; refusal content is never read; timeout; a
       cited answer passes through; an answer adding a health term absent from the cited
       entries becomes the Dont_Know_Answer
     - _Requirements: 9.3, 9.4, 9.6, 9.7, 10.7_
-  - [ ] 9.4 Extend property test P2 to `familyAnswer` (tests/pbt)
+  - [x] 9.4 Extend property test P2 to `familyAnswer` (tests/pbt)
     - **Property P2: A family answer is cited or admits it does not know**: with a fake
       client returning arbitrary outputs (arbitrary text and ids, malformed output, or
       `stop_reason: 'refusal'`), `familyAnswer` returns either a non-empty set of existing
       cited ids or exactly the Dont_Know_Answer with none
     - **Validates: Requirements 9.5, 9.6, 10.1, 10.2**
 
-- [ ] 10. [kiro] Implement `GET /api/trials` with unit tests
-  - [ ] 10.1 Implement the route and exported `getTrials(deps, userId)`
+- [x] 10. [kiro] Implement `GET /api/trials` with unit tests
+  - [x] 10.1 Implement the route and exported `getTrials(deps, userId)`
     - Thin handler: authenticate (401), build `SupabaseVaultRepository`, the module-level
       `InMemoryTrialsCache`, the default `fetchLiveStudies`, a `readSlice` that reads
       `data/public/clinicaltrials-ma-recruiting-2026-10-18.csv`, and `Date.now`
@@ -246,7 +246,7 @@ to exist.
       `conditionSearchUrl`; an unreadable slice → 503 `trials_unavailable`
     - Validate the response with `TrialsResponseSchema`
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6.1, 6.2, 6.3, 6.4, 6.5_
-  - [ ] 10.2 Write unit tests (in-memory repo, cache, fake fetch and clock)
+  - [x] 10.2 Write unit tests (in-memory repo, cache, fake fetch and clock)
     - Maya's profile requests `Alzheimer Disease` with the four query parameters; a
       missing or `none` family history makes no fetch; a cache hit under 3600 s makes no
       fetch and one at 3600 s fetches again; success caches and serves live trials
@@ -274,8 +274,8 @@ to exist.
       to either repository
     - _Requirements: 1.2, 3.2, 4.2, 4.4_
 
-- [ ] 12. [kiro] Implement `GET` and `POST /api/family` with unit tests
-  - [ ] 12.1 Implement the route and exported `answerFamilyQuestion`
+- [x] 12. [kiro] Implement `GET` and `POST /api/family` with unit tests
+  - [x] 12.1 Implement the route and exported `answerFamilyQuestion`
     - `GET`: authenticate (401), load the profile (404), respond `{ first_name, askers:
       familyModeAccess(digitalWill), synthetic_label }`
     - `POST`: validate with `FamilyRequestSchema` (400), then
@@ -286,7 +286,7 @@ to exist.
       respond with `asker`, `answer`, the cited entries (`id`, `kind`, `text`) in
       citation order and nothing else, and `synthetic_label`
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.7, 10.2, 10.3, 10.5, 10.6_
-  - [ ] 12.2 Write unit tests (in-memory repo, mocked Claude)
+  - [x] 12.2 Write unit tests (in-memory repo, mocked Claude)
     - `GET` for Maya returns `["Ella Linden (daughter)"]`; an unlisted asker gets 403 and
       no Claude call; a profile without `family_mode_access` refuses every asker; no
       allowed entries → Dont_Know_Answer and no call; `style_example` entries never

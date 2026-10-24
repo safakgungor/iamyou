@@ -8,7 +8,8 @@
     "build": "next build",
     "lint": "tsc --noEmit",
     "test:unit": "vitest run tests/unit",
-    "test:pbt": "vitest run tests/pbt"
+    "test:pbt": "vitest run tests/pbt",
+    "generate:maya": "node scripts/generate-maya.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",

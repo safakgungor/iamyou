@@ -9,7 +9,9 @@
  * `lib/api-schemas.ts` (which imports only `zod`) so that client components can
  * import the response types without reaching into this server-only layer. They
  * are re-exported here so existing server-side imports from
- * `'@/lib/claude/schemas'` keep working.
+ * `'@/lib/claude/schemas'` keep working. The `export *` below also carries the
+ * health-baseline timeline and county schemas (`TimelineResponseSchema`,
+ * `CountyResponseSchema` and their types) for the server routes.
  */
 
 import { z } from 'zod';
@@ -63,3 +65,15 @@ export const DraftSchema = z.object({
   draft: z.string(),
 });
 export type Draft = z.infer<typeof DraftSchema>;
+
+/**
+ * The `familyAnswer` output schema for care-outputs family mode, built per call
+ * from the ids of the entries that were sent, so the output format itself
+ * limits `cited_entry_ids` to those ids. (care-outputs Req 9.5)
+ */
+export function familyAnswerSchemaFor(ids: readonly [string, ...string[]]) {
+  return z.object({
+    answer: z.string(),
+    cited_entry_ids: z.array(z.enum(ids)),
+  });
+}
