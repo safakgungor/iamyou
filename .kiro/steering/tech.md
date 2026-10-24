@@ -52,13 +52,13 @@ Secrets stay server-side: API keys and the service-role key are used only in ser
 
 ## Common commands
 
-The package manager is **pnpm**. The project is not yet scaffolded, so verify the actual script names in `package.json` once it exists before relying on them.
+The package manager is **npm** (the lock file is `package-lock.json`).
 
 ```bash
-pnpm install           # install dependencies
-pnpm dev               # start the local dev server (run manually in a terminal)
-pnpm build             # production build
-pnpm test:unit         # unit tests (vitest run tests/unit)
-pnpm test:pbt          # property-based tests (vitest run tests/pbt)
-pnpm lint              # lint
+npm install            # install dependencies
+npm run dev            # start the local dev server (run manually in a terminal)
+npm run build          # production build
+npm run test:unit      # unit tests (vitest run tests/unit)
+npm run test:pbt       # property-based tests (vitest run tests/pbt)
+npm run lint           # typecheck (tsc --noEmit)
 ```

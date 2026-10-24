@@ -122,15 +122,15 @@ export default function OnboardingPage() {
   return (
     <main className="mx-auto max-w-md px-6 py-10">
       <h1 className="text-2xl font-semibold tracking-tight">Set up your twin</h1>
-      <p className="mt-2 text-sm text-[--color-muted]">
+      <p className="mt-2 text-sm text-muted">
         A few preferences so your twin behaves the way you want. You can change
         any of these later.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-        <fieldset className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-[--color-surface] p-4">
+        <fieldset className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-surface p-4">
           <legend className="px-1 text-sm font-medium">Family history</legend>
-          <p className="text-sm text-[--color-muted]">
+          <p className="text-sm text-muted">
             This context is optional and stays in your vault.
           </p>
           {FAMILY_HISTORY_OPTIONS.map((option) => (
@@ -144,14 +144,14 @@ export default function OnboardingPage() {
                 value={option.value}
                 checked={familyHistory === option.value}
                 onChange={() => setFamilyHistory(option.value)}
-                className="size-4 accent-[--color-accent]"
+                className="size-4 accent-accent"
               />
               <span>{option.label}</span>
             </label>
           ))}
         </fieldset>
 
-        <fieldset className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-[--color-surface] p-4">
+        <fieldset className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-surface p-4">
           <legend className="px-1 text-sm font-medium">Health layer</legend>
           <label className="flex items-center gap-3 rounded-lg px-1 py-1 text-base">
             <input
@@ -159,18 +159,18 @@ export default function OnboardingPage() {
               name="healthLayerOptIn"
               checked={healthLayerOptIn}
               onChange={(e) => setHealthLayerOptIn(e.target.checked)}
-              className="size-4 accent-[--color-accent]"
+              className="size-4 accent-accent"
             />
             <span>Turn on the optional health layer</span>
           </label>
-          <p className="text-sm text-[--color-muted]">
+          <p className="text-sm text-muted">
             Off by default. {DOCTOR_WORDING}
           </p>
         </fieldset>
 
-        <fieldset className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-[--color-surface] p-4">
+        <fieldset className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-surface p-4">
           <legend className="px-1 text-sm font-medium">Right not to know</legend>
-          <p className="text-sm text-[--color-muted]">
+          <p className="text-sm text-muted">
             How would you like your twin to handle health-related signals?
           </p>
           {RTK_OPTIONS.map((option) => (
@@ -184,16 +184,16 @@ export default function OnboardingPage() {
                 value={option.value}
                 checked={rtkSetting === option.value}
                 onChange={() => setRtkSetting(option.value)}
-                className="size-4 accent-[--color-accent]"
+                className="size-4 accent-accent"
               />
               <span>{option.label}</span>
             </label>
           ))}
         </fieldset>
 
-        <fieldset className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-[--color-surface] p-4">
+        <fieldset className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-surface p-4">
           <legend className="px-1 text-sm font-medium">Digital will</legend>
-          <p className="text-sm text-[--color-muted]">
+          <p className="text-sm text-muted">
             Decide what happens to your twin later on. Coming soon.
           </p>
           <button
@@ -214,7 +214,7 @@ export default function OnboardingPage() {
         <button
           type="submit"
           disabled={saving}
-          className="w-full rounded-lg bg-[--color-accent] px-6 py-3 text-base font-medium text-white disabled:opacity-50"
+          className="w-full rounded-lg bg-accent px-6 py-3 text-base font-medium text-white disabled:opacity-50"
         >
           {saving ? 'Saving…' : 'Save and continue'}
         </button>

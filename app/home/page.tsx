@@ -110,21 +110,21 @@ export default function HomePage() {
 
       <Link
         href="/check-in"
-        className="rounded-lg bg-[--color-accent] px-6 py-3 text-center text-base font-medium text-white"
+        className="rounded-lg bg-accent px-6 py-3 text-center text-base font-medium text-white"
       >
         Start a check-in
       </Link>
 
       <section
         aria-labelledby="scores-heading"
-        className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-[--color-surface] p-4"
+        className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-surface p-4"
       >
         <h2 id="scores-heading" className="text-lg font-medium">
           Your scores
         </h2>
 
         {loading && (
-          <p className="text-sm text-[--color-muted]">Loading your scores…</p>
+          <p className="text-sm text-muted">Loading your scores…</p>
         )}
         {error && (
           <p
@@ -138,7 +138,7 @@ export default function HomePage() {
         {!loading && !error && scores && (
           <>
             <p className="flex items-baseline justify-between">
-              <strong className="font-medium text-[--color-muted]">
+              <strong className="font-medium text-muted">
                 Session score:
               </strong>{' '}
               <span className="text-2xl font-semibold tabular-nums">
@@ -146,11 +146,11 @@ export default function HomePage() {
               </span>
             </p>
 
-            <h3 className="text-xs font-medium uppercase tracking-wide text-[--color-muted]">
+            <h3 className="text-xs font-medium uppercase tracking-wide text-muted">
               Weekly trend
             </h3>
             {weeklyEntries.length === 0 ? (
-              <p className="text-sm text-[--color-muted]">No weekly data yet.</p>
+              <p className="text-sm text-muted">No weekly data yet.</p>
             ) : (
               <ul className="flex flex-col gap-1">
                 {weeklyEntries.map(([week, value]) => (
@@ -158,7 +158,7 @@ export default function HomePage() {
                     key={week}
                     className="flex items-baseline justify-between border-b border-gray-100 py-1 text-sm last:border-b-0"
                   >
-                    <span className="text-[--color-muted]">{week}</span>
+                    <span className="text-muted">{week}</span>
                     <span className="tabular-nums">{value.toFixed(2)}</span>
                   </li>
                 ))}
@@ -170,13 +170,13 @@ export default function HomePage() {
 
       <section
         aria-labelledby="danger-heading"
-        className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-[--color-surface] p-4"
+        className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-surface p-4"
       >
         <h2 id="danger-heading" className="text-lg font-medium">
           Your data
         </h2>
         {deleted ? (
-          <p className="text-sm text-[--color-muted]">
+          <p className="text-sm text-muted">
             Your vault has been deleted.
           </p>
         ) : (

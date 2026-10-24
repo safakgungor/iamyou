@@ -17,3 +17,7 @@ data/private/
 # OS and editor files
 .DS_Store
 *.log
+
+# TypeScript and Next.js generated files
+*.tsbuildinfo
+next-env.d.ts

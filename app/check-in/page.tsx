@@ -252,7 +252,7 @@ export default function CheckInPage() {
       <h1 className="text-2xl font-semibold tracking-tight">Check-in</h1>
 
       {phase === 'loading' && (
-        <p className="text-sm text-[--color-muted]">Loading the next prompt…</p>
+        <p className="text-sm text-muted">Loading the next prompt…</p>
       )}
 
       {phase === 'error' && (
@@ -274,8 +274,8 @@ export default function CheckInPage() {
       {/* The prompt is shown while answering and after the reveal, but the
           twin's prediction is never shown until a result exists (Req 4.5). */}
       {(phase === 'answering' || phase === 'revealed') && prompt && (
-        <section className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-[--color-surface] p-4">
-          <h2 className="text-xs font-medium uppercase tracking-wide text-[--color-muted]">
+        <section className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-surface p-4">
+          <h2 className="text-xs font-medium uppercase tracking-wide text-muted">
             Prompt
           </h2>
           <p className="text-lg leading-snug">{prompt.text}</p>
@@ -294,13 +294,13 @@ export default function CheckInPage() {
                 type="button"
                 onClick={() => speech.startListening?.()}
                 disabled={submitting}
-                className="self-start rounded-lg border border-gray-300 bg-[--color-surface] px-4 py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50"
+                className="self-start rounded-lg border border-gray-300 bg-surface px-4 py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50"
               >
                 🎤 Speak your answer
               </button>
               <p
                 aria-live="polite"
-                className="min-h-12 rounded-lg border border-gray-200 bg-[--color-surface] p-3 text-base text-[--color-muted]"
+                className="min-h-12 rounded-lg border border-gray-200 bg-surface p-3 text-base text-muted"
               >
                 {answer ? answer : 'Listening will appear here…'}
               </p>
@@ -313,7 +313,7 @@ export default function CheckInPage() {
               rows={4}
               placeholder="Type your answer…"
               disabled={submitting}
-              className="w-full rounded-lg border border-gray-300 bg-[--color-surface] p-3 text-base disabled:opacity-50"
+              className="w-full rounded-lg border border-gray-300 bg-surface p-3 text-base disabled:opacity-50"
             />
           )}
 
@@ -322,7 +322,7 @@ export default function CheckInPage() {
               type="button"
               onClick={submitAnswer}
               disabled={submitting || answer.trim().length === 0}
-              className="w-full rounded-lg bg-[--color-accent] px-6 py-3 text-base font-medium text-white disabled:opacity-50"
+              className="w-full rounded-lg bg-accent px-6 py-3 text-base font-medium text-white disabled:opacity-50"
             >
               {submitting ? 'Scoring…' : 'Submit answer'}
             </button>
@@ -347,21 +347,21 @@ export default function CheckInPage() {
             // Scored branch: reveal prediction + score + reply (Req 6.5, 8.1).
             // For a genetics question the reply is already the Counselor_Message
             // set server-side (Req 9.3).
-            <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-[--color-surface] p-4">
+            <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-surface p-4">
               <p className="text-base">
-                <strong className="font-medium text-[--color-muted]">
+                <strong className="font-medium text-muted">
                   The twin predicted:
                 </strong>{' '}
                 {result.prediction}
               </p>
               <p className="text-base">
-                <strong className="font-medium text-[--color-muted]">
+                <strong className="font-medium text-muted">
                   Score:
                 </strong>{' '}
                 {Math.round(result.score * 100)}%
               </p>
               <p className="text-base">
-                <strong className="font-medium text-[--color-muted]">
+                <strong className="font-medium text-muted">
                   Reply:
                 </strong>{' '}
                 {result.reply}
@@ -373,7 +373,7 @@ export default function CheckInPage() {
               in the support branch we point to help rather than ask the user to
               teach the twin. */}
           {result.kind === 'scored' && (
-            <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-[--color-surface] p-4">
+            <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-surface p-4">
               <h3 className="text-sm font-medium">Teach the twin (optional)</h3>
               {correctionResult && correctionResult.kind === 'support' && (
                 <p
@@ -392,7 +392,7 @@ export default function CheckInPage() {
                 </p>
               )}
               {correctionResult && correctionResult.kind === 'stored' && (
-                <p className="text-sm text-[--color-muted]">
+                <p className="text-sm text-muted">
                   Thanks — the twin will remember that.
                 </p>
               )}
@@ -407,11 +407,11 @@ export default function CheckInPage() {
                     maxLength={MAX_CORRECTION_CHARS}
                     placeholder="Correct the twin in one sentence…"
                     disabled={correctionSubmitting}
-                    className="w-full rounded-lg border border-gray-300 bg-[--color-surface] p-3 text-base disabled:opacity-50"
+                    className="w-full rounded-lg border border-gray-300 bg-surface p-3 text-base disabled:opacity-50"
                   />
                   <p
                     className={`text-xs ${
-                      correctionTooLong ? 'text-red-600' : 'text-[--color-muted]'
+                      correctionTooLong ? 'text-red-600' : 'text-muted'
                     }`}
                   >
                     {correctionText.length}/{MAX_CORRECTION_CHARS}
@@ -425,7 +425,7 @@ export default function CheckInPage() {
                       correctionText.trim().length === 0 ||
                       correctionTooLong
                     }
-                    className="self-start rounded-lg border border-gray-300 bg-[--color-surface] px-4 py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50"
+                    className="self-start rounded-lg border border-gray-300 bg-surface px-4 py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50"
                   >
                     {correctionSubmitting ? 'Saving…' : 'Save correction'}
                   </button>
@@ -438,7 +438,7 @@ export default function CheckInPage() {
             <button
               type="button"
               onClick={nextPrompt}
-              className="w-full rounded-lg bg-[--color-accent] px-6 py-3 text-base font-medium text-white"
+              className="w-full rounded-lg bg-accent px-6 py-3 text-base font-medium text-white"
             >
               Next prompt
             </button>

@@ -76,7 +76,7 @@ export default function LandingPage() {
         </p>
       </header>
 
-      <section className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-[--color-surface] p-4">
+      <section className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-surface p-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-medium">Meet Maya</h2>
           <SyntheticLabel />
@@ -98,7 +98,7 @@ export default function LandingPage() {
         type="button"
         onClick={handleTryAsMaya}
         disabled={loading}
-        className="rounded-lg bg-[--color-accent] px-6 py-3 text-base font-medium text-white disabled:opacity-50"
+        className="rounded-lg bg-accent px-6 py-3 text-base font-medium text-white disabled:opacity-50"
       >
         {loading ? 'Starting…' : 'Try as Maya'}
       </button>
