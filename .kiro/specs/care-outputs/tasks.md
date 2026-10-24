@@ -227,8 +227,8 @@ to exist.
       cited ids or exactly the Dont_Know_Answer with none
     - **Validates: Requirements 9.5, 9.6, 10.1, 10.2**
 
-- [ ] 10. [kiro] Implement `GET /api/trials` with unit tests
-  - [ ] 10.1 Implement the route and exported `getTrials(deps, userId)`
+- [x] 10. [kiro] Implement `GET /api/trials` with unit tests
+  - [x] 10.1 Implement the route and exported `getTrials(deps, userId)`
     - Thin handler: authenticate (401), build `SupabaseVaultRepository`, the module-level
       `InMemoryTrialsCache`, the default `fetchLiveStudies`, a `readSlice` that reads
       `data/public/clinicaltrials-ma-recruiting-2026-10-18.csv`, and `Date.now`
@@ -246,7 +246,7 @@ to exist.
       `conditionSearchUrl`; an unreadable slice → 503 `trials_unavailable`
     - Validate the response with `TrialsResponseSchema`
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 6.1, 6.2, 6.3, 6.4, 6.5_
-  - [ ] 10.2 Write unit tests (in-memory repo, cache, fake fetch and clock)
+  - [x] 10.2 Write unit tests (in-memory repo, cache, fake fetch and clock)
     - Maya's profile requests `Alzheimer Disease` with the four query parameters; a
       missing or `none` family history makes no fetch; a cache hit under 3600 s makes no
       fetch and one at 3600 s fetches again; success caches and serves live trials

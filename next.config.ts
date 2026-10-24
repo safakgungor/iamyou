@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   // with the assistant routes instead of tracing the whole project.
   outputFileTracingIncludes: {
     "/api/assistant/*": ["./data/synthetic/maya/inbox.json"],
+    // The trial finder's offline fallback, read by app/api/trials/route.ts.
+    "/api/trials": ["./data/public/clinicaltrials-ma-recruiting-2026-10-18.csv"],
   },
 };
 
