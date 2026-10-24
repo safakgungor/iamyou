@@ -167,7 +167,7 @@ export class TwinStage {
   constructor(
     private canvas: HTMLCanvasElement,
     portraits: { young: Int16Array; older: Int16Array },
-    opts: { count: number; dpr: number; frozen: boolean },
+    opts: { count: number; dpr: number; frozen: boolean; pointSize?: number },
   ) {
     this.frozen = opts.frozen;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: 'high-performance' });
@@ -226,7 +226,7 @@ export class TwinStage {
         uFigure2: { value: 0 },
         uDissolve: { value: 0 },
         uPulse: { value: 0 },
-        uSize: { value: 15 },
+        uSize: { value: opts.pointSize ?? 15 },
         uPixelRatio: { value: opts.dpr },
         uVelocity: { value: 0 },
         uMouse: { value: new THREE.Vector2(99, 99) },
