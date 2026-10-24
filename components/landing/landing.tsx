@@ -462,8 +462,8 @@ export default function Landing({ signal }: { signal: RealSignal }) {
             A twin that grows with you, thinks like you and works for you.
           </p>
           <div className="lx-actions" data-reveal="fade">
-            <Link href="/signal" className="lx-btn lx-btn--ink">
-              See the model <span aria-hidden="true">→</span>
+            <Link href="/app" className="lx-btn lx-btn--ink">
+              Launch app <span aria-hidden="true">→</span>
             </Link>
             <button type="button" className="lx-btn lx-btn--glass" onClick={() => scrollTo('film')}>
               Watch the film
