@@ -21,11 +21,12 @@
  *
  * Maya appears as the landing page's particle portrait; while the demo starts
  * she becomes her twin's sphere, then the page fades and `/home` (prefetched on
- * mount) takes over.
+ * mount) takes over. A safe internal `?next=` path replaces `/home`, so the
+ * landing page can deep-link into any screen.
  */
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useEffect, useRef, useState, type RefObject } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import TwinPortrait from '@/components/twin-portrait';
 import { DataPill } from '@/components/flow/screen-header';
 import { prefersReducedMotion, stagger } from '@/components/flow/motion';
@@ -42,10 +43,40 @@ type Session = 'checking' | 'none' | 'existing';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/**
+ * Where to land after the demo starts: `?next=` when it is an internal path
+ * (starts with one "/", no scheme, no backslash), otherwise `/home`.
+ */
+function safeNext(raw: string | null): string {
+  if (!raw || !raw.startsWith('/') || raw.startsWith('//') || raw.includes('\\')) return '/home';
+  try {
+    const url = new URL(raw, window.location.origin);
+    if (url.origin !== window.location.origin) return '/home';
+    return `${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    return '/home';
+  }
+}
+
+/**
+ * Reads `?next=` into a ref and prefetches it. Kept in its own Suspense
+ * boundary so the rest of the page still prerenders.
+ */
+function NextTarget({ target }: { target: RefObject<string> }) {
+  const params = useSearchParams();
+  const router = useRouter();
+  useEffect(() => {
+    target.current = safeNext(params.get('next'));
+    router.prefetch(target.current);
+  }, [params, router, target]);
+  return null;
+}
+
 export default function AppEntryPage() {
   const router = useRouter();
   const [phase, setPhase] = useState<Phase>('idle');
   const [session, setSession] = useState<Session>('checking');
+  const target = useRef('/home');
 
   // Warm up /home and look for an existing demo session.
   useEffect(() => {
@@ -69,7 +100,7 @@ export default function AppEntryPage() {
   async function leave() {
     setPhase('leaving');
     await delay(prefersReducedMotion() ? 0 : 320);
-    router.push('/home');
+    router.push(target.current);
   }
 
   async function handleTryAsMaya() {
@@ -109,6 +140,9 @@ export default function AppEntryPage() {
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col px-6 pb-8 pt-3">
+      <Suspense fallback={null}>
+        <NextTarget target={target} />
+      </Suspense>
       <nav className="flex h-11 items-center justify-between">
         <span className="text-[21px] font-medium tracking-[-0.03em]">iamyou</span>
         <DataPill />
