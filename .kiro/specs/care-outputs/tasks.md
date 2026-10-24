@@ -124,13 +124,13 @@ to exist.
       (case, whitespace inside the name); selection order and tie-break
     - _Requirements: 9.1, 9.2, 10.2_
 
-- [ ] 4. [kiro] Add the family-history relation to profiles
+- [x] 4. [kiro] Add the family-history relation to profiles
   - [x] 4.1 Write the migration `supabase/migrations/0004_care_outputs.sql`
     - Add the nullable `profiles.family_history_relation` column with a 1–40 character
       check; existing `profiles` RLS policies apply; renumber if task 1 found a
       different `health-baseline` migration number
     - _Requirements: 1.2_
-  - [ ] 4.2 Thread the relation through the profile and the demo seed
+  - [x] 4.2 Thread the relation through the profile and the demo seed
     - Add `familyHistoryRelation?: string | null` to `Profile`; map the column in
       `SupabaseVaultRepository`; keep it in `InMemoryVaultRepository`
     - Add `"family_history_relation": "father"` to `data/synthetic/maya/profile.json` and

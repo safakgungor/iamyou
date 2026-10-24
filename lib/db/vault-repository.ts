@@ -42,6 +42,8 @@ export type Profile = {
   dateOfBirth: string | null; // ISO date, e.g. "2008-03-14"
   county: string | null;
   familyHistory: FamilyHistory;
+  /** The relative with the family condition, e.g. "father" (care-outputs field 6). */
+  familyHistoryRelation?: string | null;
   healthLayerOptIn: boolean;
   rtkSetting: RtkSetting;
   digitalWill: unknown | null; // free-form JSON, shaped by onboarding/demo seed
@@ -256,6 +258,7 @@ type ProfileRow = {
   date_of_birth: string | null;
   county: string | null;
   family_history: FamilyHistory;
+  family_history_relation?: string | null; // migration 0004
   health_layer_opt_in: boolean;
   rtk_setting: RtkSetting;
   digital_will: unknown | null;
@@ -300,6 +303,7 @@ function toProfile(row: ProfileRow): Profile {
     dateOfBirth: row.date_of_birth,
     county: row.county,
     familyHistory: row.family_history,
+    familyHistoryRelation: row.family_history_relation ?? null,
     healthLayerOptIn: row.health_layer_opt_in,
     rtkSetting: row.rtk_setting,
     digitalWill: row.digital_will,
@@ -377,10 +381,26 @@ export class SupabaseVaultRepository implements VaultRepository {
       digital_will: profile.digitalWill,
       synthetic: profile.synthetic,
     };
+    if (profile.familyHistoryRelation !== undefined) {
+      row.family_history_relation = profile.familyHistoryRelation;
+    }
     const { error } = await this.client
       .from('profiles')
       .upsert(row, { onConflict: 'user_id' });
-    if (error) throw error;
+    if (!error) return;
+
+    // Before migration 0004 the column does not exist; store the profile
+    // without the relation rather than failing the demo seed.
+    if (row.family_history_relation !== undefined && error.message?.includes('family_history_relation')) {
+      const { family_history_relation: _relation, ...withoutRelation } = row;
+      void _relation;
+      const retry = await this.client
+        .from('profiles')
+        .upsert(withoutRelation, { onConflict: 'user_id' });
+      if (retry.error) throw retry.error;
+      return;
+    }
+    throw error;
   }
 
   async listVaultEntries(userId: string): Promise<VaultEntry[]> {

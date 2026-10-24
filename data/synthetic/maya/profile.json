@@ -8,6 +8,7 @@
   "simulated_through": "2048-10-24",
   "county": "Hampshire",
   "family_history": "familial_alzheimers",
+  "family_history_relation": "father",
   "family_history_detail": "Her father, Daniel Linden, was diagnosed with early-onset familial Alzheimer's disease at age 47.",
   "genetic_test": "not_taken",
   "health_layer_opt_in": true,
