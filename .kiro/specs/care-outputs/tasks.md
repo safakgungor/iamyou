@@ -257,8 +257,8 @@ to exist.
       unreadable slice → 503
     - _Requirements: 5.1, 5.3, 5.4, 5.5, 5.6, 5.7, 6.1, 6.3, 6.4, 6.5_
 
-- [ ] 11. [kiro] Implement `POST /api/summary` with unit tests
-  - [ ] 11.1 Implement the route and exported `getSummary`
+- [x] 11. [kiro] Implement `POST /api/summary` with unit tests
+  - [x] 11.1 Implement the route and exported `getSummary`
     - Thin handler: authenticate (401), validate with `SummaryRequestSchema` (400), build
       `SupabaseVaultRepository` and the `health-baseline` Supabase weekly feature
       repository, pass a server-clock `today`
@@ -267,7 +267,7 @@ to exist.
       `discuss` and `contact`; set `synthetic_label` to "Synthetic data" when `synthetic`
       is true; validate with `SummaryResponseSchema`; store nothing and call no model
     - _Requirements: 1.7, 2.5, 3.4, 4.1, 4.2, 4.3, 4.6_
-  - [ ] 11.2 Write unit tests (in-memory repos)
+  - [x] 11.2 Write unit tests (in-memory repos)
     - 404 without a profile; Maya with seeded synthetic rows returns 14 fields and the
       Synthetic_Label; `discuss` and `contact` appear in fields 11, 4 and 13 as written;
       `record_only` with an injected signal returns `NO_CHANGE_TEXT`; nothing is written
