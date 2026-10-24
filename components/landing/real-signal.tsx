@@ -16,8 +16,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 // Wide charts on desktop; a taller frame on phones so the line keeps its shape.
 const FRAME = {
-  wide: { W: 1000, H: 300, FS: 12, PAD: { top: 28, right: 16, bottom: 44, left: 16 } },
-  narrow: { W: 600, H: 420, FS: 18, PAD: { top: 40, right: 8, bottom: 64, left: 8 } },
+  wide: { W: 1000, H: 364, FS: 12, BAND: 64, PAD: { top: 28, right: 16, bottom: 44, left: 16 } },
+  narrow: { W: 600, H: 510, FS: 18, BAND: 90, PAD: { top: 40, right: 8, bottom: 64, left: 8 } },
 };
 
 const PHASE_LABEL: Record<string, string> = {
@@ -43,7 +43,9 @@ export default function RealSignalChart({ signal }: { signal: RealSignal }) {
   const root = useRef<HTMLDivElement>(null);
   const [revealed, setRevealed] = useState(false);
   const [narrow, setNarrow] = useState(false);
-  const { W, H, FS, PAD } = FRAME[narrow ? 'narrow' : 'wide'];
+  const { W, H, FS, BAND, PAD } = FRAME[narrow ? 'narrow' : 'wide'];
+  // The heart-rate plot sits above iamyou Signal's band.
+  const plotBottom = H - PAD.bottom - BAND;
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 899px)');
@@ -53,26 +55,45 @@ export default function RealSignalChart({ signal }: { signal: RealSignal }) {
     return () => mq.removeEventListener('change', update);
   }, []);
 
-  const { path, x, y, end } = useMemo(() => {
+  const { path, x, y, end, band } = useMemo(() => {
     const vals = signal.hr.filter((v): v is number => v !== null);
     const lo = Math.min(...vals, signal.baselineHr) - 6;
     const hi = Math.max(...vals) + 6;
     const end = (signal.hr.length - 1) * signal.step_s;
     const x = (s: number) => PAD.left + (s / end) * (W - PAD.left - PAD.right);
-    const y = (bpm: number) => PAD.top + (1 - (bpm - lo) / (hi - lo)) * (H - PAD.top - PAD.bottom);
+    const y = (bpm: number) => PAD.top + (1 - (bpm - lo) / (hi - lo)) * (plotBottom - PAD.top);
     let d = '';
     signal.hr.forEach((v, i) => {
       if (v === null) return;
       d += `${d ? 'L' : 'M'}${x(i * signal.step_s).toFixed(1)},${y(v).toFixed(1)}`;
     });
-    return { path: d, x, y, end };
-  }, [signal, W, H, PAD]);
+    // Signal's P(stress-like) as an area, each 30 s window drawn at its centre.
+    let band: { top: number; h: number; area: string; line: string } | null = null;
+    if (signal.model?.points.length) {
+      const top = plotBottom + FS * 2.2;
+      const h = BAND - FS * 2.6;
+      const pts = signal.model.points
+        .map((p) => [x(Math.min(p.t + signal.model!.window_s / 2, end)), top + h * (1 - p.stress)] as const)
+        .map(([px, py]) => `${px.toFixed(1)},${py.toFixed(1)}`);
+      const line = `M${pts.join('L')}`;
+      const firstX = pts[0].split(',')[0];
+      const lastX = pts[pts.length - 1].split(',')[0];
+      band = { top, h, line, area: `${line}L${lastX},${top + h}L${firstX},${top + h}Z` };
+    }
+    return { path: d, x, y, end, band };
+  }, [signal, W, PAD, FS, BAND, plotBottom]);
 
   const first = signal.windows[0];
   const second = signal.windows[1];
   const phaseOf = (name: string) => signal.phases.find((p) => p.phase === name);
   const baseline = signal.phases[0].self_reported_stress;
   const minutes = first ? Math.round((first.end_s - first.start_s) / 60) : 0;
+  const baselineEnd = signal.phases[0].end_s;
+  // Requirement 17 of wearable-insights: phrase the question by Signal's most likely class.
+  const question =
+    signal.model?.firstClass === 'stress'
+      ? `Your heart rate rose ${first ? Math.round(first.peak_rise_bpm) : 0} bpm while you were barely moving. What was going on?`
+      : `Your heart rate rose ${first ? Math.round(first.peak_rise_bpm) : 0} bpm for about ${minutes} minutes. What was going on?`;
 
   useGSAP(
     () => {
@@ -86,6 +107,7 @@ export default function RealSignalChart({ signal }: { signal: RealSignal }) {
           scrollTrigger: { trigger: root.current, start: 'top 75%', end: 'bottom 60%', scrub: 1 },
         });
         tl.to(line, { strokeDashoffset: 0, ease: 'none', duration: 1 }, 0);
+        tl.fromTo('[data-band-clip]', { attr: { width: 0 } }, { attr: { width: W - PAD.left - PAD.right }, ease: 'none', duration: 1 }, 0);
         signal.windows.forEach((w, i) => {
           tl.from(`[data-signal-window="${i}"]`, { opacity: 0, duration: 0.08 }, w.end_s / end);
         });
@@ -127,7 +149,7 @@ export default function RealSignalChart({ signal }: { signal: RealSignal }) {
         {signal.phases.map((p, i) => (
           <g key={`${p.phase}-${i}`}>
             {p.phase in PHASE_STORY && (
-              <rect x={x(p.start_s)} y={PAD.top} width={x(p.end_s) - x(p.start_s)} height={H - PAD.top - PAD.bottom} className="lx-signal__task" />
+              <rect x={x(p.start_s)} y={PAD.top} width={x(p.end_s) - x(p.start_s)} height={plotBottom - PAD.top} className="lx-signal__task" />
             )}
             <text x={(x(p.start_s) + x(p.end_s)) / 2} y={H - FS * 1.4} fontSize={FS} className="lx-signal__phase" textAnchor="middle">
               {(PHASE_LABEL[p.phase] ?? p.phase).length * FS * 0.62 <= x(p.end_s) - x(p.start_s) + FS * 1.5 ? PHASE_LABEL[p.phase] ?? p.phase : '·'}
@@ -137,7 +159,7 @@ export default function RealSignalChart({ signal }: { signal: RealSignal }) {
 
         {signal.windows.map((w, i) => (
           <g key={w.start_s} data-signal-window={i}>
-            <rect x={x(w.start_s)} y={PAD.top} width={x(w.end_s) - x(w.start_s)} height={H - PAD.top - PAD.bottom} className="lx-signal__window" />
+            <rect x={x(w.start_s)} y={PAD.top} width={x(w.end_s) - x(w.start_s)} height={plotBottom - PAD.top} className="lx-signal__window" />
             <text x={x(w.start_s) + FS * 0.6} y={PAD.top + FS * 1.4} fontSize={FS} className="lx-signal__peak">
               +{w.peak_rise_bpm} bpm
             </text>
@@ -146,14 +168,43 @@ export default function RealSignalChart({ signal }: { signal: RealSignal }) {
 
         <line x1={PAD.left} x2={W - PAD.right} y1={y(signal.baselineHr)} y2={y(signal.baselineHr)} className="lx-signal__base" />
         <path d={path} className="lx-signal__line" data-signal-line />
+
+        {band && (
+          <g>
+            <defs>
+              <clipPath id="lx-band-clip">
+                <rect data-band-clip x={PAD.left} y={band.top - 2} width={W - PAD.left - PAD.right} height={band.h + 4} />
+              </clipPath>
+            </defs>
+            <text x={PAD.left} y={band.top - FS * 0.7} fontSize={FS * 0.85} className="lx-signal__phase">
+              Signal model · stress-like
+            </text>
+            <rect x={PAD.left} y={band.top} width={W - PAD.left - PAD.right} height={band.h} className="lx-signal__bandbg" />
+            <g clipPath="url(#lx-band-clip)">
+              <path d={band.area} className="lx-signal__band" />
+              <path d={band.line} className="lx-signal__bandline" />
+            </g>
+            <rect x={x(0)} y={band.top} width={x(baselineEnd) - x(0)} height={band.h} className="lx-signal__ref" />
+            <text x={(x(0) + x(baselineEnd)) / 2} y={band.top + band.h / 2 + FS * 0.3} fontSize={FS * 0.8} textAnchor="middle" className="lx-signal__phase">
+              Reference
+            </text>
+          </g>
+        )}
       </svg>
+
+      {signal.model && (
+        <p className="lx-signal__model">
+          A model trained on 33 other people reads every 30 seconds. It never saw this one, and it still finds both tasks.
+          <span className="lx-label">33 people · leave-one-person-out · 0.77 balanced accuracy · 94% of exercise recognised</span>
+        </p>
+      )}
 
       {first && (
         <div className="lx-signal__ask" data-signal-ask>
           <div className="lx-bubble">
             <span className="lx-label">Twin</span>
             <p>
-              Your heart rate rose {Math.round(first.peak_rise_bpm)} bpm for about {minutes} minutes. What was going on?
+              {question}
             </p>
           </div>
 

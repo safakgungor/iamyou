@@ -738,6 +738,34 @@ html.lx-locked {
   fill: var(--cyan-ink);
 }
 
+.lx-signal__band {
+  fill: rgba(11, 134, 168, 0.16);
+}
+
+.lx-signal__bandline {
+  fill: none;
+  stroke: var(--cyan-ink);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.lx-signal__bandbg {
+  fill: rgba(24, 33, 46, 0.03);
+}
+
+.lx-signal__ref {
+  fill: rgba(244, 247, 251, 0.82);
+}
+
+.lx-signal__model {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
 .lx-signal__ask {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

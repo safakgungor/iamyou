@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import sample from '@/data/public/physionet-stress-v1-sample.json';
+import s07Signal from '@/data/public/signal-s07-stress.json';
 import Landing from '@/components/landing/landing';
-import { buildRealSignal, type StressSample } from '@/components/landing/real-signal-data';
+import { buildRealSignal, type SignalBand, type StressSample } from '@/components/landing/real-signal-data';
 
 export const metadata: Metadata = {
   title: 'iamyou · I am you',
@@ -16,6 +17,6 @@ export const metadata: Metadata = {
 /** The marketing landing. The app itself lives at /app. Fonts come from the root layout. */
 export default function LandingPage() {
   // Built on the server so only one session's series reaches the browser.
-  const signal = buildRealSignal(sample as StressSample, 'S07');
+  const signal = buildRealSignal(sample as StressSample, 'S07', s07Signal as SignalBand);
   return <Landing signal={signal} />;
 }

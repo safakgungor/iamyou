@@ -46,6 +46,14 @@ export type SignalWindow = {
   phase: string;
 };
 
+/** One 30-second iamyou Signal window: out-of-fold class probabilities. */
+export type SignalPoint = { t: number; rest: number; stress: number; exercise: number };
+
+/** iamyou Signal's probabilities for one PhysioNet session (data/public/signal-*-stress.json). */
+export type SignalBand = { subject: string; window_s: number; windows: SignalPoint[] };
+
+export type SignalClass = 'rest' | 'stress' | 'exercise';
+
 export type RealSignal = {
   id: string;
   step_s: number;
@@ -54,6 +62,8 @@ export type RealSignal = {
   phases: Pick<StressPhase, 'phase' | 'start_s' | 'end_s' | 'self_reported_stress'>[];
   windows: SignalWindow[];
   summary: { sessions: number; windows: number; inTask: number };
+  /** Signal's band under the chart, and its most likely class over the first flagged window. */
+  model: { window_s: number; points: SignalPoint[]; firstClass: SignalClass | null } | null;
 };
 
 /** Maximal runs where the trailing HR mean stays at least HR_RISE_BPM above baseline. */
@@ -109,18 +119,42 @@ function dominantPhase(phases: StressPhase[], w: { start_s: number; end_s: numbe
   return best;
 }
 
-export function buildRealSignal(sample: StressSample, id: string): RealSignal {
-  let windows = 0;
+/** The most likely Signal class, averaged over the 30-second windows that overlap a flagged run. */
+export function classOverWindow(
+  points: SignalPoint[],
+  window_s: number,
+  w: { start_s: number; end_s: number },
+): SignalClass | null {
+  const hit = points.filter((p) => p.t < w.end_s && p.t + window_s > w.start_s);
+  if (!hit.length) return null;
+  const mean = (k: SignalClass) => hit.reduce((a, p) => a + p[k], 0) / hit.length;
+  const classes: SignalClass[] = ['rest', 'stress', 'exercise'];
+  return classes.reduce((best, k) => (mean(k) > mean(best) ? k : best));
+}
+
+export function buildRealSignal(sample: StressSample, id: string, band?: SignalBand): RealSignal {
+  let totalWindows = 0;
   let inTask = 0;
   for (const s of sample.subjects) {
     const found = detectStressWindows(s.series.hr_bpm, s.series.step_s, s.phases[0].hr_mean_bpm);
-    windows += found.length;
+    totalWindows += found.length;
     inTask += found.filter((w) => STRESS_TASKS.has(dominantPhase(s.phases, w))).length;
   }
 
   const subject = sample.subjects.find((s) => s.id === id);
   if (!subject) throw new Error(`Unknown PhysioNet session ${id}`);
   const baselineHr = subject.phases[0].hr_mean_bpm;
+  const windows = detectStressWindows(subject.series.hr_bpm, subject.series.step_s, baselineHr).map(
+    (w) => ({ ...w, phase: dominantPhase(subject.phases, w) }),
+  );
+  const model =
+    band && band.subject === subject.id
+      ? {
+          window_s: band.window_s,
+          points: band.windows,
+          firstClass: windows[0] ? classOverWindow(band.windows, band.window_s, windows[0]) : null,
+        }
+      : null;
 
   return {
     id: subject.id,
@@ -133,9 +167,8 @@ export function buildRealSignal(sample: StressSample, id: string): RealSignal {
       end_s,
       self_reported_stress,
     })),
-    windows: detectStressWindows(subject.series.hr_bpm, subject.series.step_s, baselineHr).map(
-      (w) => ({ ...w, phase: dominantPhase(subject.phases, w) }),
-    ),
-    summary: { sessions: sample.subjects.length, windows, inTask },
+    windows,
+    summary: { sessions: sample.subjects.length, windows: totalWindows, inTask },
+    model,
   };
 }
