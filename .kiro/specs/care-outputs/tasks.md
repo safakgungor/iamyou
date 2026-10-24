@@ -20,7 +20,7 @@ to exist.
 
 ## Tasks
 
-- [ ] 1. [kiro] Align with the health-baseline contract
+- [x] 1. [kiro] Align with the health-baseline contract
   - Compare the "health-baseline contract" section of `care-outputs/design.md` with
     `health-baseline/design.md` and, once implemented, `lib/baseline.ts`, `lib/signal.ts`
     and `lib/db/weekly-feature-repository.ts`: names and signatures of `gate`,
@@ -137,8 +137,8 @@ to exist.
       read it in `mayaDemoProfile()`; extend the demo-start unit test to assert it
     - _Requirements: 1.2_
 
-- [ ] 5. [kiro] Implement the clinician summary `lib/summary.ts`
-  - [ ] 5.1 Implement `buildSummary` and the fixed texts
+- [x] 5. [kiro] Implement the clinician summary `lib/summary.ts`
+  - [x] 5.1 Implement `buildSummary` and the fixed texts
     - Define `SUMMARY_INTRO_TEXT`, `NOT_A_DIAGNOSIS_FOOTER`, `NO_CHANGE_TEXT`,
       `FOCUS_TEXT`, `NOT_AVAILABLE_TEXT`, `SYNTHETIC_LABEL`, `SUMMARY_FEATURE_ORDER` and
       the `SummaryInput`, `SummaryDeps`, `MeasureRow`, `SummaryField` and
@@ -156,7 +156,7 @@ to exist.
       template naming only measures, timeframe and z
     - Compute no mean or z locally; no I/O
     - _Requirements: 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 2.1, 2.2, 2.3, 2.4, 2.5, 3.1, 3.2, 3.3, 3.4, 3.5, 4.4, 4.5_
-  - [ ] 5.2 Write property test P3 for `buildSummary` (tests/pbt)
+  - [x] 5.2 Write property test P3 for `buildSummary` (tests/pbt)
     - **Property P3: A closed gate hides change details**: for arbitrary weekly rows, an
       injected `detectSignal` returning an arbitrary signal or null, and an injected
       `gate` returning `includeInSummary: false`, a non-boolean, or throwing, field 10 is
@@ -164,7 +164,7 @@ to exist.
       change description; repeat with the real `gate` for `record_only` and arbitrary
       values outside the three settings
     - **Validates: Requirements 3.2, 3.4, 3.5**
-  - [ ] 5.3 Write unit tests for `buildSummary`
+  - [x] 5.3 Write unit tests for `buildSummary`
     - 14 fields in order with exact Intro and Footer; subject "iamyou Care Summary,
       Update, M. Linden" and "… Change noticed, …" when open; each missing-name case;
       field 6 "Familial Alzheimer's disease (father)"; six measure rows in order with no
@@ -186,7 +186,7 @@ to exist.
     (`cited_entry_ids: z.array(z.enum(ids))`)
   - _Requirements: 1.2, 5.7, 6.5, 7.1, 9.5_
 
-- [ ] 7. Checkpoint: pure modules, properties, migration and schemas
+- [x] 7. Checkpoint: pure modules, properties, migration and schemas
   - Run `npm run lint`, `npm run test:unit` and `npm run test:pbt`; ensure all pass, ask
     the user if questions arise.
 
@@ -257,8 +257,8 @@ to exist.
       unreadable slice → 503
     - _Requirements: 5.1, 5.3, 5.4, 5.5, 5.6, 5.7, 6.1, 6.3, 6.4, 6.5_
 
-- [ ] 11. [kiro] Implement `POST /api/summary` with unit tests
-  - [ ] 11.1 Implement the route and exported `getSummary`
+- [x] 11. [kiro] Implement `POST /api/summary` with unit tests
+  - [x] 11.1 Implement the route and exported `getSummary`
     - Thin handler: authenticate (401), validate with `SummaryRequestSchema` (400), build
       `SupabaseVaultRepository` and the `health-baseline` Supabase weekly feature
       repository, pass a server-clock `today`
@@ -267,7 +267,7 @@ to exist.
       `discuss` and `contact`; set `synthetic_label` to "Synthetic data" when `synthetic`
       is true; validate with `SummaryResponseSchema`; store nothing and call no model
     - _Requirements: 1.7, 2.5, 3.4, 4.1, 4.2, 4.3, 4.6_
-  - [ ] 11.2 Write unit tests (in-memory repos)
+  - [x] 11.2 Write unit tests (in-memory repos)
     - 404 without a profile; Maya with seeded synthetic rows returns 14 fields and the
       Synthetic_Label; `discuss` and `contact` appear in fields 11, 4 and 13 as written;
       `record_only` with an injected signal returns `NO_CHANGE_TEXT`; nothing is written
@@ -295,11 +295,11 @@ to exist.
       the Dont_Know_Answer and no entries
     - _Requirements: 9.1, 9.2, 9.4, 10.2, 10.5, 10.6_
 
-- [ ] 13. Checkpoint: routes, properties and unit tests
+- [x] 13. Checkpoint: routes, properties and unit tests
   - Run `npm run lint`, `npm run test:unit` and `npm run test:pbt`; ensure all pass, ask
     the user if questions arise.
 
-- [ ] 14. [kiro] Boundary tests
+- [x] 14. [kiro] Boundary tests
   - Assert `lib/summary.ts`, `lib/trials.ts` and `lib/family.ts` import no `fs`,
     `next/*`, `@anthropic-ai/sdk` or `lib/claude`, and call no `fetch`; assert
     `@anthropic-ai/sdk` and `lib/claude` imports appear only under `app/api/` and

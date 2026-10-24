@@ -1,0 +1,60 @@
+/* Printing the clinician summary: one page, no phone. Stylesheets stay loaded
+   after navigation, so every rule is scoped to a document that holds the
+   summary paper (`.care-summary`). (care-outputs Req 1.1) */
+
+@media print {
+  @page {
+    size: letter portrait;
+    margin: 12mm 14mm;
+  }
+
+  html:has(.care-summary),
+  body:has(.care-summary) {
+    background: #fff !important;
+  }
+
+  body:has(.care-summary) .device-back,
+  body:has(.care-summary) .device-aside,
+  body:has(.care-summary) .device-statusbar,
+  body:has(.care-summary) .device-home,
+  body:has(.care-summary) .device::before,
+  body:has(.care-summary) .device::after {
+    display: none !important;
+  }
+
+  body:has(.care-summary) .device-stage,
+  body:has(.care-summary) .device,
+  body:has(.care-summary) .device-screen,
+  body:has(.care-summary) .device-content {
+    position: static !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  body:has(.care-summary) main {
+    min-height: 0 !important;
+    max-width: none !important;
+    padding: 0 !important;
+    gap: 0 !important;
+  }
+
+  .care-summary {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
