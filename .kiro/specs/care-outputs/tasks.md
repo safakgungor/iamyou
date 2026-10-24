@@ -295,11 +295,11 @@ to exist.
       the Dont_Know_Answer and no entries
     - _Requirements: 9.1, 9.2, 9.4, 10.2, 10.5, 10.6_
 
-- [ ] 13. Checkpoint: routes, properties and unit tests
+- [x] 13. Checkpoint: routes, properties and unit tests
   - Run `npm run lint`, `npm run test:unit` and `npm run test:pbt`; ensure all pass, ask
     the user if questions arise.
 
-- [ ] 14. [kiro] Boundary tests
+- [x] 14. [kiro] Boundary tests
   - Assert `lib/summary.ts`, `lib/trials.ts` and `lib/family.ts` import no `fs`,
     `next/*`, `@anthropic-ai/sdk` or `lib/claude`, and call no `fetch`; assert
     `@anthropic-ai/sdk` and `lib/claude` imports appear only under `app/api/` and
