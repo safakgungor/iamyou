@@ -1,0 +1,353 @@
+/* iamyou Signal, the public page for the wrist model. Built on the landing's
+   world (components/landing/landing.css): the same ground, type, glass and
+   buttons. These rules only add what a report page needs on top: denser
+   sections, a results card, figure frames and a code block. */
+
+.sg-main {
+  padding-top: 92px;
+}
+
+/* Header links, styled like the landing's section buttons. */
+.sg-nav a {
+  padding: 6px 0;
+  font-family: var(--lx-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.sg-nav a:hover {
+  color: var(--ink);
+}
+
+/* ---------- Hero ---------- */
+
+.sg-hero {
+  padding: 10vh var(--gutter) 8vh;
+}
+
+.sg-title {
+  margin: 20px 0 26px;
+  max-width: 14ch;
+  font-size: clamp(52px, calc(20px + 6.4vw), 150px);
+  font-weight: 300;
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+
+.sg-stats {
+  flex-wrap: wrap;
+}
+
+.sg-stats .lx-stat small {
+  font-size: 0.5em;
+  letter-spacing: -0.03em;
+}
+
+/* ---------- Sections ---------- */
+
+.sg-section {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  row-gap: 32px;
+  align-items: start;
+  padding: 12vh var(--gutter);
+  scroll-margin-top: 72px;
+}
+
+.sg-copy {
+  grid-column: 1 / span 5;
+}
+
+.sg-aside {
+  grid-column: 7 / -1;
+}
+
+.sg-wide {
+  grid-column: 1 / -1;
+}
+
+.sg-section .lx-h2 {
+  max-width: 16ch;
+}
+
+.sg-main code {
+  font-family: var(--lx-mono), ui-monospace, monospace;
+  font-size: 0.88em;
+  color: var(--ink);
+}
+
+.sg-source {
+  color: var(--cyan-ink);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(11, 134, 168, 0.3);
+}
+
+.sg-source:hover {
+  border-bottom-color: var(--cyan-ink);
+}
+
+/* Numbered steps, one per line. */
+.sg-steps {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sg-steps li {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 12px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+
+.sg-steps li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.sg-steps strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.sg-steps p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* Window counts as a bar. */
+.sg-mix {
+  display: flex;
+  height: 10px;
+  margin-top: 18px;
+  overflow: hidden;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.sg-mix span:nth-child(1) {
+  background: rgba(24, 33, 46, 0.35);
+}
+
+.sg-mix span:nth-child(2) {
+  background: var(--cyan-ink);
+}
+
+.sg-mix span:nth-child(3) {
+  background: var(--cyan);
+}
+
+.sg-mix-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 12px;
+}
+
+/* ---------- Results card ---------- */
+
+.sg-results {
+  padding: 8px 28px;
+}
+
+.sg-results dl {
+  margin: 0;
+}
+
+.sg-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 16px;
+  align-items: baseline;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.sg-row:last-child {
+  border-bottom: 0;
+}
+
+.sg-row dt {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.sg-row dd {
+  margin: 0;
+}
+
+.sg-pair {
+  font-size: 26px;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sg-was {
+  color: var(--muted);
+  font-size: 0.7em;
+}
+
+.sg-delta {
+  font-family: var(--lx-mono), ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--cyan-ink);
+}
+
+.sg-head {
+  padding-bottom: 10px;
+}
+
+/* ---------- Figures ---------- */
+
+.sg-figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.sg-figure {
+  margin: 0;
+  padding: 14px;
+}
+
+.sg-figure--wide {
+  grid-column: 1 / -1;
+}
+
+.sg-figure a {
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.sg-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sg-figure figcaption {
+  padding: 14px 6px 4px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.sg-figure figcaption strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ---------- Reproduce ---------- */
+
+.sg-code {
+  margin: 0;
+  padding: 22px 24px;
+  overflow-x: auto;
+  font-family: var(--lx-mono), ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink);
+  white-space: pre;
+}
+
+.sg-code span {
+  color: var(--muted);
+}
+
+/* ---------- Footer ---------- */
+
+.sg-footer {
+  min-height: auto;
+  padding-top: 14vh;
+}
+
+.sg-footer .lx-footer__meta {
+  padding-top: 10vh;
+}
+
+.sg-footer .lx-footer__mark {
+  font-size: clamp(64px, 11vw, 200px);
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 899px) {
+  .sg-main {
+    padding-top: 76px;
+  }
+
+  .sg-hero {
+    padding-top: 6vh;
+  }
+
+  .sg-section {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 9vh var(--gutter);
+  }
+
+  .sg-copy,
+  .sg-aside,
+  .sg-wide {
+    grid-column: 1 / -1;
+  }
+
+  .sg-stats {
+    gap: 22px 32px;
+  }
+
+  .sg-stats .lx-stat {
+    font-size: 52px;
+  }
+
+  .sg-results {
+    padding: 4px 18px;
+  }
+
+  .sg-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 16px;
+  }
+
+  .sg-row .sg-delta {
+    grid-column: 1 / -1;
+  }
+
+  .sg-head {
+    display: none;
+  }
+
+  .sg-pair {
+    font-size: 22px;
+  }
+
+  .sg-figures {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sg-figure {
+    padding: 10px;
+  }
+
+  .sg-code {
+    padding: 18px;
+    font-size: 12px;
+  }
+}
