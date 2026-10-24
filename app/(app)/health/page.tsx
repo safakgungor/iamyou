@@ -59,7 +59,12 @@ export default function HealthPage() {
           return;
         }
         if (!res.ok) throw new Error(String(res.status));
-        const body = (await res.json()) as TimelineResponse;
+        let body = (await res.json()) as TimelineResponse;
+        // An older demo session has no weekly rows yet: seed it once and read again.
+        if (body.opted_in && body.rows.length === 0 && (await fetch('/api/demo/start', { method: 'POST' })).ok) {
+          const again = await fetch('/api/timeline');
+          if (again.ok) body = (await again.json()) as TimelineResponse;
+        }
         if (!cancelled) {
           setData(body);
           setStatus('ready');

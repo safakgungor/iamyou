@@ -59,9 +59,15 @@ export default function TimelinePage() {
   const load = useCallback(async () => {
     setError(null);
     try {
-      const res = await fetch('/api/timeline');
+      let res = await fetch('/api/timeline');
       if (!res.ok) throw new Error(`The timeline is unavailable right now (${res.status}).`);
-      const body = (await res.json()) as TimelineResponse;
+      let body = (await res.json()) as TimelineResponse;
+      // A demo session opened before the weekly history was seeded has no rows:
+      // seed it once (idempotent) and read again.
+      if (body.opted_in && body.rows.length === 0 && (await fetch('/api/demo/start', { method: 'POST' })).ok) {
+        res = await fetch('/api/timeline');
+        if (res.ok) body = (await res.json()) as TimelineResponse;
+      }
       setData(body);
       if (body.opted_in) setRtk(body.rtk_setting);
       setHidden(false);

@@ -131,7 +131,10 @@ export default function AppEntryPage() {
 
   async function handleContinue() {
     setPhase('waking');
-    await delay(prefersReducedMotion() ? 0 : 700);
+    // Top the session up to the current demo (idempotent upserts), so a session
+    // opened before a newer seed still has Maya's full history.
+    const refresh = fetch('/api/demo/start', { method: 'POST' }).catch(() => null);
+    await Promise.all([refresh, delay(prefersReducedMotion() ? 0 : 700)]);
     await leave();
   }
 
