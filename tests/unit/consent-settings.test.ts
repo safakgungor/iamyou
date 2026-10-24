@@ -20,6 +20,7 @@ import {
   FAMILY_HISTORY_OPTIONS,
   RTK_OPTIONS,
   changedSettings,
+  familyAccessLine,
   profileToSave,
   settingsFrom,
   type ConsentSettings,
@@ -120,6 +121,19 @@ describe("consent settings: saving writes only what changed", () => {
         }
       })
     );
+  });
+});
+
+describe("consent settings: digital will (Req 2.5)", () => {
+  it("names who may ask through family mode", () => {
+    expect(familyAccessLine(maya().digitalWill)).toBe("Ella Linden (daughter) can ask how you think.");
+    expect(familyAccessLine({ family_mode_access: ["Ella", "Sam"] })).toBe("Ella and Sam can ask how you think.");
+  });
+
+  it("is null when the will names no one", () => {
+    expect(familyAccessLine(null)).toBeNull();
+    expect(familyAccessLine({ family_mode_access: [] })).toBeNull();
+    expect(familyAccessLine({ decided_at_age: 31 })).toBeNull();
   });
 });
 
