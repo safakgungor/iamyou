@@ -69,7 +69,9 @@ function isInboxMessage(value: unknown): value is InboxMessage {
  */
 export function loadInbox(filePath: string = DEFAULT_INBOX_PATH): InboxResult {
   try {
-    const raw = readFileSync(filePath, 'utf-8');
+    // The path is a parameter, so the bundler cannot scope it; skip tracing
+    // here and ship the one file through outputFileTracingIncludes instead.
+    const raw = readFileSync(/*turbopackIgnore: true*/ filePath, 'utf-8');
     const parsed: unknown = JSON.parse(raw);
 
     if (!Array.isArray(parsed) || !parsed.every(isInboxMessage)) {
