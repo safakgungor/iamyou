@@ -1,0 +1,291 @@
+{
+  "entries": {
+    "v001": "xfw4xd",
+    "v002": "f99ops",
+    "v003": "77rjyx",
+    "v004": "g1sxs9",
+    "v005": "1050iu5",
+    "v006": "ity3kt",
+    "v007": "v9ec2i",
+    "v008": "1r67xf0",
+    "v009": "chvrvv",
+    "v010": "1j0wqi4",
+    "v011": "1r1fl5x",
+    "v012": "ktzvh0",
+    "v013": "1rnljtg",
+    "v014": "qdzp1k",
+    "v015": "1nlsgw3",
+    "v016": "r6i7xp",
+    "v017": "z5scuw",
+    "v018": "pt1c3g",
+    "v019": "iz9lh9",
+    "v020": "6uvei",
+    "v021": "1aq3bvp",
+    "v022": "vzdenx",
+    "v023": "1grpjmn",
+    "v024": "n4t1o4",
+    "v025": "12wq9tr",
+    "v026": "o9b9ue",
+    "v027": "hb64vx",
+    "v028": "1doqriq",
+    "v029": "btbc24",
+    "v030": "1px83d4",
+    "v031": "1y40viv",
+    "v032": "1tvvsq",
+    "v033": "sxmc85"
+  },
+  "tree": {
+    "branches": [
+      {
+        "branch": "family",
+        "nodes": [
+          {
+            "label": "Dad's bike-chain lesson",
+            "fact": "Dad made you fix it three times; you still check things thrice.",
+            "entry_ids": [
+              "v001"
+            ]
+          },
+          {
+            "label": "Calling Mom, then Dad",
+            "fact": "Good news goes to Mom first, then Dad, who still gets happy.",
+            "entry_ids": [
+              "v020"
+            ]
+          },
+          {
+            "label": "Remembering for Dad",
+            "fact": "When Dad forgot your birthday, you chose to remember for both.",
+            "entry_ids": [
+              "v002"
+            ]
+          },
+          {
+            "label": "Rescheduling cancelled plans",
+            "fact": "When friends cancel, you pick a new day right away.",
+            "entry_ids": [
+              "v023"
+            ]
+          },
+          {
+            "label": "Keep Dad's letters",
+            "fact": "You'd tell your younger self to sleep more and keep Dad's letters.",
+            "entry_ids": [
+              "v024"
+            ]
+          },
+          {
+            "label": "Ella born at 6:12",
+            "fact": "Ella arrived at dawn and is a morning person like you.",
+            "entry_ids": [
+              "v006"
+            ]
+          },
+          {
+            "label": "Ella up at five",
+            "fact": "Ella woke you at five, but the morning light made it a seven.",
+            "entry_ids": [
+              "v025"
+            ]
+          },
+          {
+            "label": "Dad's tomato seeds",
+            "fact": "You and Mom planted Dad's seeds; half came up, a good year.",
+            "entry_ids": [
+              "v007"
+            ]
+          },
+          {
+            "label": "Teaching Ella the chain",
+            "fact": "You taught Ella the chain fix, three times, like Dad did.",
+            "entry_ids": [
+              "v008"
+            ]
+          },
+          {
+            "label": "Ella's advice question",
+            "fact": "You ask Ella what she'd tell a friend; she usually knows.",
+            "entry_ids": [
+              "v018"
+            ]
+          },
+          {
+            "label": "Christmas Eve pride notes",
+            "fact": "Everyone reads aloud one proud thing, and nobody may be modest.",
+            "entry_ids": [
+              "v009"
+            ]
+          }
+        ]
+      },
+      {
+        "branch": "body",
+        "nodes": [
+          {
+            "label": "Free Saturday river run",
+            "fact": "Your ideal Saturday: a river run, pancakes, then nothing planned.",
+            "entry_ids": [
+              "v019"
+            ]
+          },
+          {
+            "label": "Morning person, not owl",
+            "fact": "You're a morning person who sometimes stays up for friends.",
+            "entry_ids": [
+              "v028"
+            ]
+          },
+          {
+            "label": "Tea for exams, coffee runs",
+            "fact": "You drink tea before exams and coffee before runs.",
+            "entry_ids": [
+              "v021"
+            ]
+          },
+          {
+            "label": "Burlington marathon",
+            "fact": "You walked at mile 22 and still proudly finished.",
+            "entry_ids": [
+              "v004"
+            ]
+          },
+          {
+            "label": "Half marathon, Mom's seventieth",
+            "fact": "You looked forward to a half marathon and Mom's seventieth birthday.",
+            "entry_ids": [
+              "v026"
+            ]
+          },
+          {
+            "label": "Tired, not nervous",
+            "fact": "Before the appointment you were tired, not nervous.",
+            "entry_ids": [
+              "v033"
+            ]
+          }
+        ]
+      },
+      {
+        "branch": "mind",
+        "nodes": [
+          {
+            "label": "Pre-med to neuroscience",
+            "fact": "You switched partly for Dad, partly for unanswered questions.",
+            "entry_ids": [
+              "v003"
+            ]
+          },
+          {
+            "label": "Studying the brain",
+            "fact": "You wondered whether you study the brain to understand or outrun it.",
+            "entry_ids": [
+              "v022"
+            ]
+          }
+        ]
+      },
+      {
+        "branch": "work",
+        "nodes": [
+          {
+            "label": "Turned down Seattle",
+            "fact": "Staying three hours from Mom mattered more than the title.",
+            "entry_ids": [
+              "v005"
+            ]
+          },
+          {
+            "label": "Plans you start today",
+            "fact": "A plan without a part you can start today is a wish.",
+            "entry_ids": [
+              "v015"
+            ]
+          }
+        ]
+      },
+      {
+        "branch": "values",
+        "nodes": [
+          {
+            "label": "Waiting a day angry",
+            "fact": "You don't avoid conflict; you wait a day when angry.",
+            "entry_ids": [
+              "v027"
+            ]
+          },
+          {
+            "label": "Prouder to explain Dad",
+            "fact": "You choose the option you'd be prouder to explain to Dad.",
+            "entry_ids": [
+              "v010"
+            ]
+          },
+          {
+            "label": "No decisions after 10pm",
+            "fact": "Big decisions made late at night wait until morning.",
+            "entry_ids": [
+              "v011"
+            ]
+          },
+          {
+            "label": "Pick and explain why",
+            "fact": "You don't say 'whatever works'; you pick and give reasons.",
+            "entry_ids": [
+              "v029"
+            ]
+          },
+          {
+            "label": "Gentle hard truths",
+            "fact": "You say hard things gently, conclusion first, then reasons.",
+            "entry_ids": [
+              "v012",
+              "v017"
+            ]
+          },
+          {
+            "label": "Money buys time together",
+            "fact": "Money is for buying time with people, not things.",
+            "entry_ids": [
+              "v013"
+            ]
+          },
+          {
+            "label": "Hating being late",
+            "fact": "You don't hate spontaneity; you hate being late.",
+            "entry_ids": [
+              "v030"
+            ]
+          },
+          {
+            "label": "Respecting not knowing",
+            "fact": "You'd rather know, but respect people who choose not to.",
+            "entry_ids": [
+              "v014"
+            ]
+          },
+          {
+            "label": "Try once, then ask",
+            "fact": "You ask for help after trying once on your own.",
+            "entry_ids": [
+              "v031"
+            ]
+          },
+          {
+            "label": "Changing your mind",
+            "fact": "You distrust anyone who has never changed their mind.",
+            "entry_ids": [
+              "v016"
+            ]
+          },
+          {
+            "label": "Not great, but handling",
+            "fact": "Instead of 'I'm fine,' you say 'not great, but I'm handling it.'",
+            "entry_ids": [
+              "v032"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -116,7 +116,12 @@ function importsClaudeLayer(source: string): boolean {
  * (`lib/claude/**`).
  */
 function isServerOnlyLocation(relPath: string): boolean {
-  return relPath.startsWith("app/api/") || relPath.startsWith("lib/claude/");
+  return (
+    relPath.startsWith("app/api/") ||
+    relPath.startsWith("lib/claude/") ||
+    // The mind tree's own Claude calls: server-only guarded, imported only by app/api/mind/**.
+    relPath === "lib/mind/claude.ts"
+  );
 }
 
 /* -------------------------------------------------------------------------- */
