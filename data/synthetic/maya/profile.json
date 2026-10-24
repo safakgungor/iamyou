@@ -1,0 +1,20 @@
+{
+  "id": "maya",
+  "synthetic": true,
+  "first_name": "Maya",
+  "last_name": "Linden",
+  "date_of_birth": "2008-03-14",
+  "start_date": "2026-10-24",
+  "simulated_through": "2048-10-24",
+  "county": "Hampshire",
+  "family_history": "familial_alzheimers",
+  "family_history_detail": "Her father, Daniel Linden, was diagnosed with early-onset familial Alzheimer's disease at age 47.",
+  "genetic_test": "not_taken",
+  "health_layer_opt_in": true,
+  "rtk_setting": "tell_me",
+  "digital_will": {
+    "family_mode_access": ["Ella Linden (daughter)"],
+    "decided_at_age": 31
+  },
+  "about": "Maya grew up in western Massachusetts. She studied neuroscience, runs most mornings, and is the person her family calls first. She is direct, warm and a morning person, and she waits a day before answering when she is angry."
+}

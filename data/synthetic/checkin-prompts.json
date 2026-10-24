@@ -1,0 +1,22 @@
+[
+  { "id": "c01", "category": "preference", "text": "What's the first thing you'd do with a free Saturday?" },
+  { "id": "c02", "category": "social", "text": "Who would you call first with good news, and why?" },
+  { "id": "c03", "category": "preference", "text": "Coffee or tea this morning, and why?" },
+  { "id": "c04", "category": "reflection", "text": "What's been on your mind most this week?" },
+  { "id": "c05", "category": "social", "text": "How would you reply if a friend cancelled plans at the last minute?" },
+  { "id": "c06", "category": "reflection", "text": "What would you tell your younger self?" },
+  { "id": "c07", "category": "energy", "text": "How is your energy today, from 1 to 10, and what's behind that number?" },
+  { "id": "c08", "category": "reflection", "text": "What are you looking forward to this month?" },
+  { "id": "c09", "category": "decision", "text": "You get two job offers: one pays more, one is closer to family. Which do you lean toward?" },
+  { "id": "c10", "category": "decision", "text": "It's 11 pm and you have to make a big decision. What do you do?" },
+  { "id": "c11", "category": "values", "text": "A friend asks for honest feedback on something they're proud of, and it isn't good. What do you say?" },
+  { "id": "c12", "category": "energy", "text": "How did you sleep last night?" },
+  { "id": "c13", "category": "social", "text": "Someone you love is having a hard week. What do you do?" },
+  { "id": "c14", "category": "preference", "text": "Plan or improvise: how do you like a vacation to go?" },
+  { "id": "c15", "category": "values", "text": "What's something you changed your mind about in the last year?" },
+  { "id": "c16", "category": "decision", "text": "You're stuck on a problem for an hour. Do you keep going or ask for help?" },
+  { "id": "c17", "category": "reflection", "text": "What made you laugh recently?" },
+  { "id": "c18", "category": "values", "text": "What would you spend an unexpected $500 on?" },
+  { "id": "c19", "category": "social", "text": "How do you start a hard conversation?" },
+  { "id": "c20", "category": "energy", "text": "Morning person or night person, honestly?" }
+]

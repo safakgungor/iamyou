@@ -1,0 +1,71 @@
+year,county,measure,prevalence,low,high,population
+2023,Barnstable,Current cigarette smoking among adults,10.5,8,13.6,231735
+2023,Barnstable,Diagnosed diabetes among adults,10.7,8.9,12.8,231735
+2023,Barnstable,Frequent mental distress among adults,13.8,11.8,16,231735
+2023,Barnstable,Obesity among adults,26.3,21.2,31.8,231735
+2023,Barnstable,Visits to doctor for routine checkup within the past year among adults,85.3,82.6,87.5,231735
+2023,Berkshire,Current cigarette smoking among adults,12.7,9.8,15.6,126818
+2023,Berkshire,Diagnosed diabetes among adults,10.9,9.2,12.8,126818
+2023,Berkshire,Frequent mental distress among adults,16.9,14.7,19.1,126818
+2023,Berkshire,Obesity among adults,31.2,25.4,36.7,126818
+2023,Berkshire,Visits to doctor for routine checkup within the past year among adults,81.7,78.6,84.4,126818
+2023,Bristol,Current cigarette smoking among adults,15.8,12.6,19.1,581841
+2023,Bristol,Diagnosed diabetes among adults,10.8,9.2,12.4,581841
+2023,Bristol,Frequent mental distress among adults,18.6,16.5,21.2,581841
+2023,Bristol,Obesity among adults,32.1,27.8,36.9,581841
+2023,Bristol,Visits to doctor for routine checkup within the past year among adults,81.9,79.2,84.4,581841
+2023,Dukes,Current cigarette smoking among adults,10.8,8.2,13.8,20819
+2023,Dukes,Diagnosed diabetes among adults,10.6,8.8,12.4,20819
+2023,Dukes,Frequent mental distress among adults,14.7,12.5,17,20819
+2023,Dukes,Obesity among adults,25.5,19.1,32.7,20819
+2023,Dukes,Visits to doctor for routine checkup within the past year among adults,83.4,80.1,86.3,20819
+2023,Essex,Current cigarette smoking among adults,11.4,9,13.9,810089
+2023,Essex,Diagnosed diabetes among adults,10.3,8.8,11.8,810089
+2023,Essex,Frequent mental distress among adults,15.3,13.4,17.3,810089
+2023,Essex,Obesity among adults,30,25.6,34.5,810089
+2023,Essex,Visits to doctor for routine checkup within the past year among adults,81.1,78.4,83.6,810089
+2023,Franklin,Current cigarette smoking among adults,12.8,9.8,15.9,70836
+2023,Franklin,Diagnosed diabetes among adults,10.8,9.1,12.7,70836
+2023,Franklin,Frequent mental distress among adults,16.1,13.8,18.5,70836
+2023,Franklin,Obesity among adults,26.3,20.8,32.8,70836
+2023,Franklin,Visits to doctor for routine checkup within the past year among adults,82.1,78.8,85,70836
+2023,Hampden,Current cigarette smoking among adults,14.8,12.1,17.5,460291
+2023,Hampden,Diagnosed diabetes among adults,12.1,10.5,13.8,460291
+2023,Hampden,Frequent mental distress among adults,18.9,16.7,21.1,460291
+2023,Hampden,Obesity among adults,34.9,30.1,40.1,460291
+2023,Hampden,Visits to doctor for routine checkup within the past year among adults,80.4,77.4,83.1,460291
+2023,Hampshire,Current cigarette smoking among adults,9.7,7.6,12.2,162502
+2023,Hampshire,Diagnosed diabetes among adults,8.2,7,9.6,162502
+2023,Hampshire,Frequent mental distress among adults,17.4,14.9,20.1,162502
+2023,Hampshire,Obesity among adults,22.2,17.9,27.2,162502
+2023,Hampshire,Visits to doctor for routine checkup within the past year among adults,80.6,77.3,83.6,162502
+2023,Middlesex,Current cigarette smoking among adults,9.1,7.1,11.4,1623952
+2023,Middlesex,Diagnosed diabetes among adults,8.5,7.3,9.6,1623952
+2023,Middlesex,Frequent mental distress among adults,14.8,13,16.7,1623952
+2023,Middlesex,Obesity among adults,23.8,20.5,27.2,1623952
+2023,Middlesex,Visits to doctor for routine checkup within the past year among adults,79.9,77.5,82.3,1623952
+2023,Nantucket,Current cigarette smoking among adults,9.1,6.9,11.6,14444
+2023,Nantucket,Diagnosed diabetes among adults,8.6,7.2,10.1,14444
+2023,Nantucket,Frequent mental distress among adults,14.3,12.3,16.4,14444
+2023,Nantucket,Obesity among adults,27.7,20.6,35.7,14444
+2023,Nantucket,Visits to doctor for routine checkup within the past year among adults,81.4,78.1,84.4,14444
+2023,Norfolk,Current cigarette smoking among adults,9.2,7,11.5,727473
+2023,Norfolk,Diagnosed diabetes among adults,9,7.7,10.5,727473
+2023,Norfolk,Frequent mental distress among adults,14.6,12.7,16.6,727473
+2023,Norfolk,Obesity among adults,23.5,19.9,27.8,727473
+2023,Norfolk,Visits to doctor for routine checkup within the past year among adults,81.5,79,84.1,727473
+2023,Plymouth,Current cigarette smoking among adults,11.9,9.4,14.7,535308
+2023,Plymouth,Diagnosed diabetes among adults,10.3,8.9,11.9,535308
+2023,Plymouth,Frequent mental distress among adults,16.8,14.7,19.1,535308
+2023,Plymouth,Obesity among adults,29.7,25.4,34.7,535308
+2023,Plymouth,Visits to doctor for routine checkup within the past year among adults,82.1,79.3,84.6,535308
+2023,Suffolk,Current cigarette smoking among adults,11.1,8.9,13.4,768425
+2023,Suffolk,Diagnosed diabetes among adults,9.3,8.1,10.5,768425
+2023,Suffolk,Frequent mental distress among adults,17.3,15.3,19.4,768425
+2023,Suffolk,Obesity among adults,24.2,20.7,27.8,768425
+2023,Suffolk,Visits to doctor for routine checkup within the past year among adults,78.5,75.8,81.1,768425
+2023,Worcester,Current cigarette smoking among adults,12.3,9.8,14.9,866866
+2023,Worcester,Diagnosed diabetes among adults,10.4,9,11.9,866866
+2023,Worcester,Frequent mental distress among adults,17.2,15.1,19.3,866866
+2023,Worcester,Obesity among adults,32.6,28.3,36.9,866866
+2023,Worcester,Visits to doctor for routine checkup within the past year among adults,81.3,78.7,83.7,866866

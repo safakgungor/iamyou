@@ -1,0 +1,42 @@
+[
+  {
+    "id": "m1",
+    "from": "Dr. Lee's office, Valley Family Medicine",
+    "subject": "Your appointment on Thursday",
+    "received_days_ago": 0,
+    "synthetic": true,
+    "body": "Hi Maya, this is a reminder that you have an appointment with Dr. Lee on Thursday at 9:40 am. Please reply to confirm, or let us know if you need to reschedule. Front desk, Valley Family Medicine"
+  },
+  {
+    "id": "m2",
+    "from": "Jordan (lab partner)",
+    "subject": "Poster draft?",
+    "received_days_ago": 1,
+    "synthetic": true,
+    "body": "Hey, did you get a chance to look at the poster draft? I moved the methods section to the left column. No rush, but the print shop closes at 5 on Friday."
+  },
+  {
+    "id": "m3",
+    "from": "River Valley Runners",
+    "subject": "Saturday long run route",
+    "received_days_ago": 2,
+    "synthetic": true,
+    "body": "This Saturday's long run starts at 7 am at the bike path entrance. 10 or 14 miles, your choice. Bring water; the fountain at mile 5 is off for the season."
+  },
+  {
+    "id": "m4",
+    "from": "Mom",
+    "subject": "Dad's birthday",
+    "received_days_ago": 3,
+    "synthetic": true,
+    "body": "Sweetheart, I was thinking we could take Dad to the orchard for his birthday. He always liked it there. Are you free the Sunday after next?"
+  },
+  {
+    "id": "m5",
+    "from": "Library",
+    "subject": "Item due soon",
+    "received_days_ago": 4,
+    "synthetic": true,
+    "body": "The item \"Principles of Neural Science\" is due in 3 days. You can renew it once online."
+  }
+]
