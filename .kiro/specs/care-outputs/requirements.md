@@ -49,7 +49,7 @@ only from server routes.
 - **Family_Answer**: The Claude response shape `{answer: string, cited_entry_ids: string[]}`.
 - **Dont_Know_Answer**: The exact string "I don't know how {first_name} would answer that.", where `{first_name}` is `profile.first_name`.
 - **vault entry**: A record in the person's vault with an `id`, a `kind` (one of `story`, `opinion`, `conversation`, `correction`, or `style_example`), and a `text`, produced by `twin-loop`.
-- **RTK_Gate**: The pure function `gate(signal, setting)` in `lib/rtk-gate.ts` from the `health-baseline` spec, returning `{showToUser, includeInSummary}`. Consumed here, not redefined.
+- **RTK_Gate**: The pure function `gate(signal, rtk_setting)` in `lib/signal.ts` from the `health-baseline` spec, returning `{showToUser, includeInSummary}`. Consumed here, not redefined.
 - **Baseline_Module**: The pure module `lib/baseline.ts` from the `health-baseline` spec, providing each feature's baseline mean, most recent 4-week mean, and z-score. Consumed here, not redefined.
 - **Signal_Module**: The pure module `lib/signal.ts` from the `health-baseline` spec, producing the change signal. Consumed here, not redefined.
 - **change signal**: The record produced by the Signal_Module listing the deviating features and the first week of the run. Consumed here, not redefined.
@@ -60,6 +60,8 @@ only from server routes.
 - **Synthetic_Label**: A visible "Synthetic data" label shown on any screen that displays synthetic persona or history data.
 - **Not_A_Diagnosis_Footer**: The exact footer string "This is not a diagnosis.".
 - **No_Change_Text**: The exact string "No change to report.".
+- **No_Match_Text**: The exact string "No matching studies recruiting in Massachusetts right now.".
+- **Condition_Search_URL**: The ClinicalTrials.gov website search for the family_condition, limited to recruiting studies in Massachusetts, at `https://clinicaltrials.gov/search`.
 - **FAMILY_ENTRY_LIMIT**: The constant `40`; the maximum number of vault entries sent to Claude for a family-mode answer.
 
 ## Requirements
@@ -99,7 +101,7 @@ only from server routes.
 1. WHEN `gate(signal, rtk_setting).includeInSummary` is `true`, THE Summary_Builder SHALL populate field 10 (What changed) with a plain description naming which measures moved, the timeframe since when they moved relative to the baseline start, and the change amount against the person's own baseline.
 2. IF `gate(signal, rtk_setting).includeInSummary` is `false`, THEN THE Summary_Builder SHALL set field 10 (What changed) to exactly the No_Change_Text "No change to report." and SHALL NOT include any measure-change details in field 10. _(Property P3)_
 3. WHERE field 10 (What changed) is populated with change details, THE Summary_Builder SHALL include only the measure names, the timeframe, and the change amount, and SHALL NOT include any clinical interpretation, assessment, or statement that the person has or is likely to have a condition.
-4. THE Summary_Builder SHALL obtain `includeInSummary` by calling `gate()` from `lib/rtk-gate.ts` with the change signal from the Signal_Module and the `rtk_setting` from the profile, and SHALL NOT reimplement the gate logic.
+4. THE Summary_Builder SHALL obtain `includeInSummary` by calling `gate()` from `lib/signal.ts` with the change signal from the Signal_Module and the `rtk_setting` from the profile, and SHALL NOT reimplement the gate logic.
 5. IF no change signal is available or the gate result cannot be read, THEN THE Summary_Builder SHALL set field 10 (What changed) to exactly the No_Change_Text "No change to report." and SHALL NOT include any measure-change details. _(Property P3)_
 
 ### Requirement 4: Synthetic labelling and non-diagnostic copy on the summary
@@ -132,7 +134,7 @@ only from server routes.
 
 ### Requirement 6: Trial finder offline fallback
 
-**User Story:** As a judge opening the demo on a phone, I want the trial list to work even when the live registry is unreachable, so that the demo never shows an empty or broken screen.
+**User Story:** As a judge opening the demo on a phone, I want the trial list to work even when the live registry is unreachable, so that the demo never shows a broken screen.
 
 #### Acceptance Criteria
 
@@ -140,7 +142,7 @@ only from server routes.
 2. WHEN serving from the Saved_MA_Slice, THE Trials_Module SHALL match the family_condition against the row's `conditions` or `title` by case-insensitive keyword, matching `huntington` against the keyword "huntington", `familial_alzheimers` against the keyword "alzheimer", and `als` against the keywords "amyotrophic lateral sclerosis", "motor neuron", or the whole word "ALS".
 3. WHEN serving from the Saved_MA_Slice, THE Trials_Module SHALL treat every row as status RECRUITING, consistent with the file's contents.
 4. WHEN a Saved_MA_Slice row is normalized, THE Trials_Module SHALL set its `cities` to the single entry `["Massachusetts"]` without a city name, because the slice's `massachusetts_city` column is empty.
-5. IF no Saved_MA_Slice row matches the family_condition keywords, or the family_condition has no defined keyword mapping, THEN THE Trials_Module SHALL serve all rows from the Saved_MA_Slice so that the returned trial list is never empty.
+5. IF no Saved_MA_Slice row matches the family_condition keywords, or the family_condition has no defined keyword mapping, THEN THE Trials_Module SHALL return an empty trial list and SHALL NOT substitute non-matching rows, and THE Trials_Screen SHALL display exactly the No_Match_Text "No matching studies recruiting in Massachusetts right now." together with a link to the Condition_Search_URL for the family_condition.
 
 ### Requirement 7: Trial normalization and phase labels
 
