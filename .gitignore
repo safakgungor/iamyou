@@ -1,0 +1,21 @@
+# Dependencies and builds
+node_modules/
+.next/
+out/
+build/
+coverage/
+.vercel/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Real personal data never leaves this machine
+data/private/
+
+# OS and editor files
+.DS_Store
+*.log
+
+# Note: the .kiro/ directory must stay tracked. Do not add it here.
