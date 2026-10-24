@@ -12,7 +12,7 @@
  */
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import { useSpeech } from '@/components/use-speech';
 import type { FamilyAskersResponse, FamilyResponse } from '@/lib/api-schemas';
 
@@ -33,6 +33,9 @@ const KIND_TEXT: Record<FamilyResponse['cited_entries'][number]['kind'], string>
 };
 
 type Status = { kind: 'idle' } | { kind: 'asking' } | { kind: 'error'; message: string };
+
+/** The stagger step for a `.rise` entrance (app/globals.css). */
+const stagger = (i: number) => ({ '--i': i }) as CSSProperties;
 
 export default function FamilyPage() {
   const [info, setInfo] = useState<FamilyAskersResponse | null>(null);
@@ -97,15 +100,15 @@ export default function FamilyPage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-7 px-5 pb-16 pt-6">
       <nav className="flex items-center justify-between">
-        <Link href="/home" className="label transition-colors hover:text-ink">
-          ← Hub
+        <Link href="/care" className="label transition-colors hover:text-ink">
+          ← Care
         </Link>
         <span className="rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted shadow-[inset_0_0_0_1px_var(--color-line)]">
           {info?.synthetic_label ?? 'Synthetic data'}
         </span>
       </nav>
 
-      <header className="flex flex-col gap-3">
+      <header className="rise flex flex-col gap-3">
         <p className="label text-cyan-ink">Care · Family mode</p>
         <h1 className="text-[40px] font-light leading-[0.95] tracking-[-0.04em]">Ask how {name} would answer.</h1>
         <p className="text-[15px] text-muted">
@@ -127,7 +130,7 @@ export default function FamilyPage() {
       )}
 
       {info && asker && (
-        <section aria-labelledby="ask-heading" className="glass flex flex-col gap-4 p-5">
+        <section aria-labelledby="ask-heading" className="glass rise flex flex-col gap-4 p-5" style={stagger(1)}>
           <h2 id="ask-heading" className="sr-only">
             Ask a question
           </h2>
@@ -147,7 +150,7 @@ export default function FamilyPage() {
                     type="button"
                     onClick={() => setAsker(a)}
                     aria-pressed={a === asker}
-                    className={`h-9 rounded-full px-4 text-sm transition-colors ${
+                    className={`tap h-9 rounded-full px-4 text-sm ${
                       a === asker ? 'bg-ink text-white' : 'bg-white/70 shadow-[inset_0_0_0_1px_var(--color-line)] hover:bg-white'
                     }`}
                   >
@@ -181,7 +184,7 @@ export default function FamilyPage() {
               <button
                 type="submit"
                 disabled={busy || question.trim().length === 0}
-                className="inline-flex h-11 items-center gap-2 rounded-full bg-ink px-5 text-[15px] font-medium text-white transition-colors hover:bg-cyan-ink disabled:opacity-50"
+                className="inline-flex h-11 items-center gap-2 rounded-full bg-ink px-5 text-[15px] font-medium text-white tap hover:bg-cyan-ink disabled:opacity-50"
               >
                 Ask <span aria-hidden="true">→</span>
               </button>
@@ -193,7 +196,7 @@ export default function FamilyPage() {
                     speech.listen();
                   }}
                   disabled={busy || speech.listening}
-                  className="inline-flex h-11 items-center gap-2 rounded-full bg-white/70 px-4 text-[15px] shadow-[inset_0_0_0_1px_var(--color-line)] transition-colors hover:bg-white disabled:opacity-60"
+                  className="inline-flex h-11 items-center gap-2 rounded-full bg-white/70 px-4 text-[15px] shadow-[inset_0_0_0_1px_var(--color-line)] tap hover:bg-white disabled:opacity-60"
                 >
                   <MicIcon />
                   {speech.listening ? 'Listening…' : 'Speak'}
@@ -211,7 +214,7 @@ export default function FamilyPage() {
                     key={s}
                     type="button"
                     onClick={() => void ask(s)}
-                    className="rounded-full bg-white/70 px-3 py-1.5 text-left text-sm shadow-[inset_0_0_0_1px_var(--color-line)] transition-colors hover:bg-white"
+                    className="rounded-full bg-white/70 px-3 py-1.5 text-left text-sm shadow-[inset_0_0_0_1px_var(--color-line)] tap hover:bg-white"
                   >
                     {s}
                   </button>
@@ -237,7 +240,7 @@ export default function FamilyPage() {
         )}
 
         {result && (
-          <article className="glass flex flex-col gap-4 p-6" aria-label={`${name}'s answer`}>
+          <article className="glass rise flex flex-col gap-4 p-6" aria-label={`${name}'s answer`}>
             <header className="flex flex-col gap-1">
               <span className="label">{result.asker} asked</span>
               <span className="text-[15px] text-muted">{result.question}</span>
@@ -266,7 +269,7 @@ export default function FamilyPage() {
                 setResult(null);
                 setQuestion('');
               }}
-              className="label self-start text-cyan-ink hover:text-ink"
+              className="tap label self-start text-cyan-ink hover:text-ink"
             >
               Ask another →
             </button>

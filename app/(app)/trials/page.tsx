@@ -16,11 +16,14 @@
  */
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import type { TrialsResponse } from '@/lib/api-schemas';
 import { NOT_A_RECOMMENDATION_TEXT, studyUrl } from '@/lib/trials';
 
 type Origin = Extract<TrialsResponse, { status: 'ok' }>['origin'];
+
+/** The stagger step for a `.rise` entrance (app/globals.css). */
+const stagger = (i: number) => ({ '--i': i }) as CSSProperties;
 
 const ORIGIN_TEXT: Record<Origin, string> = {
   live: 'Live from ClinicalTrials.gov',
@@ -54,8 +57,8 @@ export default function TrialsPage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-7 px-5 pb-16 pt-6">
       <nav className="flex items-center justify-between">
-        <Link href="/home" className="label transition-colors hover:text-ink">
-          ← Hub
+        <Link href="/care" className="label transition-colors hover:text-ink">
+          ← Care
         </Link>
         <a
           href="https://clinicaltrials.gov"
@@ -67,7 +70,7 @@ export default function TrialsPage() {
         </a>
       </nav>
 
-      <header className="flex flex-col gap-3">
+      <header className="rise flex flex-col gap-3">
         <p className="label text-cyan-ink">Care · Trials</p>
         <h1 className="text-[40px] font-light leading-[0.95] tracking-[-0.04em]">Studies recruiting in Massachusetts.</h1>
         <p className="text-[15px] text-muted">For the condition in your family, straight from the public registry.</p>
@@ -77,7 +80,7 @@ export default function TrialsPage() {
         </p>
       </header>
 
-      <section aria-labelledby="trials-heading" aria-live="polite" className="flex flex-col gap-3">
+      <section aria-labelledby="trials-heading" aria-live="polite" className="rise flex flex-col gap-3" style={stagger(1)}>
         <h2 id="trials-heading" className="label">
           Recruiting now{data?.status === 'ok' ? ` · ${data.trials.length}` : ''}
         </h2>
@@ -108,7 +111,7 @@ export default function TrialsPage() {
               href={data.search_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="label text-cyan-ink transition-colors hover:text-ink"
+              className="tap label self-start text-cyan-ink hover:text-ink"
             >
               Search ClinicalTrials.gov →
             </a>
@@ -120,14 +123,14 @@ export default function TrialsPage() {
             <p className="label text-[10px]">{ORIGIN_TEXT[data.origin]}</p>
             <ul className="flex flex-col gap-3">
               {data.trials.map((trial, index) => (
-                <TrialCard key={`${trial.nctId}-${index}`} trial={trial} />
+                <TrialCard key={`${trial.nctId}-${index}`} trial={trial} index={index} />
               ))}
             </ul>
             <a
               href={data.search_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="label mt-1 px-1 text-cyan-ink transition-colors hover:text-ink"
+              className="tap label mt-1 self-start px-1 text-cyan-ink hover:text-ink"
             >
               See the full search on ClinicalTrials.gov →
             </a>
@@ -138,10 +141,11 @@ export default function TrialsPage() {
   );
 }
 
-function TrialCard({ trial }: { trial: TrialsResponse['trials'][number] }) {
+function TrialCard({ trial, index }: { trial: TrialsResponse['trials'][number]; index: number }) {
   const url = studyUrl(trial.nctId);
   return (
-    <li className="glass flex flex-col gap-3 p-5">
+    // Only the first few cards stagger; the rest rise together.
+    <li className="glass rise flex flex-col gap-3 p-5" style={stagger(Math.min(index, 5) + 2)}>
       <h3 className="text-[17px] font-medium leading-snug tracking-[-0.01em]">{trial.title || 'Untitled study'}</h3>
       <p className="flex items-start gap-2 text-sm text-cyan-ink">
         <span aria-hidden="true" className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-cyan" />
@@ -168,7 +172,7 @@ function TrialCard({ trial }: { trial: TrialsResponse['trials'][number] }) {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-between gap-3 border-t border-line pt-3 text-sm text-ink transition-colors hover:text-cyan-ink"
+          className="tap flex items-center justify-between gap-3 border-t border-line pt-3 text-sm text-ink hover:text-cyan-ink"
         >
           <span className="font-mono text-[12px] tracking-[0.04em] text-muted">{trial.nctId}</span>
           <span>
