@@ -1,0 +1,194 @@
+/* The phone the app lives in. Phones get the app full-screen; wider screens
+   get a device frame in the middle of the landing's ice-white ground. */
+
+.device-back,
+.device-aside,
+.device-statusbar,
+.device-home {
+  display: none;
+}
+
+.device-screen {
+  min-height: 100dvh;
+}
+
+.device-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.device-content > * {
+  flex: 1 0 auto;
+}
+
+@media (min-width: 900px) and (min-height: 620px) {
+  .device-stage {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  .device-back {
+    display: block;
+    position: absolute;
+    top: 24px;
+    left: 32px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .device-back:hover {
+    color: var(--color-ink);
+  }
+
+  /* Titanium band, black bezel, a deep soft shadow. */
+  .device {
+    position: relative;
+    height: min(864px, calc(100vh - 56px));
+    padding: 11px;
+    border-radius: 66px;
+    background: #0c1015;
+    box-shadow:
+      0 0 0 3px #d9e0e7,
+      0 0 0 4px rgb(24 33 46 / 0.18),
+      inset 0 0 0 1px rgb(255 255 255 / 0.08),
+      0 60px 120px -40px rgb(24 33 46 / 0.5),
+      0 24px 48px -24px rgb(24 33 46 / 0.3);
+  }
+
+  /* Side buttons. */
+  .device::before,
+  .device::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #c3ccd6, #e4e9ee);
+  }
+
+  .device::before {
+    left: -7px;
+    top: 168px;
+    height: 64px;
+    box-shadow: 0 84px 0 0 #d2d9e0;
+  }
+
+  .device::after {
+    right: -7px;
+    top: 208px;
+    height: 96px;
+  }
+
+  .device-screen {
+    position: relative;
+    width: 390px;
+    height: 100%;
+    min-height: 0;
+    border-radius: 55px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    background:
+      radial-gradient(90% 50% at 72% 0%, #ffffff 0%, rgb(255 255 255 / 0) 60%),
+      linear-gradient(180deg, #f4f7fb 0%, #e9eef5 100%);
+    /* Fixed-position children now pin to the phone, not the browser. */
+    transform: translateZ(0);
+  }
+
+  .device-screen::-webkit-scrollbar {
+    display: none;
+  }
+
+  .device-statusbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+    padding: 6px 30px 0 40px;
+    color: var(--color-ink);
+    background: linear-gradient(180deg, rgb(244 247 251 / 0.96) 55%, rgb(244 247 251 / 0));
+  }
+
+  .device-time {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .device-island {
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    width: 122px;
+    height: 35px;
+    margin-left: -61px;
+    border-radius: 20px;
+    background: #05070a;
+  }
+
+  .device-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .device-content {
+    min-height: calc(100% - 54px - 21px);
+    padding: 0;
+  }
+
+  /* The page's own full-height rule would measure the browser, not the phone. */
+  .device-content .min-h-screen {
+    min-height: 0;
+  }
+
+  .device-home {
+    display: block;
+    position: sticky;
+    bottom: 8px;
+    z-index: 40;
+    width: 134px;
+    height: 5px;
+    margin: 8px auto;
+    border-radius: 3px;
+    background: var(--color-ink);
+    opacity: 0.85;
+  }
+
+  .device-aside {
+    display: none;
+  }
+}
+
+@media (min-width: 1180px) and (min-height: 620px) {
+  .device-aside {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 280px);
+    display: grid;
+    gap: 14px;
+    width: 220px;
+    padding: 22px;
+    transform: translateY(-50%);
+  }
+
+  .device-aside p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+
+  .device-qr svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}

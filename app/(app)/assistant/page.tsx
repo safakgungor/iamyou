@@ -70,9 +70,8 @@ export default function AssistantPage() {
     setDraft(null);
     setEditing(false);
     setStatus({ kind: 'idle' });
-    if (window.matchMedia('(max-width: 899px)').matches) {
-      requestAnimationFrame(() => detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-    }
+    // The message and its draft sit above the list, so bring them into view.
+    requestAnimationFrame(() => detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   };
 
   const createDraft = useCallback(async () => {
@@ -141,7 +140,7 @@ export default function AssistantPage() {
   const busy = status.kind === 'drafting' || status.kind === 'working';
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-5 pb-16 pt-6 md:px-10">
+    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col gap-8 px-5 pb-16 pt-6">
       <nav className="flex items-center justify-between">
         <Link href="/home" className="label transition-colors hover:text-ink">
           ← Hub
@@ -153,14 +152,14 @@ export default function AssistantPage() {
 
       <header className="flex flex-col gap-3">
         <p className="label text-cyan-ink">Second self</p>
-        <h1 className="text-[clamp(36px,6vw,64px)] font-light leading-[0.95] tracking-[-0.04em]">Your twin writes. You decide.</h1>
+        <h1 className="text-[40px] font-light leading-[0.95] tracking-[-0.04em]">Your twin writes. You decide.</h1>
         <p className="flex items-center gap-2 text-[15px] text-ink">
           <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-cyan shadow-[0_0_0_4px_rgb(54_209_240/0.2)]" />
           {APPROVAL_NOTICE}
         </p>
       </header>
 
-      <div className="grid gap-6 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+      <div className="flex flex-col gap-6">
         {/* Inbox */}
         <section aria-labelledby="inbox-heading" className="flex flex-col gap-3">
           <h2 id="inbox-heading" className="label">
@@ -201,7 +200,7 @@ export default function AssistantPage() {
         </section>
 
         {/* Message + draft */}
-        <section ref={detailRef} aria-live="polite" className="order-first flex scroll-mt-6 flex-col gap-4 md:order-none">
+        <section ref={detailRef} aria-live="polite" className="order-first flex scroll-mt-16 flex-col gap-4">
           {selected && (
             <article className="glass flex flex-col gap-4 p-6">
               <header className="flex flex-col gap-1">
