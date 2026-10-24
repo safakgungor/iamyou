@@ -274,8 +274,8 @@ to exist.
       to either repository
     - _Requirements: 1.2, 3.2, 4.2, 4.4_
 
-- [ ] 12. [kiro] Implement `GET` and `POST /api/family` with unit tests
-  - [ ] 12.1 Implement the route and exported `answerFamilyQuestion`
+- [x] 12. [kiro] Implement `GET` and `POST /api/family` with unit tests
+  - [x] 12.1 Implement the route and exported `answerFamilyQuestion`
     - `GET`: authenticate (401), load the profile (404), respond `{ first_name, askers:
       familyModeAccess(digitalWill), synthetic_label }`
     - `POST`: validate with `FamilyRequestSchema` (400), then
@@ -286,7 +286,7 @@ to exist.
       respond with `asker`, `answer`, the cited entries (`id`, `kind`, `text`) in
       citation order and nothing else, and `synthetic_label`
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.7, 10.2, 10.3, 10.5, 10.6_
-  - [ ] 12.2 Write unit tests (in-memory repo, mocked Claude)
+  - [x] 12.2 Write unit tests (in-memory repo, mocked Claude)
     - `GET` for Maya returns `["Ella Linden (daughter)"]`; an unlisted asker gets 403 and
       no Claude call; a profile without `family_mode_access` refuses every asker; no
       allowed entries → Dont_Know_Answer and no call; `style_example` entries never
