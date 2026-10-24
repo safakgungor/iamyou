@@ -41,6 +41,8 @@ approval, synthetic screens are labelled, and secrets stay server-side.
 - **weeklyTrend**: The pure function that computes the mean score per ISO week from a set of graded answers.
 - **deleteVault**: The operation that removes every row owned by a given user across all Vault tables.
 - **Synthetic_Label**: A visible "Synthetic data" label shown on any screen that displays synthetic persona or history data.
+- **crisis flag**: The boolean `crisis` field on a grading result; `true` when the user's answer expresses intent to harm oneself or a crisis that needs immediate support.
+- **Support_Message**: A supportive message pointing the user to professional support, including the 988 Suicide & Crisis Lifeline (call or text 988 in the US).
 
 ## Requirements
 
@@ -95,7 +97,8 @@ approval, synthetic screens are labelled, and secrets stay server-side.
 2. WHEN a prompt is shown to the user, THE Check_In_Service SHALL generate the twin's prediction for that prompt and store it in the `predictions` table before the user submits an answer.
 3. THE Prediction_Service SHALL build the prediction request through `buildPredictionRequest`, which accepts a prompt and vault context and SHALL NOT accept an answer parameter.
 4. WHERE an answer string is absent from the vault context, THE serialized prediction request produced by `buildPredictionRequest` SHALL NOT contain that answer string. _(Property P2)_
-5. THE Prediction_Service SHALL call Claude only from a server route.
+5. THE System SHALL NOT display the twin's prediction to the user before the user submits an answer.
+6. THE Prediction_Service SHALL call Claude only from a server route.
 
 ### Requirement 5: Voice input and output with text fallback
 
@@ -113,7 +116,7 @@ approval, synthetic screens are labelled, and secrets stay server-side.
 
 #### Acceptance Criteria
 
-1. WHEN the user submits an answer, THE Grading_Service SHALL grade the stored prediction against the submitted answer using Claude, which returns an object of the form `{score: number, rationale: string}`.
+1. WHEN the user submits an answer, THE Grading_Service SHALL grade the stored prediction against the submitted answer using Claude, which returns an object of the form `{score: number, rationale: string, crisis: boolean}`, where `crisis` is `true` when the answer expresses intent to harm oneself or a crisis that needs immediate support.
 2. WHEN a raw score is received, THE Score_Service SHALL clamp the score to the range [0, 1] via `clampScore` and SHALL map `NaN` to 0.
 3. FOR ALL numeric inputs `x`, `clampScore(x)` SHALL return a value within [0, 1], and `clampScore(NaN)` SHALL return 0. _(Property P1)_
 4. WHEN the score has been clamped, THE Score_Service SHALL store the clamped score with the corresponding `answers` row.
@@ -142,6 +145,16 @@ approval, synthetic screens are labelled, and secrets stay server-side.
 2. THE Score_Service SHALL compute the weekly trend as the mean clamped score per ISO_week via `weeklyTrend`.
 3. FOR ALL inputs, `weeklyTrend` SHALL return exactly one value per ISO_week present in the input, and each returned value SHALL be within [0, 1]. _(Property P3)_
 
+### Requirement 9: Crisis and genetics safety
+
+**User Story:** As a user in distress or with a genetics question, I want the twin to step back and point me to real professional support, so that I am never left with a score, a twin reply, or an interpretation in place of appropriate help.
+
+#### Acceptance Criteria
+
+1. IF the grading result has `crisis` equal to `true`, THEN THE Check_In_Service SHALL show no score and no twin reply, and SHALL show the Support_Message pointing to professional support, including the 988 Suicide & Crisis Lifeline (call or text 988 in the US). _(Property P5)_
+2. IF a correction expresses a crisis, THEN THE System SHALL show the Support_Message and SHALL NOT store anything in the Vault from that correction.
+3. IF the user asks about genetic testing or a test result, THEN THE System SHALL suggest talking to a genetic counselor and SHALL NOT interpret any result.
+
 ## Correctness Properties
 
 These properties are carried into design and verified with fast-check. Each is attached to
@@ -151,6 +164,7 @@ the requirement(s) it governs.
 - **P2 — Prediction never sees the answer.** `buildPredictionRequest` takes no answer parameter; for any vault and any answer string absent from that vault, the serialized prediction request never contains that answer string. _(Requirements 4)_
 - **P3 — Weekly trend shape and bounds.** `weeklyTrend` returns one value per ISO_week present in the input, and each value is within [0, 1]. _(Requirement 8)_
 - **P4 — Delete leaves nothing.** `deleteVault(userId)` leaves zero rows for that user in every Vault table, verified against the in-memory Vault_Repository. _(Requirement 3)_
+- **P5 — Crisis response.** For any grading result with crisis = true, the check-in result shown to the user contains the support message and contains no score and no twin reply. _(Requirements 6, 9)_
 
 ## Out of Scope
 
