@@ -196,6 +196,17 @@ export default function HomePage() {
         <h2 id="data-heading" className="label">
           Your data
         </h2>
+        <Link href="/onboarding" className="glass tap -mx-1 flex items-center justify-between gap-4 p-4">
+          <span className="flex flex-col gap-0.5">
+            <span className="text-[15px] font-medium">Consent &amp; settings</span>
+            <span className="text-[13px] leading-snug text-muted">
+              Family history, the health layer, who hears about a change.
+            </span>
+          </span>
+          <span aria-hidden="true" className="text-muted">
+            →
+          </span>
+        </Link>
         {deleted ? (
           <p className="text-[15px]">
             Your vault is empty.{' '}

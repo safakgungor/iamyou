@@ -28,6 +28,19 @@ gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 const BASE: TwinForm = { scatter: 0, figure: 0, figure2: 0, dissolve: 0, pulse: 0, x: 0, y: 0, scale: 1, opacity: 1 };
 const form = (f: Partial<TwinForm>): TwinForm => ({ ...BASE, ...f });
 
+/** Every screen in the app, so the landing reaches all of it. Screens that need
+ *  Maya's demo session go through /app, which signs in and then opens `next`. */
+const APP_MAP = [
+  { href: '/app?next=/check-in', kicker: 'Daily check-in', title: 'The twin answers first', text: 'One question, by voice or text.' },
+  { href: '/app?next=/assistant', kicker: 'Second self', title: 'Replies in her voice', text: 'Nothing is sent without approval.' },
+  { href: '/app?next=/mind', kicker: 'Mind tree', title: 'Everything it knows', text: 'A map of her, with sources.' },
+  { href: '/app?next=/timeline', kicker: 'Health layer', title: '22 years, one baseline', text: 'Speech and sleep, week by week.' },
+  { href: '/real-signal', kicker: 'Wrist signal', title: 'Same heart, two reasons', text: 'Real PhysioNet wristband data.' },
+  { href: '/app?next=/care', kicker: 'Care', title: 'Ready for the visit', text: 'Summary, studies, family mode.' },
+  { href: '/app?next=/onboarding', kicker: 'Consent', title: 'Her right not to know', text: 'Who hears about a change.' },
+  { href: '/app', kicker: 'Start', title: 'Try as Maya', text: 'No sign-up. Synthetic persona.' },
+];
+
 /** Orb form per chapter: [desktop, mobile]. */
 const ORB = {
   hero: [form({ figure: 1, x: 1.6, y: -0.02, scale: 1.2 }), form({ figure: 1, y: 0.8, scale: 0.78, opacity: 0.9 })],
@@ -597,11 +610,19 @@ export default function Landing({ signal }: { signal: RealSignal }) {
             </h2>
             <p className="lx-body" data-reveal="fade">
               With consent, it learns how you speak, sleep and recover across healthy years, so a slow change has something
-              to be measured against. It reads your WHOOP data and asks what a wearable can&apos;t see.
+              to be measured against. It reads your wristband too, and asks what a wearable can&apos;t see.
             </p>
             <p className="lx-body lx-body--quiet" data-reveal="fade">
               You decide who hears about a change: you, only your doctor, or no one.
             </p>
+            <div className="lx-actions" data-reveal="fade">
+              <Link href="/real-signal" className="lx-btn lx-btn--glass lx-btn--sm">
+                Open the wrist signal <span aria-hidden="true">→</span>
+              </Link>
+              <Link href="/app?next=/timeline" className="lx-btn lx-btn--glass lx-btn--sm">
+                See Maya&apos;s 22 years <span aria-hidden="true">→</span>
+              </Link>
+            </div>
           </div>
           <div data-reveal="fade" data-hud-hide>
             <RealSignalChart signal={signal} />
@@ -675,6 +696,18 @@ export default function Landing({ signal }: { signal: RealSignal }) {
             Watch the film
           </button>
         </div>
+        <nav className="lx-appmap" aria-label="Inside the app" data-reveal="fade">
+          <p className="lx-label lx-index">Inside the app</p>
+          <div className="lx-appmap__grid">
+            {APP_MAP.map((item) => (
+              <Link key={item.href} href={item.href} className="lx-glass lx-appmap__tile">
+                <span className="lx-label">{item.kicker}</span>
+                <span className="lx-appmap__title">{item.title}</span>
+                <span className="lx-appmap__text">{item.text}</span>
+              </Link>
+            ))}
+          </div>
+        </nav>
         <div className="lx-footer__meta">
           <span className="lx-label">Built with Kiro and Claude</span>
           <span className="lx-label">Hackachusetts 2026 · Healthcare &amp; Biotech</span>
